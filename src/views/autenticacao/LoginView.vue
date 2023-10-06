@@ -1,5 +1,5 @@
 <template>
-    <main>
+    <main id="autenticacao">
         <section class="background">
             <div class="background__overlay"></div>
             <img src="../../assets/images/bg-image.jpg" alt="" class="background__image">

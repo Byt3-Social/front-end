@@ -1,4 +1,5 @@
-main {
+main#autenticacao {
+    background-color: #ffffff;
     display: flex;
     flex-direction: row;
     height: 100%;
