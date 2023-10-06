@@ -2,7 +2,7 @@
     <section class="header">
         <div class="header__wrapper">
             <i :class="icone"></i>
-            <h3 class="header__title">{{ titulo }}</h3>
+            <h4 class="header__title">{{ titulo }}</h4>
         </div>
     </section>
 </template>
