@@ -1,5 +1,5 @@
 <template>
-    <Navbar></Navbar>
+    <MenuHorizontal></MenuHorizontal>
     <main id="prospeccao">
         <Header titulo="Cadastrar Organização" icone="bi bi-building-fill"></Header>
         <FloatingPanel>
@@ -12,20 +12,20 @@
 </template>
 <script>
 import '../../assets/styles/cadastro-organizacao.css';
-import Navbar from '../../components/Navbar.vue';
 import FooterItem from '../../components/Footer.vue';
 import Header from '../../components/Header.vue';
 import FloatingPanel from '../../components/FloatingPanel.vue';
 import FormularioCadastroOrganizacao from '../../components/FormularioCadastroOrganizacao.vue';
+import MenuHorizontal from '../../components/MenuHorizontal.vue';
 
 export default {
     name: 'CadastroOrganizacaoView',
     components: {
-        Navbar,
-        FooterItem,
-        Header,
-        FloatingPanel,
-        FormularioCadastroOrganizacao
-    }
+    FooterItem,
+    Header,
+    FloatingPanel,
+    FormularioCadastroOrganizacao,
+    MenuHorizontal
+}
 }
 </script>
