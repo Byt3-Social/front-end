@@ -34,7 +34,7 @@ main {
 }
 
 .login__logo {
-    width: 40%;
+    width: 30%;
     display: block;
     margin-bottom: 3rem;
 }
@@ -45,7 +45,7 @@ main {
     width: 65%;
     color: #ffffff;
     text-transform: uppercase;
-    padding: 1rem;
+    padding: .75rem;
     font-weight: 500;
     border: none;
     border-radius: 5rem;
