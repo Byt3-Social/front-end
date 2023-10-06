@@ -9,7 +9,7 @@
 
         <fieldset class="form-cadastro-organizacao__fieldset">
             <legend class="form-cadastro-organizacao__fieldset-legend">Responsável</legend>
-            <Field label="Nome" name="razao_social" type="text"></Field>
+            <Field label="Nome" name="nome" type="text"></Field>
             <Field label="Email" name="email_responsavel" type="email"></Field>
             <Field label="Telefone" name="telefone_responsavel" type="text"></Field>
         </fieldset>
