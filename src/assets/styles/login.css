@@ -43,6 +43,18 @@ main#autenticacao {
 .login__cta-button {
     display: block;
     background-color: #00145f;
+    width: 100%;
+    color: #ffffff;
+    text-transform: uppercase;
+    padding: .75rem;
+    font-weight: 500;
+    border: none;
+    border-radius: 5rem;
+}
+
+.home__cta-button {
+    display: block;
+    background-color: #00145f;
     width: 65%;
     color: #ffffff;
     text-transform: uppercase;
@@ -50,4 +62,19 @@ main#autenticacao {
     font-weight: 500;
     border: none;
     border-radius: 5rem;
+}
+
+.login-text h1 {
+    font-size: 28;
+    text-align: left;
+    margin-bottom: 1.5rem;
+}
+
+.login__input {
+    width: 100%;
+    padding: .5rem;
+    margin-bottom: 1.5rem;
+    border: .15rem solid rgb(224, 224, 224);
+    background-color: #fff;
+    border-radius: 1rem;
 }

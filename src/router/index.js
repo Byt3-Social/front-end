@@ -2,10 +2,17 @@ import { createRouter, createWebHistory } from 'vue-router'
 
 import LoginView from '@/views/autenticacao/LoginView'
 import CadastroOrganizacaoView from '@/views/prospeccao/CadastroOrganizacaoView'
+import GerenciarCadastroView from '@/views/compliance/GerenciarCadastroView.vue'
+import HomeView from '@/views/autenticacao/HomeView.vue'
 
 import NotFoundView from '@/views/NotFoundView'
 
 const routes = [
+    {
+        path: '/',
+        name: 'HomeView',
+        component: HomeView
+    },
     {
         path: '/login',
         name: 'Login',
@@ -15,6 +22,11 @@ const routes = [
         path: '/organizacoes/cadastrar',
         name: 'CadastroOrganizacao',
         component: CadastroOrganizacaoView
+    },
+    {
+        path: '/gerenciar/cadastro',
+        name: 'GerenciarCadastro',
+        component: GerenciarCadastroView
     },
     {
         path: '/:pathMatch(.*)*',
