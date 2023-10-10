@@ -7,6 +7,47 @@ main#compliance {
 }
 
 /* Estilos para o menu de navegação */
+.navbar__gerenciar-org {
+    display: flex;
+    flex-direction: row;
+    justify-content: space-between;
+    border-style: groove;
+    border-width: 0.03rem;
+    border-color: #ddd;
+    border-radius: 1rem;
+    margin-bottom: 1.5rem;
+    padding: .5rem;
+}
+
+.botaoGerenciar {
+    display: block;
+    background-color: #fff;
+    width: 65%;
+    color: #003475;
+    padding: 1.5rem;
+    font-weight: bold;
+    border: none;
+    border-radius: 1rem;
+    margin: .5rem;
+}
+
+.botaoGerenciar:hover {
+    background-color: #ebe9e9;
+}
+
+.botaoGerenciar--Selecionado{
+    display: block;
+    background-color: #003475;
+    width: 65%;
+    color: #fff;
+    padding: 1.5rem;
+    font-weight: bold;
+    border: none;
+    border-radius: 1rem;
+    margin: .5rem;
+}
+
+/* ------------------------------------------- */
 .nav {
     display: flex;
     list-style: none;
