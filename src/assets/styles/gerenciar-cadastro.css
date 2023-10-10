@@ -1,0 +1,47 @@
+main#compliance {
+    display: flex;
+    flex-direction: column;
+    height: 100%;
+    width: 100%;
+    align-items: center;
+}
+
+/* Estilos para o menu de navegação */
+.nav {
+    display: flex;
+    list-style: none;
+    padding: 0;
+    border: .1rem solid #ddd;
+    border-radius: 1.5rem;
+    margin-bottom: 1rem;
+}
+
+.nav-item {
+    flex: 1;
+    text-align: center;
+    margin: 1rem;
+}
+
+.nav-link {
+    text-decoration: none;
+    padding: 1rem 2rem;
+    background-color: #fff;
+    color: #003475;
+    border: .1rem solid #ddd;
+    display: block;
+    font-weight: bold;
+    border-radius: 1.5rem;
+}
+
+.nav-link:hover {
+    background-color: #CFEAEB;
+    border-color: #fff;
+    color: #003475;
+}
+
+.nav-link[aria-selected="true"] {
+    background-color: #003475;
+    color: #fff;
+    border-color: #fff;
+}
+

@@ -44,4 +44,8 @@ export default {
 .bi.bi-building-fill {
     font-size: 32px;
 }
+
+.bi.bi-file-earmark-fill {
+    font-size: 32px;
+}
 </style>
