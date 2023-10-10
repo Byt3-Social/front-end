@@ -6,13 +6,13 @@
             </h1>
             <ul class="navbar__items">
                 <li>
-                    <router-link :to="{ name: 'Login' }" class="navbar__item">Dashboard</router-link>
+                    <router-link :to="{ name: 'Login' }" class="navbar__item"><a>Dashboard</a></router-link>
                 </li>
                 <li>
-                    <router-link :to="{ name: 'Login' }" class="navbar__item">Organizações</router-link>
+                    <router-link :to="{ name: 'CadastroOrganizacao' }" class="navbar__item">Organizações</router-link>
                 </li>
                 <li>
-                    <router-link :to="{ name: 'Login' }" class="navbar__item">Processos</router-link>
+                    <router-link :to="{ name: 'CadastroProcesso' }" class="navbar__item">Processos</router-link>
                 </li>
                 <li>
                     <router-link :to="{ name: 'Login' }" class="navbar__item">Ações Sociais</router-link>

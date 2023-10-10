@@ -2,7 +2,10 @@
     <section class="header">
         <div class="header__wrapper">
             <i :class="icone"></i>
+            <label>
             <h4 class="header__title">{{ titulo }}</h4>
+            <h3 class="header_subtitle"> {{subtitulo}} </h3>
+            </label>
         </div>
     </section>
 </template>
@@ -12,7 +15,7 @@ import "bootstrap-icons/font/bootstrap-icons.css";
 
 export default {
     name: 'Header',
-    props: ['titulo', 'icone']
+    props: ['titulo', 'icone', 'subtitulo']
 }
 </script>
 
@@ -37,11 +40,38 @@ export default {
     align-items: center;
 }
 
-.header__wrapper .header__title {
-    margin: 0 0 0 1rem;
+.header__wrapper label {
+    display: flex;
+    flex-direction: column;
+    align-items: flex-start;
+    padding-left: 0.5rem;
+    padding-bottom: 0rem;
+}
+
+h4 {
+margin: 0; 
+padding: 0;
+}
+
+h3 {
+margin: 0;
+opacity: 0.5;
+}
+
+.header_subtitle {
+    font-size: 0.9rem;
+    
 }
 
 .bi.bi-building-fill {
-    font-size: 32px;
+    font-size: 2rem;
+}
+
+.bi.bi-building-fill {
+    font-size: 2rem;
+}
+
+.bi.bi-file-earmark-fill {
+    font-size: 2rem;
 }
 </style>
