@@ -6,7 +6,7 @@
             </h1>
 
             <div class="navbar__user">
-                <p class="navbar__user-name">Olá Leandro!</p>
+                <p class="navbar__user-name">Olá Pdtec!</p>
                 <img src="../assets/images/letra-p.png" alt="" class="navbar__user-picture">
             </div>
         </div>

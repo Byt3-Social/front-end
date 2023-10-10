@@ -18,15 +18,22 @@
             <Field label="Estado" name="estado" type="text"></Field>
         </fieldset>
     </form>
+    <div class="conteiner-botão">
+        <button class="botao-cinza">Salvar</button>
+        <PrimaryButton acao="Submeter"></PrimaryButton>
+    </div>
+
 </template>
 
 <script>
 import Field from '../Field.vue';
+import PrimaryButton from '../PrimaryButton.vue';
 
 export default {
     name: 'DadosGerais',
     components: {
-        Field
+        Field,
+        PrimaryButton
     }
 }
 </script>
@@ -40,6 +47,21 @@ export default {
 
 .form__dados-gerais__fieldset{
     width: 100%;
+}
+
+.conteiner-botão {
+    padding: 1rem;
+}
+
+.botao-cinza  {
+    background-color: #ddd;
+    width: 100%;
+    padding: .75rem;
+    color: #818181;
+    border-radius: 5rem;
+    border: none;
+    font-weight: 500;
+    margin-bottom: 1rem;    
 }
 
 </style>

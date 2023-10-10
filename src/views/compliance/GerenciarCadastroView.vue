@@ -18,11 +18,11 @@
                     </ul>
                 </nav>
 
-                
+                <DadosGerais></DadosGerais>
             
-                 <div id="#dados-gerais" role="tabpanel" aria-hidden="true">
+                 <!-- <div id="#dados-gerais" role="tabpanel" aria-hidden="true">
                     <DadosGerais></DadosGerais>
-                </div>
+                </div> -->
                 <!--
                 <div id="dados-complementares" class="tab__content" role="tabpanel" aria-hidden="true">
                     Conteúdo da Tab 2
