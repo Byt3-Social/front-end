@@ -2,7 +2,7 @@
     <DropFileCompliance documentoUpado="Contrato Social" ></DropFileCompliance>
     <DropFileCompliance documentoUpado="Cartão CNPJ" ></DropFileCompliance>
     <DropFileCompliance documentoUpado="Extrato Bancário"></DropFileCompliance>
-    <PrimaryButton acao="Solicitar documento adicional"></PrimaryButton>
+    <PrimaryButton acao="Assinar"></PrimaryButton>
 </template>
 
 <script>
