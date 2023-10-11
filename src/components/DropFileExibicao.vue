@@ -3,20 +3,18 @@
 
       <section class="soltarArquivo">
 
-        <section class="sectionDrop" @dragover="dragover" @dragleave="dragleave" @drop="drop">
+        <section class="sectionDrop">
           
           <!-- Se atentar a o id e ao for para acessibilidade posteriormente.-->
-          <input type="file" name="file" id="fileInput" class="inputArquivo__areaDeDrop--invisivel" @change="onChange" ref="file">
-          
           <section class= "sectionAreaDrop"></section>
           <section for="fileInput" class= "sectionAreaDrop">
 
-            <div v-show="isDragging" class="file-label">
+            <div v-show="isDragging" class="file-label--dropFileExibicao">
               <i class="bi bi-upload"></i>
               <p>Solte o arquivo aqui.</p>
             </div>
 
-            <div v-show="!isDragging" class="file-label"> 
+            <div v-show="!isDragging" class="file-label--dropFileExibicao"> 
               <i class="bi bi-file-earmark-plus"></i>
               <p>{{ documentoUpado }}</p>
             </div>
@@ -38,8 +36,6 @@
     </section>
 
         <section class="sectionExibicao" v-if="files.length">
-
-     
             
             <div v-for="file in files" :key="file.name" class="sectionExibicao__arquivoUpado">
               
@@ -79,14 +75,7 @@
               
 
             </div>
-
-
-          
-
         </section>
-
-     
-
     </main>
   </template>
   
@@ -95,7 +84,7 @@ import PrimaryButton from './PrimaryButton.vue';
 
   export default {
     //Uma penca de métodos que devem ser úteis, segundo o moço do video.
-    name: 'AreaDropArquivo',
+    name: 'AreaDropArquivoExibicao',
     props: ['documentoUpado'],
 
     components: {
@@ -104,39 +93,11 @@ import PrimaryButton from './PrimaryButton.vue';
 
     data() {
       return {
-        name: 'AreaDropArquivo',
+        name: 'AreaDropArquivoExibicao',
         isDragging: false,
         files: false,
         estadoFileAssinado: true
       };
-    },
-
-    methods: {
-      onChange(i) {
-        this.files = this.$refs.file.files;
-        console.log(this.files);
-      },
-
-      dragover(e) {
-        e.preventDefault();
-        this.isDragging = true;
-      },
-
-      dragleave() {
-        this.isDragging = false;
-      },
-
-      drop(e) {
-        e.preventDefault();
-        this.$refs.file.files = e.dataTransfer.files;
-        this.onChange();
-        this.isDragging = false;
-      },
-
-      remove(i) {
-        this.files = false;
-      },
-
     },
   };
   </script>

@@ -13,6 +13,7 @@
 <script>
 import '../../assets/styles/cadastro-organizacao.css';
 import '../../assets/styles/dropfile.css';
+import '../../assets/styles/dropfile-exibicao.css';
 import '../../assets/styles/cadastro-processo.css';
 import Navbar from '../../components/Navbar.vue';
 import FooterItem from '../../components/Footer.vue';

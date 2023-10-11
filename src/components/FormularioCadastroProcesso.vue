@@ -120,9 +120,9 @@
     </main>
 
     <main v-show="exibirMainProcesso == 'Documentos'">
-        <DropFile documentoUpado="Contrato Social" ></DropFile>
-        <DropFile documentoUpado="Cartão CNPJ" ></DropFile>
-        <DropFile documentoUpado="Extrato Bancário"></DropFile>
+        <DropFileExibicao documentoUpado="Contrato Social" ></DropFileExibicao >
+        <DropFileExibicao  documentoUpado="Cartão CNPJ" ></DropFileExibicao >
+        <DropFileExibicao  documentoUpado="Extrato Bancário"></DropFileExibicao >
         <PrimaryButton acao="Solicitar documento adicional"></PrimaryButton>
     </main>
 
@@ -131,14 +131,14 @@
 <script>
 import Field from './Field.vue';
 import PrimaryButton from './PrimaryButton.vue';
-import DropFile from './DropFile.vue';
+import DropFileExibicao from './DropFileExibicao.vue';
 
 export default {
     name: 'FormularioCadastroProcessos',
     components: {
         Field,
         PrimaryButton,
-        DropFile,
+        DropFileExibicao,
     },
 
     data () {
