@@ -2,12 +2,12 @@
     <nav class="navbar">
         <div class="navbar__wrapper">
             <h1 class="navbar__logo">
-                <img src="../assets/images/b3-social-logo.png" alt="">
+                <img src="../../assets/images/b3-social-logo.png" alt="">
             </h1>
 
             <div class="navbar__user">
                 <p class="navbar__user-name">Olá Pdtec!</p>
-                <img src="../assets/images/letra-p.png" alt="" class="navbar__user-picture">
+                <img src="../../assets/images/letra-p.png" alt="" class="navbar__user-picture">
             </div>
         </div>
     </nav>

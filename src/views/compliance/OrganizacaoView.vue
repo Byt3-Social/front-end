@@ -1,10 +1,10 @@
 <template> 
-    <NavbarGerencia></NavbarGerencia>
+    <NavBarCompliance></NavBarCompliance>
     <main id="compliance">
         <Header titulo="Cadastro" icone="bi bi-file-earmark-fill"></Header>
         <FloatingPanel>
             <template v-slot:FloatingPanelContent>
-                <FormGerenciarOrganizacoes></FormGerenciarOrganizacoes>
+                <FormOngs></FormOngs>
             </template>
         </FloatingPanel>
     </main>
@@ -12,24 +12,24 @@
 </template>
 
 <script>
-import NavbarGerencia from '@/components/NavBarGerencia.vue';
+import NavBarCompliance from '@/components/compliance/NavBarCompliance.vue';
 import Header from '@/components/Header.vue';
 import FloatingPanel from '@/components/FloatingPanel.vue';
 import Footer from '@/components/Footer.vue';
-import FormGerenciarOrganizacoes from '@/components/compliance/FormGerenciarOrganizacoes.vue';
+import FormOngs from '@/components/compliance/FormOngs.vue';
 
 export default {
-    name: 'GerenciarCadastro',
+    name: 'OrganizacaoView',
     components: {
-        NavbarGerencia,
+        NavBarCompliance,
         Header,
         FloatingPanel,
         Footer,
-        FormGerenciarOrganizacoes
+        FormOngs
     }
 }
 </script>
 
 <style>
-@import "../../assets/styles/gerenciar-cadastro.css"
+@import '../../assets/styles/org-cadastro.css'
 </style>

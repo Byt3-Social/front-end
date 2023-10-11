@@ -21,6 +21,7 @@ export default {
 
 .input__label {
     margin-bottom: .5rem;
+    color: #003475;
 }
 
 .input__item {
