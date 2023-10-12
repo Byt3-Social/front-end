@@ -8,6 +8,7 @@ import CadastroAcaoVoluntariadoView from '@/views/acoes-sociais/CadastroAcaoVolu
 import CadastroAcaoIspView from '@/views/acoes-sociais/CadastroAcaoIspView'
 import CadastroAcompanhamentoAcaoView from '@/views/acompanhamento/CadastroAcompanhamentoAcaoView'
 import FormularioDoacaoView from '@/views/acoes-sociais/FormularioDoacaoView'
+import ListagemProcessosView from '@/views/acoes-sociais/ListagemProcessosView'
 
 import NotFoundView from '@/views/NotFoundView'
 
@@ -51,6 +52,11 @@ const routes = [
         path: '/doacoes/:id',
         name: 'Doacao',
         component: FormularioDoacaoView
+    },
+    {
+        path: '/processos',
+        name: 'ListagemProcessos',
+        component: ListagemProcessosView
     },
     {
         path: '/:pathMatch(.*)*',

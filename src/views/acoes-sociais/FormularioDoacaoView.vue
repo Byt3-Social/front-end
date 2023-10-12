@@ -33,6 +33,7 @@
                     </div>
                 </label>
                 <hr>
+                <p><em>Você está doando para a campanha de <strong>Arrecadação de cestas básicas</strong></em></p>
                 <div class="formulario-pagamento__resumo">
                     <p class="formulario-pagamento__texto-valor">Valor da doação</p>
                     <p class="formulario-pagamento__valor-final">R$ 10,00</p>

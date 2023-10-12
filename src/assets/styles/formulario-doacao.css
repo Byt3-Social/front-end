@@ -42,7 +42,7 @@ main#doacao {
     display: flex;
     flex-direction: row;
     justify-content: space-between;
-    margin: 3rem 0 1.2rem;
+    margin: 2rem 0 1.2rem;
 }
 
 .formulario-pagamento__texto-valor,
