@@ -5,6 +5,7 @@ import CadastroOrganizacaoView from '@/views/prospeccao/CadastroOrganizacaoView'
 import CadastroProcessoView from '@/views/prospeccao/CadastroProcessoView'
 import CadastroAcaoVoluntariadoView from '@/views/acoes-sociais/CadastroAcaoVoluntariadoView'
 import CadastroAcaoIspView from '@/views/acoes-sociais/CadastroAcaoIspView'
+import CadastroAcompanhamentoAcaoView from '@/views/acompanhamento/CadastroAcompanhamentoAcaoView'
 
 import NotFoundView from '@/views/NotFoundView'
 
@@ -33,6 +34,11 @@ const routes = [
         path: '/acoes/isp',
         name: 'CadastroAcaoIsp',
         component: CadastroAcaoIspView
+    },
+    {
+        path: '/acompanhamentos/novo',
+        name: 'CadastroAcompanhamentoAcao',
+        component: CadastroAcompanhamentoAcaoView
     },
     {
         path: '/:pathMatch(.*)*',

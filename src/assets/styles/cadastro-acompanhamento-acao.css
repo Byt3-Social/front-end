@@ -1,0 +1,102 @@
+.tabs {
+    display: flex;
+    flex-direction: row;
+    width: 100%;
+    justify-content: space-between;
+    align-items: stretch;
+    list-style-type: none;
+    padding: 0;
+    border: 1px solid rgba(118, 118, 118, 0.20);
+    border-radius: 1.5rem;
+    padding: .75rem;
+
+}
+
+.tabs__item {
+    width: 100%;
+    margin: auto .5rem;
+}
+
+.tabs__item button {
+    background-color: #ffffff;
+    color: #00145f;
+    border: none;
+    width: 100%;
+    padding: 1rem 2rem;
+    border-radius: 3rem;
+}
+
+.tabs__item button.active {
+    background-color: #F0F5FF;
+}
+
+.form-row {
+    display: flex;
+    flex-direction: row;
+    justify-content: space-between;
+    width: 100%;
+}
+
+.form-row .form-input {
+    width: 49%;
+}
+
+.form-input {
+    width: 100%;
+    display: block;
+    margin-bottom: 1rem;
+}
+
+.form-input__label {
+    margin-bottom: .5rem;
+}
+
+input.form-input__item {
+    width: 100%;
+    display: block;
+    background: #F1F1F2;
+    border: none;
+    padding: .75rem 1rem;
+    border-radius: 3rem;
+}
+
+textarea.form-input__item {
+    width: 100%;
+    display: block;
+    background: #F1F1F2;
+    border: none;
+    padding: .75rem 1rem;
+    border-radius: 1rem;
+    height: 6rem;
+}
+
+.primary-button {
+    background-color: #00145f;
+    width: 100%;
+    padding: .75rem;
+    color: #ffffff;
+    border-radius: 5rem;
+    border: none;
+    font-weight: 500;
+}
+
+.form-group-icon {
+    display: flex;
+    background-color: #F1F1F2;
+    padding: 0 1rem;
+    border-radius: 3rem;
+}
+
+.form-group-icon button {
+    outline: none;
+    border: none;
+    background-color: #424242;
+    color: #ffffff;
+    padding: .75rem 1.5rem;
+    border-radius: 3rem;
+    margin: .5rem 0;
+}
+
+.icon {
+    font-size: 2rem;
+}
