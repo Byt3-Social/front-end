@@ -1,7 +1,7 @@
 <template>
     <Navbar></Navbar>
     <main id="prospeccao">
-        <Header titulo="Ação de Voluntariado" icone="bi bi-collection-fill"></Header>
+        <Header titulo="Voluntariado" icone="bi bi-collection-fill"></Header>
         <FloatingPanel>
             <template v-slot:FloatingPanelContent>
                 <ul class="tabs">

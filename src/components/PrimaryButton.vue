@@ -1,5 +1,5 @@
 <template>
-    <button class="primary-button">{{ acao }}</button>
+    <button class="primary-button" @click.prevent="$emit('clicked')">{{ acao }}</button>
 </template>
 
 <script>

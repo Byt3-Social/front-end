@@ -57,7 +57,7 @@ export default {
     display: flex;
     flex-direction: row;
     width: 100%;
-    padding: 0;
+    padding: .5rem 0;
     align-items: center;
     justify-content: space-between;
 }
@@ -97,11 +97,21 @@ export default {
     align-items: center;
 }
 
+.navbar__user-details {
+    width: 100%;
+    margin-right: 1rem;
+}
+
 .navbar__user .navbar__user-name {
     width: 100%;
     margin: 0;
     font-weight: 600;
     text-align: right;
+}
+
+.navbar__user-role {
+    text-align: right;
+    display: block;
 }
 
 .navbar__user .navbar__user-picture {
@@ -111,7 +121,7 @@ export default {
     display: block;
     margin: 0 auto;
     padding: .3rem;
-    border: 2.5px solid #00145f;
+    border: 2px solid #00145f;
 }
 
 .navbar__user-details {

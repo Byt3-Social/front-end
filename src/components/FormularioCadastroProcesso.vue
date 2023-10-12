@@ -1,7 +1,7 @@
 <template>
     <section class="navbar__acompanhamentoProcesso">
-            <button  :class="classeDadosGerais" @click="selecionaNavbarProcesso('DadosGerais')">Dados Gerais</button>
-            <button  :class="classeDadosComplementares" @click="selecionaNavbarProcesso('DadosComplementares')">Dados Complementares</button>
+            <button  :class="classeDadosGerais" @click="selecionaNavbarProcesso('DadosGerais')">Dados gerais</button>
+            <button  :class="classeDadosComplementares" @click="selecionaNavbarProcesso('DadosComplementares')">Dados complementares</button>
             <button :class="classeDocumentos" @click="selecionaNavbarProcesso('Documentos')">Documentos</button>
         </section>
     <main v-if = "exibirMainProcesso == 'DadosGerais'">

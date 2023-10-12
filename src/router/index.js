@@ -1,19 +1,26 @@
 import { createRouter, createWebHistory } from 'vue-router'
 
 import LoginView from '@/views/autenticacao/LoginView'
+import LoginOrganizacaoView from '@/views/autenticacao/LoginOrganizacaoView'
 import CadastroOrganizacaoView from '@/views/prospeccao/CadastroOrganizacaoView'
 import CadastroProcessoView from '@/views/prospeccao/CadastroProcessoView'
 import CadastroAcaoVoluntariadoView from '@/views/acoes-sociais/CadastroAcaoVoluntariadoView'
 import CadastroAcaoIspView from '@/views/acoes-sociais/CadastroAcaoIspView'
 import CadastroAcompanhamentoAcaoView from '@/views/acompanhamento/CadastroAcompanhamentoAcaoView'
+import FormularioDoacaoView from '@/views/acoes-sociais/FormularioDoacaoView'
 
 import NotFoundView from '@/views/NotFoundView'
 
 const routes = [
     {
-        path: '/login',
+        path: '/colaborador/login',
         name: 'Login',
         component: LoginView
+    },
+    {
+        path: '/organizacao/login',
+        name: 'LoginOrganizacao',
+        component: LoginOrganizacaoView
     },
     {
         path: '/organizacoes/cadastrar',
@@ -39,6 +46,11 @@ const routes = [
         path: '/acompanhamentos/novo',
         name: 'CadastroAcompanhamentoAcao',
         component: CadastroAcompanhamentoAcaoView
+    },
+    {
+        path: '/doacoes/:id',
+        name: 'Doacao',
+        component: FormularioDoacaoView
     },
     {
         path: '/:pathMatch(.*)*',
