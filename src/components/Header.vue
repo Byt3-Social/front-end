@@ -1,7 +1,7 @@
 <template>
     <section class="header">
         <div class="header__wrapper">
-            <i :class="icone"></i>
+            <i class="header__icon" :class="icone"></i>
             <label>
             <h4 class="header__title">{{ titulo }}</h4>
             <h3 class="header_subtitle"> {{subtitulo}} </h3>
@@ -63,8 +63,9 @@ opacity: 0.5;
     
 }
 
-.bi.bi-building-fill {
+.header__icon {
     font-size: 2rem;
+    margin-right: .5rem;
 }
 
 .bi.bi-building-fill {

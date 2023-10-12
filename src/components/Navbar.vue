@@ -2,7 +2,7 @@
     <nav class="navbar">
         <div class="navbar__wrapper">
             <h1 class="navbar__logo">
-                <img src="../assets/images/b3-social-logo.png" alt="">
+                <Logo cor="#00145f"></Logo>
             </h1>
             <ul class="navbar__items">
                 <li>
@@ -15,12 +15,15 @@
                     <router-link :to="{ name: 'CadastroProcesso' }" class="navbar__item">Processos</router-link>
                 </li>
                 <li>
-                    <router-link :to="{ name: 'Login' }" class="navbar__item">Ações Sociais</router-link>
+                    <router-link :to="{ name: 'CadastroAcaoVoluntariado' }" class="navbar__item">Ações Sociais</router-link>
                 </li>
             </ul>
 
             <div class="navbar__user">
-                <p class="navbar__user-name">Olá Leandro!</p>
+                <div class="navbar__user-details">
+                    <p class="navbar__user-name">Olá Leandro!</p>
+                    <small class="navbar__user-role">Colaborador B3</small>
+                </div>
                 <img src="../assets/images/profile-picture.png" alt="" class="navbar__user-picture">
             </div>
         </div>
@@ -28,8 +31,13 @@
 </template>
 
 <script>
+import Logo from '@/components/Logo.vue';
+
 export default {
-    name: 'Navbar'
+    name: 'Navbar',
+    components: {
+        Logo
+    }
 }
 </script>
 
@@ -55,7 +63,7 @@ export default {
 }
 
 .navbar__logo {
-    width: 15%;
+    width: 12%;
     margin: 0;
 }
 
@@ -90,7 +98,7 @@ export default {
 }
 
 .navbar__user .navbar__user-name {
-    width: 50%;
+    width: 100%;
     margin: 0;
     font-weight: 600;
     text-align: right;
@@ -104,5 +112,17 @@ export default {
     margin: 0 auto;
     padding: .3rem;
     border: 2.5px solid #00145f;
+}
+
+.navbar__user-details {
+    display: flex;
+    flex-direction: column;
+    width: 100%;
+    margin-right: 1rem;
+}
+
+.navbar__user-role {
+    text-align: right;
+    text-transform: uppercase;
 }
 </style>
