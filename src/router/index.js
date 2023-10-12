@@ -4,6 +4,7 @@ import LoginView from '@/views/autenticacao/LoginView'
 import CadastroOrganizacaoView from '@/views/prospeccao/CadastroOrganizacaoView'
 import CadastroProcessoView from '@/views/prospeccao/CadastroProcessoView'
 import CadastroAcaoVoluntariadoView from '@/views/acoes-sociais/CadastroAcaoVoluntariadoView'
+import CadastroAcaoIspView from '@/views/acoes-sociais/CadastroAcaoIspView'
 
 import NotFoundView from '@/views/NotFoundView'
 
@@ -27,6 +28,11 @@ const routes = [
         path: '/acoes/voluntariado',
         name: 'CadastroAcaoVoluntariado',
         component: CadastroAcaoVoluntariadoView
+    },
+    {
+        path: '/acoes/isp',
+        name: 'CadastroAcaoIsp',
+        component: CadastroAcaoIspView
     },
     {
         path: '/:pathMatch(.*)*',
