@@ -13,37 +13,44 @@ main#compliance {
     justify-content: space-between;
     border-style: groove;
     border-width: 0.03rem;
-    border-color: #ddd;
+    border-color: rgb(209, 224, 238);
     border-radius: 1rem;
     margin-bottom: 1.5rem;
-    padding: .5rem;
+    padding: 1rem;
+    padding-top: 0.6rem;
+    padding-bottom: 0.6rem;
 }
 
 .botao__mudar-tab {
-    display: block;
-    background-color: #fff;
-    width: 65%;
-    color: #003475;
-    padding: 1.5rem;
-    font-weight: bold;
-    border: none;
-    border-radius: 1rem;
-    margin: .5rem;
+    width: 16rem;
+    height: 4rem;
+    color: #00145F;
+    background-color: white;
+    border-top-right-radius: 0 0 1.5rem;
+    border-color: white;
+    border-style: hidden;
+    border-radius: 1.5rem;
+    transform: 1s;
+    transition: background-color 0.3s ease;
+    transition: all 0.2s ease;
 }
 
 .botao__mudar-tab:hover {
-    background-color: #ebe9e9;
-    color: #003475;
+    background-color: #F0F5FF;
+    font-weight: bold;
 }
 
 .botao__mudar-tab--Selecionado{
-    display: block;
-    background-color: #003475;
-    width: 65%;
-    color: #fff;
-    padding: 1.5rem;
+    width: 16rem;
+    height: 4rem;
+    color: #00145F;
     font-weight: bold;
-    border: none;
-    border-radius: 1rem;
-    margin: .5rem;
+    background-color: #F0F5FF;
+    border-top-right-radius: 0 0 1.5rem;
+    border-color: white;
+    border-style: hidden;
+    border-radius: 1.5rem;
+    transform: 1s;
+    transition: background-color 0.3s ease;
+    transition: all 0.2s ease;
 }
