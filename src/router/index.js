@@ -1,8 +1,12 @@
 import { createRouter, createWebHistory } from 'vue-router'
 
-import LoginView from '@/views/autenticacao/LoginView'
-import LoginOrganizacaoView from '@/views/autenticacao/LoginOrganizacaoView'
-import CadastroOrganizacaoView from '@/views/prospeccao/CadastroOrganizacaoView'
+import ColaboradorLoginView from '@/views/autenticacao/ColaboradorLoginView'
+import OrganizacaoLoginView from '@/views/autenticacao/OrganizacaoLoginView'
+
+import CadastrarOrganizacaoView from '@/views/prospeccao/CadastrarOrganizacaoView'
+import ListarOrganizacoesView from '@/views/prospeccao/ListarOrganizacoesView'
+import EditarOrganizacaoView from '@/views/prospeccao/EditarOrganizacaoView'
+
 import CadastroProcessoView from '@/views/prospeccao/CadastroProcessoView'
 import CadastroAcaoVoluntariadoView from '@/views/acoes-sociais/CadastroAcaoVoluntariadoView'
 import CadastroAcaoIspView from '@/views/acoes-sociais/CadastroAcaoIspView'
@@ -15,18 +19,28 @@ import NotFoundView from '@/views/NotFoundView'
 const routes = [
     {
         path: '/colaborador/login',
-        name: 'Login',
-        component: LoginView
+        name: 'ColaboradorLogin',
+        component: ColaboradorLoginView
     },
     {
         path: '/organizacao/login',
-        name: 'LoginOrganizacao',
-        component: LoginOrganizacaoView
+        name: 'OrganizacaoLogin',
+        component: OrganizacaoLoginView
     },
     {
-        path: '/organizacoes/cadastrar',
-        name: 'CadastroOrganizacao',
-        component: CadastroOrganizacaoView
+        path: '/colaborador/organizacoes/cadastrar',
+        name: 'CadastrarOrganizacao',
+        component: CadastrarOrganizacaoView
+    },
+    {
+        path: '/colaborador/organizacoes',
+        name: 'ListarOrganizacoes',
+        component: ListarOrganizacoesView,
+    },
+    {
+        path: '/colaborador/organizacoes/:id',
+        name: 'EditarOrganizacao',
+        component: EditarOrganizacaoView
     },
     {
         path: '/organizacoes/processo',
@@ -66,7 +80,10 @@ const routes = [
 
 const router = createRouter({
     history: createWebHistory(process.env.BASE_URL),
-    routes
+    routes,
+    scrollBehavior(to, from, savedPosition) {
+        return { top: 0 }
+    },
 })
 
 export default router

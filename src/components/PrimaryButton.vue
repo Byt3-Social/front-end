@@ -8,15 +8,3 @@ export default {
     props: ['acao']
 }
 </script>
-
-<style>
-.primary-button {
-    background-color: #00145f;
-    width: 100%;
-    padding: .75rem;
-    color: #ffffff;
-    border-radius: 5rem;
-    border: none;
-    font-weight: 500;
-}
-</style>

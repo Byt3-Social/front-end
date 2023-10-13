@@ -1,0 +1,47 @@
+@import '../variaveis.scss';
+
+main#colaborador-login-view {
+    background-color: $branco;
+    display: flex;
+    flex-direction: row;
+    height: 100%;
+    width: 100%;
+
+    .background {
+        width: 65%;
+        height: 100%;
+        position: relative;
+    }
+
+    .background__overlay {
+        position: absolute;
+        top: 0;
+        width: 100%;
+        height: 100%;
+        background-color: rgba(0, 0, 0, 0.55);
+    }
+
+    .background__image {
+        width: 100%;
+        height: 100%;
+        object-fit: cover;
+    }
+
+    .login {
+        width: 35%;
+        display: flex;
+        flex-direction: column;
+        align-items: center;
+        justify-content: center;
+    }
+
+    .login__logo-wrapper {
+        width: 35%;
+    }
+
+    .primary-button {
+        text-transform: uppercase;
+        width: 70%;
+        margin-top: 3rem;
+    }
+}

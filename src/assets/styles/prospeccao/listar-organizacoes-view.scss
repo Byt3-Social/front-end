@@ -1,0 +1,93 @@
+main#listar-organizacoes-view {
+    display: flex;
+    flex-direction: column;
+    align-items: center;
+    height: 100%;
+    width: 100%;
+
+    .table {
+        width: 100%;
+        text-align: center;
+        vertical-align: middle;
+
+        thead {
+            border-bottom: 1px solid rgba(0, 0, 0, 0.1);
+            text-transform: uppercase;
+            font-weight: 500;
+        }
+
+        tbody {
+            .status {
+                padding: .5rem 1rem;
+                border-radius: 2rem;
+                text-transform: uppercase;
+                font-size: .9rem;
+                font-weight: 500;
+
+                &--ABERTO {
+                    background-color: #F0F5FF;
+                    color: #00145F;
+                }
+
+                &--EM_ANALISE {
+                    background-color: #FFF8DD;
+                    color: #FFC700;
+                }
+
+                &--APROVADO {
+                    background-color: #E8FFF3;
+                    color: #50CD89;
+                }
+
+                &--REPROVADO {
+                    background-color: #fff5f8;
+                    color: #f1416c;
+                }
+
+                &--CADASTRADO {
+                    background-color: #f8f5ff;
+                    color: #7239ea;
+                }
+            }
+
+            .acao {
+                outline: none;
+                border: none;
+                background-color: transparent;
+
+                &__icone {
+                    font-size: 1.8rem;
+                    margin: 0 .75rem;
+                }
+
+                &--editar {
+                    color: #00145f;
+                }
+
+                &--excluir {
+                    color: #ff6c6d;
+                }
+            }
+        }
+
+        td {
+            padding: 1rem 0;
+            color: rgba(0, 0, 0, 0.7);
+        }
+    }
+
+    .carregando__message {
+        text-align: center;
+        padding: 1rem 0;
+    }
+
+    .v-enter-active,
+    .v-leave-active {
+        transition: opacity 0.2s ease;
+    }
+
+    .v-enter-from,
+    .v-leave-to {
+        opacity: 0;
+    }
+}
