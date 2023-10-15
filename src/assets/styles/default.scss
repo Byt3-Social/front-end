@@ -35,6 +35,15 @@ body {
     position: relative;
 }
 
+.form-row {
+    display: flex;
+    width: 100%;
+
+    .form-input-wrapper:first-of-type {
+        margin-right: 1rem;
+    }
+}
+
 .form-input-wrapper {
     width: 100%;
     display: block;
@@ -54,7 +63,30 @@ input.form-input {
     border-radius: 3rem;
 }
 
+select.form-input {
+    width: 100%;
+    display: block;
+    background: #F1F1F2;
+    border: none;
+    padding: .75rem 1rem;
+    border-radius: 3rem;
+}
+
+textarea.form-input {
+    width: 100%;
+    display: block;
+    background: #F1F1F2;
+    border: none;
+    padding: .75rem 1rem;
+    border-radius: 1rem;
+    height: 6rem;
+}
+
 input.form-input:focus {
+    background-color: #E0E1E2;
+}
+
+textarea.form-input:focus {
     background-color: #E0E1E2;
 }
 
@@ -72,9 +104,63 @@ input {
     }
 }
 
+.v-enter-active,
+.v-leave-active {
+    transition: opacity 0.2s ease;
+}
+
+.v-enter-from,
+.v-leave-to {
+    opacity: 0;
+}
+
+.tabs {
+    display: flex;
+    flex-direction: row;
+    width: 100%;
+    justify-content: space-between;
+    align-items: center;
+    list-style-type: none;
+    border: 1px solid rgba(118, 118, 118, 0.20);
+    border-radius: 1rem;
+    padding: .75rem;
+
+    &__item {
+        width: 100%;
+        margin: auto .5rem;
+    }
+
+    &__button {
+        background-color: transparent;
+        color: #00145f;
+        text-transform: uppercase;
+        border: none;
+        width: 100%;
+        padding: 1rem 2rem;
+        border-radius: 3rem;
+
+        &.active {
+            background-color: #F0F5FF;
+            font-weight: 500;
+        }
+    }
+}
+
 .primary-button {
     display: block;
     background-color: #00145f;
+    width: 100%;
+    color: #ffffff;
+    padding: .75rem;
+    font-weight: 500;
+    border: none;
+    border-radius: 5rem;
+    margin-top: 3rem;
+}
+
+.danger-button {
+    display: block;
+    background-color: #f1416c;
     width: 100%;
     color: #ffffff;
     padding: .75rem;
@@ -92,6 +178,11 @@ input {
     align-items: center;
     justify-content: center;
     margin-bottom: 3rem;
+    width: 100%;
+
+    p {
+        margin-bottom: 0;
+    }
 
     &--error {
         border: 1px solid #f1416c;
@@ -105,9 +196,19 @@ input {
         background-color: #e8fff3;
     }
 
+    &--info {
+        border: 1px solid #00145f;
+        color: #00145f;
+        background-color: #F0F5FF;
+    }
+
     &__icone {
         width: 5%;
         text-align: center;
         font-size: 1.8rem;
     }
+}
+
+.navbar {
+    box-shadow: 0 0 1rem 0.5rem rgba(0, 0, 0, 0.1);
 }

@@ -4,18 +4,41 @@
             <h1 class="navbar__logo">
                 <Logo cor="#00145f"></Logo>
             </h1>
-            <ul class="navbar__items">
-                <li>
-                    <router-link :to="{ name: 'ColaboradorLogin' }" class="navbar__item"><a>Dashboard</a></router-link>
+            <ul class="navbar__items" v-if="this.$route.name != 'EmployeeHome' && this.$route.name != 'OrganizationHome'">
+                <li class="dropdown">
+                    <router-link :to="{ name: 'OrganizacaoLogin' }"
+                        class="navbar__item">Dashboard</router-link>
                 </li>
-                <li>
-                    <router-link :to="{ name: 'ListarOrganizacoes' }" class="navbar__item">Organizações</router-link>
+                <li class="dropdown">
+                    <button type="button" class="dropdown__button">Organizações</button>
+                    <div class="dropdown__content">
+                        <router-link :to="{ name: 'ListarOrganizacoes' }" class="navbar__item group__item">Visão
+                            Geral</router-link>
+                        <router-link :to="{ name: 'CadastrarOrganizacao' }"
+                            class="navbar__item group__item">Cadastrar</router-link>
+                    </div>
                 </li>
-                <li>
-                    <router-link :to="{ name: 'CadastroProcesso' }" class="navbar__item">Processos</router-link>
+                <li class="dropdown">
+                    <router-link :to="{ name: 'ListarProcessos' }" class="navbar__item">Processos</router-link>
                 </li>
-                <li>
-                    <router-link :to="{ name: 'CadastroAcaoVoluntariado' }" class="navbar__item">Ações Sociais</router-link>
+                <li class="dropdown">
+                    <button type="button" class="dropdown__button">Ações Sociais</button>
+                    <div class="dropdown__content">
+                        <p class="drowpdown__group">Voluntariado</p>
+                        <router-link :to="{ name: 'ListarAcoesVoluntariado' }" class="navbar__item group__item">Visão
+                            Geral</router-link>
+                        <router-link :to="{ name: 'ListarAcoesVoluntariado' }"
+                            class="navbar__item group__item">Criar Campanha</router-link>
+                        <p class="drowpdown__group">ISP</p>
+                        <router-link :to="{ name: 'ListarAcoesIsp' }" class="navbar__item group__item">Visão
+                            Geral</router-link>
+                        <router-link :to="{ name: 'ListarAcoesIsp' }"
+                            class="navbar__item group__item">Cadastrar</router-link>
+                        <p class="drowpdown__group">Acompanhamento</p>
+                        <router-link :to="{ name: 'ListarAcompanhamentos' }" class="navbar__item group__item">Solicitados</router-link>
+                        <router-link :to="{ name: 'ListarAcompanhamentos' }"
+                            class="navbar__item group__item">Nova Solicitação</router-link>
+                    </div>
                 </li>
             </ul>
 
@@ -37,6 +60,11 @@ export default {
     name: 'Navbar',
     components: {
         Logo
+    },
+    methods: {
+        mostrarDropdown: function () {
+
+        }
     }
 }
 </script>
@@ -84,9 +112,56 @@ export default {
     margin: 0;
 }
 
+.navbar .dropdown__button {
+    background-color: transparent;
+    outline: none;
+    border: none;
+    margin: 1rem 0;
+}
+
+.navbar .dropdown {
+    position: relative;
+    display: inline-block;
+}
+
+.navbar .drowpdown__group {
+    padding: .5rem 1rem;
+    margin: 0;
+    opacity: .5;
+    font-size: .8rem;
+    text-transform: uppercase;
+    font-weight: 500;
+}
+
+.navbar .dropdown .group__item {
+    padding-left: 2rem;
+}
+
+.navbar .dropdown__content {
+    display: none;
+    position: absolute;
+    background-color: #ffffff;
+    padding: 1rem 0;
+    min-width: 200px;
+    border-radius: .5rem;
+    box-shadow: 0px 0px 50px 0px rgba(82, 63, 105, .15);
+    z-index: 1;
+}
+
 .navbar__items .navbar__item {
     text-decoration: none;
     color: #000000;
+    width: 100%;
+    display: inline-block;
+    padding: .5rem 1rem;
+}
+
+.navbar .dropdown:hover .dropdown__content {
+    display: block;
+}
+
+.navbar__items .dropdown__content .navbar__item:hover {
+    background-color: #F0F5FF;
 }
 
 .navbar__user {
@@ -134,5 +209,4 @@ export default {
 .navbar__user-role {
     text-align: right;
     text-transform: uppercase;
-}
-</style>
+}</style>

@@ -135,7 +135,7 @@ export default {
     },
     methods: {
         buscarOrganizacao: function (id) {
-            axios.get(process.env.VUE_APP_API_BASE_URL + "/organizacoes/" + id)
+            axios.get("http://localhost:8082/organizacoes/" + id)
                 .then((response) => {
                     var organizacao = response.data;
 
@@ -171,7 +171,7 @@ export default {
                 },
             };
 
-            axios.put(process.env.VUE_APP_API_BASE_URL + "/organizacoes/" + this.id, data)
+            axios.put("http://localhost:8082/organizacoes/" + this.id, data)
                 .then((response) => {
                     this.$router.push({ name: 'ListarOrganizacoes', query: { sucessoAtualizacao: true } });
                 })

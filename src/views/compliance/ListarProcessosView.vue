@@ -1,7 +1,7 @@
 <template>
     <Navbar></Navbar>
-    <main id="listar-organizacoes-view">
-        <Header titulo="Organizações" icone="bi bi-building"></Header>
+    <main id="listar-processos-view">
+        <Header titulo="Processos" icone="bi bi-file-earmark-fill"></Header>
         <FloatingPanel>
             <template v-slot:FloatingPanelContent>
                 <div class="alerta alerta--sucesso"
@@ -17,7 +17,7 @@
                 <table class="table table-borderless">
                     <thead>
                         <tr>
-                            <td>Registro</td>
+                            <td>CNPJ</td>
                             <td>Organização</td>
                             <td>Status</td>
                             <td>Ações</td>
@@ -25,15 +25,15 @@
                     </thead>
                     <Transition>
                         <tbody v-if="!carregandoRequisicao">
-                            <tr v-for="organizacao in organizacoes">
-                                <td>{{ organizacao.id }}</td>
-                                <td>{{ organizacao.nome }}</td>
+                            <tr v-for="processo in processos">
+                                <td>{{ cnpjMask(processo.cnpj) }}</td>
+                                <td>{{ processo.nome_empresarial }}</td>
                                 <td>
-                                    <span :class="`status status--${organizacao.status_cadastro}`">{{
-                                        organizacao.status_cadastro.replace("EM_ANALISE", "EM ANÁLISE") }}</span>
+                                    <span :class="`status status--${processo.status}`">{{
+                                        processo.status.replace("EM_ANALISE", "EM ANÁLISE") }}</span>
                                 </td>
                                 <td>
-                                    <router-link :to="{ name: 'EditarOrganizacao', params: { id: organizacao.id } }"
+                                    <router-link :to="{ name: 'VisualizarProcesso', params: { id: processo.id } }"
                                         class="acao">
                                         <i class="acao__icone bi bi-pencil-square acao--editar"></i>
                                     </router-link>
@@ -51,12 +51,13 @@
     <FooterItem></FooterItem>
 </template>
 <script>
-import '../../assets/styles/prospeccao/listar-organizacoes-view.scss';
+import '../../assets/styles/compliance/listar-processos-view.scss';
 import Navbar from '../../components/Navbar.vue';
 import FooterItem from '../../components/Footer.vue';
 import Header from '../../components/Header.vue';
 import FloatingPanel from '../../components/FloatingPanel.vue';
 import axios from 'axios';
+import { Mask } from "maska";
 
 export default {
     name: 'ListarOrganizacoesView',
@@ -68,12 +69,15 @@ export default {
     },
     data() {
         return {
-            organizacoes: null,
+            processos: null,
 
             carregandoRequisicao: false,
 
             rotaAnterior: null,
         }
+    },
+    mounted() {
+
     },
     beforeRouteEnter(to, from, next) {
         next(route => {
@@ -81,16 +85,21 @@ export default {
         })
     },
     created() {
-        this.buscarOrganizacoes();
+        this.buscarProcessos();
     },
     methods: {
-        buscarOrganizacoes: function () {
+        cnpjMask: function (cnpj) {
+            var mask = new Mask({ mask: "##.###.###/####-##" });
+
+            return mask.masked(cnpj);
+        },
+        buscarProcessos: function () {
             this.carregandoRequisicao = true;
 
-            axios.get("http://localhost:8082/organizacoes")
+            axios.get("http://localhost:8083/processos")
                 .then((response) => {
                     console.log(response);
-                    this.organizacoes = response.data;
+                    this.processos = response.data;
                 })
                 .catch((error) => {
                     console.log(error);

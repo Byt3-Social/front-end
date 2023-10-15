@@ -1,7 +1,7 @@
 <template>
     <Navbar></Navbar>
-    <main id="doacao">
-        <form action="#" method="post" class="formualario-pagamento">
+    <main id="doar-view">
+        <form action="#" method="post" class="formulario-pagamento">
             <fieldset class="formulario-pagamento__opcoes">
                 <legend>Escolha sua doação</legend>
                 <label for="checkbox" class="checkbox">
@@ -33,101 +33,100 @@
                     </div>
                 </label>
                 <hr>
-                <p><em>Você está doando para a campanha de <strong>Arrecadação de cestas básicas</strong></em></p>
+                <p><em>Você está doando para a campanha: <strong>Arrecadação de cestas básicas</strong></em></p>
                 <div class="formulario-pagamento__resumo">
                     <p class="formulario-pagamento__texto-valor">Valor da doação</p>
                     <p class="formulario-pagamento__valor-final">R$ 10,00</p>
                 </div>
             </fieldset>
             <fieldset class="formulario-pagamento__dados-bancarios">
-                <ul class="opcoes-pagamento">
-                    <li class="opcoes-pagamento__item">
-                        <button type="button" :class="metodoDoacao == 'PIX' ? 'active' : ''"
-                            @click="selecionarMetodoPagamento('PIX')">PIX</button>
+                <ul class="tabs">
+                    <li class="tabs__item">
+                        <button class="tabs__button" :class="tab == 'PIX' ? 'active' : ''"
+                            @click.prevent="selecionarTab('PIX')">PIX</button>
                     </li>
-                    <li class="opcoes-pagamento__item">
-                        <button type="button" :class="metodoDoacao == 'BOLETO' ? 'active' : ''"
-                            @click="selecionarMetodoPagamento('BOLETO')">Boleto</button>
+                    <li class="tabs__item">
+                        <button class="tabs__button" :class="tab == 'BOLETO' ? 'active' : ''"
+                            @click.prevent="selecionarTab('BOLETO')">Boleto</button>
                     </li>
-                    <li class="opcoes-pagamento__item">
-                        <button type="button" :class="metodoDoacao == 'CARTAO_CREDITO' ? 'active' : ''"
-                            @click="selecionarMetodoPagamento('CARTAO_CREDITO')">Crédito</button>
+                    <li class="tabs__item">
+                        <button class="tabs__button" :class="tab == 'CREDITO' ? 'active' : ''"
+                            @click.prevent="selecionarTab('CREDITO')">Crédito</button>
                     </li>
                 </ul>
 
                 <div class="dados-pagamento" v-show="!pagamentoFinalizado">
-                    <div class="form-input">
-                        <label for="name" class="form-input__label">Nome</label>
-                        <input type="type" :value="nome" id="name" class="form-input__item">
+                    <div class="form-input-wrapper">
+                        <label for="nome" class="form-input-label">Nome</label>
+                        <input type="text" name="nome" id="nome" class="form-input" v-model="nome" autofocus>
                     </div>
-                    <div class="form-input">
-                        <label for="name" class="form-input__label">CPF</label>
-                        <input type="type" :value="cpf" id="name" class="form-input__item">
+                    <div class="form-input-wrapper">
+                        <label for="nome" class="form-input-label">CPF</label>
+                        <input type="text" name="nome" id="nome" class="form-input" v-model="nome" autofocus>
                     </div>
-                    <Field label="CPF do doador" name="cpf" type="text" v-model="cpf"></Field>
                     <div class="form-row">
-                        <div class="form-input">
-                            <label for="name" class="form-input__label">Email</label>
-                            <input type="type" :name="name" id="name" class="form-input__item">
+                            <div class="form-input-wrapper">
+                                <label for="nome" class="form-input-label">Email</label>
+                                <input type="text" name="nome" id="nome" class="form-input" v-model="nome">
+                            </div>
+                            <div class="form-input-wrapper">
+                                <label for="nome" class="form-input-label">Telefone</label>
+                                <input type="text" name="nome" id="nome" class="form-input" v-model="nome">
+                            </div>
                         </div>
-                        <div class="form-input">
-                            <label for="name" class="form-input__label">Telefone</label>
-                            <input type="type" :name="name" id="name" class="form-input__item">
-                        </div>
-                    </div>
-                    <div class="cartao-info" v-if="metodoDoacao == 'CARTAO_CREDITO'">
-                        <div class="form-input">
-                            <label for="name" class="form-input__label">Número do cartão</label>
-                            <input type="type" :name="name" id="name" class="form-input__item">
-                        </div>
+                    <div class="tab__content" v-if="tab == 'CREDITO'">
+                        <div class="form-input-wrapper">
+                                <label for="nome" class="form-input-label">Número do cartão</label>
+                                <input type="text" name="nome" id="nome" class="form-input" v-model="nome">
+                            </div>
                         <div class="formulario-pagamento__form-row">
                             <div class="form-row">
-                                <div class="form-input">
-                                    <label for="name" class="form-input__label">Validade</label>
-                                    <input type="type" :name="name" id="name" class="form-input__item">
-                                </div>
-                                <div class="form-input">
-                                    <label for="name" class="form-input__label">CVV</label>
-                                    <input type="type" :name="name" id="name" class="form-input__item">
-                                </div>
+                            <div class="form-input-wrapper">
+                                <label for="nome" class="form-input-label">Validade</label>
+                                <input type="text" name="nome" id="nome" class="form-input" v-model="nome">
+                            </div>
+                            <div class="form-input-wrapper">
+                                <label for="nome" class="form-input-label">CVV</label>
+                                <input type="text" name="nome" id="nome" class="form-input" v-model="nome">
+                            </div>
+                        </div>
+                        </div>
+                    </div>
+
+                    <div class="cartao-info" v-if="tab == 'BOLETO'">
+                        <div class="form-row">
+                            <div class="form-input-wrapper">
+                                <label for="nome" class="form-input-label">Endereço</label>
+                                <input type="text" name="nome" id="nome" class="form-input" v-model="nome">
+                            </div>
+                            <div class="form-input-wrapper">
+                                <label for="nome" class="form-input-label">Número</label>
+                                <input type="text" name="nome" id="nome" class="form-input" v-model="nome">
+                            </div>
+                        </div>
+                        <div class="form-row">
+                            <div class="form-input-wrapper">
+                                <label for="nome" class="form-input-label">Bairro</label>
+                                <input type="text" name="nome" id="nome" class="form-input" v-model="nome">
+                            </div>
+                            <div class="form-input-wrapper">
+                                <label for="nome" class="form-input-label">CEP</label>
+                                <input type="text" name="nome" id="nome" class="form-input" v-model="nome">
+                            </div>
+                        </div>
+                        <div class="form-row">
+                            <div class="form-input-wrapper">
+                                <label for="nome" class="form-input-label">Cidade</label>
+                                <input type="text" name="nome" id="nome" class="form-input" v-model="nome">
+                            </div>
+                            <div class="form-input-wrapper">
+                                <label for="nome" class="form-input-label">Estado</label>
+                                <input type="text" name="nome" id="nome" class="form-input" v-model="nome">
                             </div>
                         </div>
                     </div>
 
-                    <div class="cartao-info" v-if="metodoDoacao == 'BOLETO'">
-                        <div class="form-row">
-                            <div class="form-input">
-                                <label for="name" class="form-input__label">Endereço</label>
-                                <input type="type" :name="name" id="name" class="form-input__item">
-                            </div>
-                            <div class="form-input">
-                                <label for="name" class="form-input__label">Número</label>
-                                <input type="type" :name="name" id="name" class="form-input__item">
-                            </div>
-                        </div>
-                        <div class="form-row">
-                            <div class="form-input">
-                                <label for="name" class="form-input__label">Bairro</label>
-                                <input type="type" :name="name" id="name" class="form-input__item">
-                            </div>
-                            <div class="form-input">
-                                <label for="name" class="form-input__label">CEP</label>
-                                <input type="type" :name="name" id="name" class="form-input__item">
-                            </div>
-                        </div>
-                        <div class="form-row">
-                            <div class="form-input">
-                                <label for="name" class="form-input__label">Cidade</label>
-                                <input type="type" :name="name" id="name" class="form-input__item">
-                            </div>
-                            <div class="form-input">
-                                <label for="name" class="form-input__label">Estado</label>
-                                <input type="type" :name="name" id="name" class="form-input__item">
-                            </div>
-                        </div>
-                    </div>
-
-                    <p class="text-center">
+                    <p class="text-center safe">
                         <i class="bi bi-shield-lock-fill"></i>
                         Seus dados pessoais estão protegidos
                     </p>
@@ -146,7 +145,7 @@
 </template>
 
 <script>
-import '../../assets/styles/formulario-doacao.css';
+import '../../assets/styles/acoes-sociais/doar-view.scss';
 import Navbar from '../../components/Navbar.vue';
 import FooterItem from '../../components/Footer.vue';
 import axios from 'axios';
@@ -173,7 +172,7 @@ export default {
             email: null,
             telefone: null,
             cpf: null,
-            metodoDoacao: 'PIX',
+            tab: 'PIX',
             tokenCartao: null,
             valorDoacao: 10.00,
 
@@ -197,8 +196,8 @@ export default {
         }
     },
     methods: {
-        selecionarMetodoPagamento: function (metodo) {
-            this.metodoDoacao = metodo;
+        selecionarTab: function (metodo) {
+            this.tab = metodo;
         },
         doar: function () {
             if (this.metodoDoacao == "CARTAO_CREDITO") {

@@ -1,7 +1,7 @@
 <template>
     <Navbar></Navbar>
-    <main id="listar-organizacoes-view">
-        <Header titulo="Organizações" icone="bi bi-building"></Header>
+    <main id="listar-acompanhamentos-view">
+        <Header titulo="Acompanhamento" icone="bi bi-file-earmark-bar-graph-fill"></Header>
         <FloatingPanel>
             <template v-slot:FloatingPanelContent>
                 <div class="alerta alerta--sucesso"
@@ -17,24 +17,18 @@
                 <table class="table table-borderless">
                     <thead>
                         <tr>
-                            <td>Registro</td>
+                            <td>Ação</td>
                             <td>Organização</td>
-                            <td>Status</td>
                             <td>Ações</td>
                         </tr>
                     </thead>
                     <Transition>
                         <tbody v-if="!carregandoRequisicao">
-                            <tr v-for="organizacao in organizacoes">
-                                <td>{{ organizacao.id }}</td>
-                                <td>{{ organizacao.nome }}</td>
+                            <tr v-for="acao in acoes">
+                                <td>{{ acao.nome_acao }}</td>
+                                <td>{{ organizacoes != null ? matchOrganizacao(acao.organizacao_id) : "-" }}</td>
                                 <td>
-                                    <span :class="`status status--${organizacao.status_cadastro}`">{{
-                                        organizacao.status_cadastro.replace("EM_ANALISE", "EM ANÁLISE") }}</span>
-                                </td>
-                                <td>
-                                    <router-link :to="{ name: 'EditarOrganizacao', params: { id: organizacao.id } }"
-                                        class="acao">
+                                    <router-link :to="{ name: 'EditarAcaoIsp', params: { id: acao.id } }" class="acao">
                                         <i class="acao__icone bi bi-pencil-square acao--editar"></i>
                                     </router-link>
                                 </td>
@@ -51,15 +45,16 @@
     <FooterItem></FooterItem>
 </template>
 <script>
-import '../../assets/styles/prospeccao/listar-organizacoes-view.scss';
+import '../../assets/styles/acompanhamento/listar-acompanhamentos-view.scss';
 import Navbar from '../../components/Navbar.vue';
 import FooterItem from '../../components/Footer.vue';
 import Header from '../../components/Header.vue';
 import FloatingPanel from '../../components/FloatingPanel.vue';
 import axios from 'axios';
+import { Mask } from "maska";
 
 export default {
-    name: 'ListarOrganizacoesView',
+    name: 'ListarAcompanhamentosView',
     components: {
         Navbar,
         FooterItem,
@@ -68,6 +63,7 @@ export default {
     },
     data() {
         return {
+            acoes: null,
             organizacoes: null,
 
             carregandoRequisicao: false,
@@ -75,15 +71,38 @@ export default {
             rotaAnterior: null,
         }
     },
+    mounted() {
+
+    },
     beforeRouteEnter(to, from, next) {
         next(route => {
             route.rotaAnterior = from;
         })
     },
     created() {
-        this.buscarOrganizacoes();
+        // this.buscarAcoes();
+        // this.buscarOrganizacoes();
     },
     methods: {
+        cnpjMask: function (cnpj) {
+            var mask = new Mask({ mask: "##.###.###/####-##" });
+
+            return mask.masked(cnpj);
+        },
+        buscarAcoes: function () {
+            this.carregandoRequisicao = true;
+
+            axios.get("http://localhost:8081/acoes-isp")
+                .then((response) => {
+                    console.log(response);
+                    this.acoes = response.data;
+                })
+                .catch((error) => {
+                    console.log(error);
+                });
+
+            this.carregandoRequisicao = false;
+        },
         buscarOrganizacoes: function () {
             this.carregandoRequisicao = true;
 
@@ -97,7 +116,16 @@ export default {
                 });
 
             this.carregandoRequisicao = false;
-        }
+        },
+        matchOrganizacao: function (id) {
+            for (let index = 0; index < this.organizacoes.length; index++) {
+                const organizacao = this.organizacoes[index];
+
+                if (organizacao.id == id) {
+                    return organizacao.nome;
+                }
+            }
+        },
     }
 }
 </script>

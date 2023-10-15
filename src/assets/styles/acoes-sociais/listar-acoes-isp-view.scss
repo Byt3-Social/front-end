@@ -1,4 +1,4 @@
-main#listar-organizacoes-view {
+main#listar-acoes-isp-view {
     display: flex;
     flex-direction: column;
     align-items: center;
@@ -24,29 +24,24 @@ main#listar-organizacoes-view {
                 font-size: .9rem;
                 font-weight: 500;
 
-                &--ABERTO {
+                &--EM_ANDAMENTO {
                     background-color: #F0F5FF;
                     color: #00145F;
                 }
 
-                &--EM_ANALISE {
-                    background-color: #FFF8DD;
-                    color: #FFC700;
-                }
-
-                &--APROVADO {
+                &--FINALIZADO {
                     background-color: #E8FFF3;
                     color: #50CD89;
-                }
-
-                &--REPROVADO {
-                    background-color: #fff5f8;
-                    color: #f1416c;
                 }
 
                 &--CADASTRADO {
                     background-color: #f8f5ff;
                     color: #7239ea;
+                }
+
+                &--AGUARDANDO_APORTE {
+                    background-color: #DBDFE9;
+                    color: #071437;
                 }
             }
 
@@ -79,5 +74,15 @@ main#listar-organizacoes-view {
     .carregando__message {
         text-align: center;
         padding: 1rem 0;
+    }
+
+    .v-enter-active,
+    .v-leave-active {
+        transition: opacity 0.2s ease;
+    }
+
+    .v-enter-from,
+    .v-leave-to {
+        opacity: 0;
     }
 }

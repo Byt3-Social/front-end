@@ -1,0 +1,168 @@
+@import '../variaveis.scss';
+
+main#visualizar-acompanhamento-view {
+    display: flex;
+    flex-direction: column;
+    align-items: center;
+    height: 100%;
+    width: 100%;
+
+    .tabs__content {
+        display: flex;
+        flex-direction: row;
+        justify-content: space-between;
+        align-items: center;
+        flex-wrap: wrap;
+        width: 100%;
+    }
+
+    .bloco {
+        display: block;
+        width: 49%;
+        margin-bottom: 1.5rem;
+
+        &__atributo {
+            display: block;
+            font-weight: 600;
+        }
+
+        &__atributo--preenchido {
+            display: block;
+        }
+    }
+
+    .primary-button.solicitar-reuniao {
+        margin-top: 0;
+        margin-bottom: 1rem;
+    }
+
+    .documento {
+        width: 100%;
+
+        &__solicitar {
+            width: 100%;
+            display: flex;
+            background-color: #F1F1F2;
+            padding: .5rem;
+            border-radius: 3rem;
+            margin-bottom: 1.5rem;
+
+            &--button {
+                background-color: #424242;
+                outline: none;
+                border: none;
+                padding: .5rem 1.5rem;
+                border-radius: 3rem;
+                color: #ffffff;
+                margin-left: 1.5rem;
+            }
+        }
+
+        &__item {
+            width: 100%;
+        }
+
+        &__solicitado {
+            margin-top: 1.5rem;
+            padding: 1.2rem;
+            border: 1px dashed #00145F;
+            width: 100%;
+            border-radius: 1rem;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            color: #00145F;
+            font-weight: 500;
+        }
+
+        &__info {
+            margin-left: 1.5rem;
+        }
+
+        &__icone {
+            font-size: 2rem;
+
+            &--download {
+                color: #00145F;
+                margin-right: 1rem;
+            }
+
+            &--reset {
+                color: #f1416c;
+            }
+        }
+
+        &__nome {
+            margin-left: 1rem;
+        }
+
+        &__enviado {
+            padding: 1.2rem;
+            border: .5px solid #767676;
+            margin-top: 1rem;
+            border-radius: 1rem;
+            display: flex;
+            flex-direction: row;
+            align-items: center;
+        }
+
+        &__detalhes {
+            display: flex;
+            flex-direction: row;
+            align-items: center;
+            width: 80%;
+
+            i {
+                font-size: 2rem;
+            }
+        }
+
+        &__acoes {
+            width: 20%;
+            display: flex;
+            align-items: center;
+            justify-content: flex-end;
+
+            button {
+                outline: none;
+                border: none;
+                background-color: transparent;
+            }
+
+
+        }
+    }
+
+    .reuniao {
+        display: flex;
+        flex-direction: row;
+        width: 100%;
+        align-items: center;
+        justify-content: center;
+        padding: 1rem;
+        border: 1px solid #444791;
+        background-color: #f8f5ff;
+        border-radius: 1rem;
+        color: #444791;
+        margin-bottom: 1.5rem;
+
+        i {
+            font-size: 2rem;
+            margin-right: 1.5rem;
+        }
+
+        &__detalhes {
+            p {
+                margin-bottom: 0;
+            }
+
+            p:first-of-type {
+                font-weight: 600;
+            }
+
+            a {
+                text-decoration: none;
+            }
+        }
+    }
+}

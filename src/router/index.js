@@ -7,16 +7,28 @@ import CadastrarOrganizacaoView from '@/views/prospeccao/CadastrarOrganizacaoVie
 import ListarOrganizacoesView from '@/views/prospeccao/ListarOrganizacoesView'
 import EditarOrganizacaoView from '@/views/prospeccao/EditarOrganizacaoView'
 
-import CadastroProcessoView from '@/views/prospeccao/CadastroProcessoView'
-import CadastroAcaoVoluntariadoView from '@/views/acoes-sociais/CadastroAcaoVoluntariadoView'
-import CadastroAcaoIspView from '@/views/acoes-sociais/CadastroAcaoIspView'
-import CadastroAcompanhamentoAcaoView from '@/views/acompanhamento/CadastroAcompanhamentoAcaoView'
-import FormularioDoacaoView from '@/views/acoes-sociais/FormularioDoacaoView'
-import ListagemProcessosView from '@/views/acoes-sociais/ListagemProcessosView'
+import ListarProcessosView from '@/views/compliance/ListarProcessosView'
+import VisualizarProcessoView from '@/views/compliance/VisualizarProcessoView'
+
+import ListarAcoesVoluntariadoView from '@/views/acoes-sociais/ListarAcoesVoluntariadoView'
+import EditarAcaoVoluntariadoView from '@/views/acoes-sociais/EditarAcaoVoluntariadoView'
+import VisualizarDoacaoView from '@/views/acoes-sociais/VisualizarDoacaoView'
+import ListarAcoesIspView from '@/views/acoes-sociais/ListarAcoesIspView'
+import EditarAcaoIspView from '@/views/acoes-sociais/EditarAcaoIspView'
+import DoarView from '@/views/acoes-sociais/DoarView'
+
+import ListarAcompanhamentosView from '@/views/acompanhamento/ListarAcompanhamentosView'
+import CadastrarAcompanhamentoView from '@/views/acompanhamento/CadastrarAcompanhamentoView'
+import VisualizarAcompanhamentoView from '@/views/acompanhamento/VisualizarAcompanhamentoView'
+
+import ColaboradorHomeView from '@/views/colaborador/ColaboradorHomeView'
+
+import OrganizacaoHomeView from '@/views/organizacao/OrganizacaoHomeView'
 
 import NotFoundView from '@/views/NotFoundView'
 
 const routes = [
+    /* Login */
     {
         path: '/colaborador/login',
         name: 'ColaboradorLogin',
@@ -27,51 +39,89 @@ const routes = [
         name: 'OrganizacaoLogin',
         component: OrganizacaoLoginView
     },
+    /* Prospecção */
     {
-        path: '/colaborador/organizacoes/cadastrar',
+        path: '/admin/organizacoes/cadastrar',
         name: 'CadastrarOrganizacao',
         component: CadastrarOrganizacaoView
     },
     {
-        path: '/colaborador/organizacoes',
+        path: '/admin/organizacoes',
         name: 'ListarOrganizacoes',
         component: ListarOrganizacoesView,
     },
     {
-        path: '/colaborador/organizacoes/:id',
+        path: '/admin/organizacoes/:id',
         name: 'EditarOrganizacao',
         component: EditarOrganizacaoView
     },
+    /* Compliance */
     {
-        path: '/organizacoes/processo',
-        name: 'CadastroProcesso',
-        component: CadastroProcessoView
+        path: '/admin/processos',
+        name: 'ListarProcessos',
+        component: ListarProcessosView
     },
     {
-        path: '/acoes/voluntariado',
-        name: 'CadastroAcaoVoluntariado',
-        component: CadastroAcaoVoluntariadoView
+        path: '/admin/processos/:id',
+        name: 'VisualizarProcesso',
+        component: VisualizarProcessoView
+    },
+    /* Ações sociais */
+    {
+        path: '/admin/acoes/voluntariado',
+        name: 'ListarAcoesVoluntariado',
+        component: ListarAcoesVoluntariadoView
     },
     {
-        path: '/acoes/isp',
-        name: 'CadastroAcaoIsp',
-        component: CadastroAcaoIspView
+        path: '/admin/acoes/voluntariado/:id',
+        name: 'EditarAcaoVoluntariado',
+        component: EditarAcaoVoluntariadoView
     },
     {
-        path: '/acompanhamentos/novo',
-        name: 'CadastroAcompanhamentoAcao',
-        component: CadastroAcompanhamentoAcaoView
+        path: '/admin/acoes/voluntariado/doacoes/:id',
+        name: 'VisualizarDoacao',
+        component: VisualizarDoacaoView
     },
     {
-        path: '/doacoes/:id',
-        name: 'Doacao',
-        component: FormularioDoacaoView
+        path: '/admin/acoes/isp',
+        name: 'ListarAcoesIsp',
+        component: ListarAcoesIspView
     },
     {
-        path: '/processos',
-        name: 'ListagemProcessos',
-        component: ListagemProcessosView
+        path: '/admin/acoes/isp/:id',
+        name: 'EditarAcaoIsp',
+        component: EditarAcaoIspView
     },
+    {
+        path: '/employee/doacoes/:id',
+        name: 'Doar',
+        component: DoarView
+    },
+    /* Acompanhamento */
+    {
+        path: '/admin/acompanhamentos',
+        name: 'ListarAcompanhamentos',
+        component: ListarAcompanhamentosView
+    },
+    {
+        path: '/admin/acompanhamentos/:id',
+        name: 'VisualizarAcompanhamento',
+        component: VisualizarAcompanhamentoView
+    },
+
+    /* Colaborador */
+    {
+        path: '/colaborador',
+        name: 'ColaboradorHome',
+        component: ColaboradorHomeView
+    },
+    /* Organização */
+    {
+        path: '/organizacao',
+        name: 'OrganizacaoHome',
+        component: OrganizacaoHomeView
+    },
+    
     {
         path: '/:pathMatch(.*)*',
         component: NotFoundView
