@@ -74,4 +74,8 @@ opacity: 0.5;
 .bi.bi-file-earmark-fill {
     font-size: 2rem;
 }
+
+.bi.bi-file-earmark-fill {
+    font-size: 32px;
+}
 </style>
