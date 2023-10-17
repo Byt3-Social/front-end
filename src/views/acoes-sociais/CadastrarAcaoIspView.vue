@@ -3,32 +3,12 @@
     <main id="editar-acao-isp-view">
         <Header titulo="Investimento Social Privado" icone="bi bi-wallet2"></Header>
         <Transition>
-            <FloatingPanel v-if="erroBuscaAcao">
-                <template v-slot:FloatingPanelContent>
-                    <div class="alerta alerta--info">
-                        <i class="alerta__icone bi bi-info-circle-fill"></i>
-                        <p class="alerta__message">Não foi possível recuperar as informações da ação</p>
-                    </div>
-                </template>
-            </FloatingPanel>
-        </Transition>
-        <Transition>
             <FloatingPanel
-                v-if="!erroBuscaAcao && acao != null && organizacoes != null && segmentos != null && categorias != null && areas != null && incentivos != null">
+                v-if="organizacoes != null && segmentos != null && categorias != null && areas != null && incentivos != null">
                 <template v-slot:FloatingPanelContent>
-                    <div class="alerta alerta--error" v-if="erroAtualizacao">
+                    <div class="alerta alerta--error" v-if="erroCadastro">
                         <i class="alerta__icone bi bi-x-circle-fill"></i>
                         <p class="alerta__message">Não foi possível atualizar as informações dessa ação</p>
-                    </div>
-                    <div class="alerta alerta--sucesso"
-                        v-if="!erroAtualizacao && this.$route.query.sucessoAtualizacao && rotaAnterior == null">
-                        <i class="alerta__icone bi bi-check-circle-fill"></i>
-                        <p class="alerta__message">Ação atualizada com sucesso</p>
-                    </div>
-                    <div class="alerta alerta--sucesso"
-                        v-if="!erroAtualizacao && this.$route.query.sucessoCadastro && rotaAnterior.name == 'CadastrarAcaoIsp'">
-                        <i class="alerta__icone bi bi-check-circle-fill"></i>
-                        <p class="alerta__message">Ação cadastrada com sucesso</p>
                     </div>
                     <ul class="tabs">
                         <li class="tabs__item">
@@ -39,25 +19,21 @@
                             <button class="tabs__button" :class="tab == 'FINANCEIRO' ? 'active' : ''"
                                 @click="selecionarTab('FINANCEIRO')">Financeiro</button>
                         </li>
-                        <li class="tabs__item">
-                            <button class="tabs__button" :class="tab == 'ARQUIVOS' ? 'active' : ''"
-                                @click="selecionarTab('ARQUIVOS')">Arquivos</button>
-                        </li>
                     </ul>
                     <form action="#" method="post" v-if="tab == 'DADOS-GERAIS' || tab == 'FINANCEIRO'">
                         <div class="tabs__content" v-if="tab == 'DADOS-GERAIS'">
                             <div class="form-input-wrapper">
                                 <label for="acao.nomeAcao" class="form-input-label">Nome da ação</label>
                                 <input type="text" name="acao.nomeAcao" id="acao.nomeAcao" class="form-input"
-                                    v-model="acao.nomeAcao">
+                                    v-model="acao.nomeAcao" autofocus>
                             </div>
                             <div class="form-input-wrapper">
                                 <label for="acao.organizacaoId" class="form-input-label">Organização</label>
                                 <select name="acao.organizacaoId" id="acao.organizacaoId" class="form-input"
                                     v-model="acao.organizacaoId">
                                     <option :value="null">Selecione uma organização...</option>
-                                    <option v-for="organizacao in organizacoes" :value="organizacao.id"
-                                        :selected="acao.organizacaoId == organizacao.id">{{ organizacao.nome }}</option>
+                                    <option v-for="organizacao in organizacoes" :value="organizacao.id">{{ organizacao.nome
+                                    }}</option>
                                 </select>
                             </div>
                             <div class="form-input-wrapper">
@@ -70,13 +46,13 @@
                                     <label for="acao.status" class="form-input-label">Status</label>
                                     <select name="acao.status" id="acao.status" class="form-input" v-model="acao.status">
                                         <option :value="null" disabled>Selecione um status...</option>
-                                        <option value="CADASTRADO" :selected="acao.status == 'CADASTRADA'">Cadastrada
+                                        <option value="CADASTRADO">Cadastrada
                                         </option>
-                                        <option value="AGUARDANDO_APORTE" :selected="acao.status == 'AGUARDANDO_APORTE'">
+                                        <option value="AGUARDANDO_APORTE">
                                             Aguardando aporte</option>
-                                        <option value="EM_ANDAMENTO" :selected="acao.status == 'EM_ANDAMENTO'">Em andamento
+                                        <option value="EM_ANDAMENTO">Em andamento
                                         </option>
-                                        <option value="FINALIZADO" :selected="acao.status == 'FINALIZADA'">Finalizada
+                                        <option value="FINALIZADO">Finalizada
                                         </option>
                                     </select>
                                 </div>
@@ -92,11 +68,11 @@
                                 <select name="acao.abrangencia" id="acao.abrangencia" class="form-input"
                                     v-model="acao.abrangencia">
                                     <option :value="null" disabled>Selecione uma abrangência...</option>
-                                    <option value="NACIONAL" :selected="acao.abrangencia == 'NACIONAL'">Nacional
+                                    <option value="NACIONAL">Nacional
                                     </option>
-                                    <option value="ESTADUAL" :selected="acao.abrangencia == 'ESTADUAL'">Estadual
+                                    <option value="ESTADUAL">Estadual
                                     </option>
-                                    <option value="MUNICIPAL" :selected="acao.abrangencia == 'MUNICIPAL'">Municipal
+                                    <option value="MUNICIPAL">Municipal
                                     </option>
                                 </select>
                             </div>
@@ -112,7 +88,7 @@
                                 <div class="form-input-wrapper">
                                     <label for="acao.categoria" class="form-input-label">Categoria</label>
                                     <select name="acao.categoria" id="acao.categoria" class="form-input"
-                                        v-model="categoriaId">
+                                        v-model="acao.categoria">
                                         <option :value="null" disabled>Selecione uma categoria...</option>
                                         <option :value="categoria.id" v-for="categoria in categorias">{{ categoria.nome }}
                                         </option>
@@ -120,7 +96,7 @@
                                 </div>
                                 <div class="form-input-wrapper">
                                     <label for="acao.area" class="form-input-label">Área</label>
-                                    <select name="acao.area" id="acao.area" class="form-input" v-model="areaId">
+                                    <select name="acao.area" id="acao.area" class="form-input" v-model="acao.area">
                                         <option :value="null" disabled>Selecione uma área...</option>
                                         <option :value="area.id" v-for="area in areas">{{ area.nome }}</option>
                                     </select>
@@ -147,83 +123,20 @@
                             </div>
                             <div class="form-input-wrapper">
                                 <label for="acao.incentivo" class="form-input-label">Incentivo fiscal</label>
-                                <select name="acao.incentivo" id="acao.incentivo" class="form-input" v-model="incentivoId">
+                                <select name="acao.incentivo" id="acao.incentivo" class="form-input"
+                                    v-model="acao.incentivo">
                                     <option :value="null" disabled>Selecione um incentivo...</option>
                                     <option :value="incentivo.id" v-for="incentivo in incentivos">{{ incentivo.nome }}
                                     </option>
                                 </select>
                             </div>
-
-                            <div class="form-row aporte-wrapper">
-                                <div class="form-input-wrapper">
-                                    <input type="number" name="acao.aporteInicial" id="acao.aporteInicial"
-                                        class="form-input" step="0.01" min="1.00" placeholder="Valor" v-model="aporteValor">
-                                </div>
-                                <div class="form-input-wrapper">
-                                    <input type="date" name="acao.aporteInicial" id="acao.aporteInicial" class="form-input"
-                                        v-model="aporteData">
-                                </div>
-                                <div class="form-input-wrapper">
-                                    <button type="button" class="documento__solicitar--button"
-                                        @click.prevent="incluirAporte()">Registrar</button>
-                                </div>
-                            </div>
-
-                            <table class="table table-borderless">
-                                <thead>
-                                    <tr>
-                                        <td>Valor</td>
-                                        <td>Data</td>
-                                        <td>Ações</td>
-                                    </tr>
-                                </thead>
-                                <tbody>
-                                    <tr v-if="aporteInicial != null && aporteInicial != ''">
-                                        <td>R$ {{ aporteInicial.toFixed(2).replace(".", ",") }}</td>
-                                        <td>
-                                            {{ (new
-                                                Date(acao.createdAt)).toLocaleDateString('pt-BR',
-                                                    options) }}
-                                        </td>
-                                    </tr>
-                                    <tr v-for="(aporte, index) in acao.aportes">
-                                        <td>R$ {{ aporte.valor.toFixed(2).replace(".", ",") }}</td>
-                                        <td>
-                                            {{ (new
-                                                Date(aporte.data)).toLocaleDateString('pt-BR',
-                                                    options) }}
-                                        </td>
-                                        <td>
-                                            <button type="button" class="acao" @click.prevent="excluirAporte(index)">
-                                                <i class="bi bi-x-circle-fill acao__icone acao--excluir"></i>
-                                            </button>
-                                        </td>
-                                    </tr>
-                                </tbody>
-                            </table>
-
-                            <p class="text-center"
-                                v-if="(aporteInicial == null || aporteInicial == '') && acao.aportes.length < 1">
-                                Não há registros de aportes</p>
                         </div>
 
-                        <button class="primary-button" @click.prevent="atualizarAcaoIsp(acao.id)">
+                        <button class="primary-button" @click.prevent="cadastrarAcaoIsp()">
                             <span v-show="carregandoRequisicao" class="spinner-border" aria-hidden="true"></span>
-                            <span v-show="!carregandoRequisicao">Salvar</span>
+                            <span v-show="!carregandoRequisicao">Cadastrar</span>
                         </button>
                     </form>
-                    <div class="tabs__content" v-if="tab == 'ARQUIVOS'">
-                        <SingleFileUploader arquivoSolicitado="Contrato" icone="file-text" pasta="contratos"
-                            v-model:arquivo="acao.contrato" @excluirArquivo="excluirArquivo($event, 'contrato')"
-                            @uploadArquivo="uploadArquivo($event, 'contrato')"
-                            @download="downloadArquivo($event, 'contrato')">
-                        </SingleFileUploader>
-
-                        <MultiFileUploader arquivoSolicitado="Arquivo" icone="file-plus" pasta="documentos"
-                            v-model:arquivos="acao.arquivos" @excluirArquivo="excluirArquivo($event, 'documento')"
-                            @uploadArquivo="uploadArquivo($event, 'documento')"
-                            @download="downloadArquivo($event, 'documento')"></MultiFileUploader>
-                    </div>
                 </template>
             </FloatingPanel>
         </Transition>
@@ -241,7 +154,7 @@ import SingleFileUploader from '@/components/SingleFileUploader.vue';
 import MultiFileUploader from '@/components/MultiFileUploader.vue';
 
 export default {
-    name: 'EditarAcaoIspView',
+    name: 'CadastrarAcaoIspView',
     components: {
         Navbar,
         FooterItem,
@@ -251,7 +164,6 @@ export default {
         MultiFileUploader,
     },
     created() {
-        this.buscarAcaoIsp(this.$route.params.id);
         this.buscarOrganizacoes();
         this.buscarSegmentos();
         this.buscarAreas();
@@ -262,34 +174,29 @@ export default {
     data() {
         return {
             tab: "DADOS-GERAIS",
-            acao: null,
+            acao: {
+                nomeAcao: null,
+                descricao: null,
+                abrangencia: null,
+                tipoInvestimento: null,
+                qtdePessoasImpactadas: null,
+                aporteInicial: null,
+                status: null,
+                organizacaoId: null,
+                categoria: null,
+                area: null,
+                incentivo: null,
+                locaisImpactados: [],
+            },
             organizacoes: null,
             segmentos: null,
             estados: null,
             categorias: null,
             areas: null,
             incentivos: null,
-            categoriaId: null,
-            areaId: null,
-            incentivoId: null,
-            locaisImpactados: [],
-            aporteInicial: null,
-            aporteValor: null,
-            aporteData: null,
-            options: {
-                year: 'numeric',
-                month: 'long',
-                day: 'numeric',
-            },
             erroBuscaAcao: false,
-            erroAtualizacao: false,
-            rotaAnterior: null,
+            erroCadastro: false,
         }
-    },
-    beforeRouteEnter(to, from, next) {
-        next(route => {
-            route.rotaAnterior = from;
-        })
     },
     methods: {
         selecionarTab: function (tab) {
@@ -350,99 +257,14 @@ export default {
                     console.log(error);
                 });
         },
-        buscarAcaoIsp: function (id) {
-            axios.get("http://localhost:8081/acoes-isp/" + id)
+        cadastrarAcaoIsp: function () {
+            axios.post("http://localhost:8081/acoes-isp", this.acao)
                 .then((response) => {
-                    console.log(response.data);
-                    var acao = response.data;
-                    this.acao = acao;
-
-                    this.categoriaId = this.acao.categoria != null ? this.acao.categoria.id : null;
-                    this.areaId = this.acao.area != null ? this.acao.area.id : null;
-                    this.incentivoId = this.acao.incentivo != null ? this.acao.incentivo.id : null;
-
-                    acao.locaisImpactados.forEach(local => {
-                        this.locaisImpactados.push(local.local);
-                    });
-
-                    this.acao.locaisImpactados = this.locaisImpactados;
-                    this.aporteInicial = acao.aporteInicial;
+                    this.$router.push({ name: 'EditarAcaoIsp', params: { id: response.data }, query: { sucessoCadastro: true, timestamp: Date.now() } });
                 })
                 .catch((error) => {
                     console.log(error);
-                    this.erroBuscaAcao = true;
-                });
-        },
-        incluirAporte: function () {
-            if (this.aporteData != null && this.aporteValor != null && this.aporteData != '' && this.aporteValor != '') {
-                var aporte = {
-                    data: this.aporteData,
-                    valor: this.aporteValor
-                }
-
-                this.acao.aportes.push(aporte);
-            }
-        },
-        excluirAporte: function (index) {
-            this.acao.aportes.splice(index, 1);
-        },
-        uploadArquivo: function (e, tipo) {
-            var body = new FormData();
-            body.append('arquivo', e);
-
-            axios.post("http://localhost:8081/acoes/" + this.acao.id + "/arquivos?acao=isp&upload=" + tipo, body, { "Content-Type": "multipart/form-data" })
-                .then((response) => {
-                    if (tipo == 'contrato') {
-                        this.acao.contrato = response.data;
-                    } else {
-                        this.acao.arquivos.push(response.data);
-                    }
-                })
-                .catch((error) => {
-                    console.log(error);
-                });
-        },
-        excluirArquivo: function (event, tipo) {
-            var id;
-            if (tipo == 'contrato') {
-                id = event;
-            } else {
-                id = this.acao.arquivos[event].id;
-            }
-
-            axios.delete("http://localhost:8081/acoes/arquivos/" + id + "?tipo=" + tipo)
-                .then((response) => {
-                    if (tipo == 'contrato') {
-                        this.acao.contrato = null;
-                    } else {
-                        this.acao.arquivos.splice(event, 1);
-                    }
-                })
-                .catch((error) => {
-                    console.log(error);
-                });
-        },
-        downloadArquivo: function (event, tipo) {
-            axios.get("http://localhost:8081/acoes/arquivos/" + event + "?download=" + tipo)
-                .then((response) => {
-                    window.location.href = response.data;
-                })
-                .catch((error) => {
-                    console.log(error);
-                });
-        },
-        atualizarAcaoIsp: function (id) {
-            this.acao.categoria = this.categoriaId;
-            this.acao.area = this.areaId;
-            this.acao.incentivo = this.incentivoId;
-
-            axios.put("http://localhost:8081/acoes-isp/" + id, this.acao)
-                .then((response) => {
-                    this.$router.push({ name: 'EditarAcaoIsp', params: { id: id }, query: { sucessoAtualizacao: true, timestamp: Date.now() } });
-                })
-                .catch((error) => {
-                    console.log(error);
-                    this.erroAtualizacao = true;
+                    this.erroCadastro = true;
                     window.scrollTo(0, 0);
 
                     document.querySelectorAll(".field-error__message").forEach(field => {

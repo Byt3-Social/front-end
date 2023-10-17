@@ -13,6 +13,15 @@ main#visualizar-doacao-view {
         flex-wrap: wrap;
     }
 
+    .alerta {
+        margin-bottom: 1rem;
+    }
+
+    .danger-button,
+    .primary-button {
+        margin-top: 1rem;
+    }
+
     .bloco {
         display: block;
         width: 49%;

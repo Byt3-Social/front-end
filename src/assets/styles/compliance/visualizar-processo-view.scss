@@ -38,7 +38,8 @@ main#visualizar-processo-view {
                 margin-bottom: 1.5rem;
 
                 &--button {
-                    background-color: #424242;
+                    background-color: #00145f;
+                    text-transform: uppercase;
                     outline: none;
                     border: none;
                     padding: .5rem 1.5rem;
@@ -63,10 +64,28 @@ main#visualizar-processo-view {
                 justify-content: center;
                 color: #00145F;
                 font-weight: 500;
+                position: relative;
+
+                .excluir-documento__button {
+                    background-color: transparent;
+                    outline: none;
+                    border: none;
+                    position: absolute;
+                    right: 1rem;
+
+                    i {
+                        font-size: 2rem;
+                        color: #f1416c;
+                    }
+                }
             }
 
             &__info {
                 margin-left: 1.5rem;
+
+                p {
+                    margin-bottom: 0;
+                }
             }
 
             &__icone {
@@ -74,16 +93,17 @@ main#visualizar-processo-view {
 
                 &--download {
                     color: #00145F;
-                    margin-right: 1rem;
                 }
 
                 &--reset {
                     color: #f1416c;
+                    margin-left: 1rem;
                 }
             }
 
             &__nome {
                 margin-left: 1rem;
+                margin-bottom: 0;
             }
 
             &__enviado {
@@ -119,38 +139,14 @@ main#visualizar-processo-view {
                     background-color: transparent;
                 }
 
-                
+
             }
         }
     }
 
     .alerta {
+        margin-bottom: 1rem;
         border: none;
-
-        &--ABERTO {
-            background-color: #F0F5FF;
-            color: #00145F;
-        }
-
-        &--EM_ANALISE {
-            background-color: #FFF8DD;
-            color: #FFC700;
-        }
-
-        &--APROVADO {
-            background-color: #E8FFF3;
-            color: #50CD89;
-        }
-
-        &--REPROVADO {
-            background-color: #fff5f8;
-            color: #f1416c;
-        }
-
-        &--CADASTRADO {
-            background-color: #f8f5ff;
-            color: #7239ea;
-        }
     }
 
     .bloco {
@@ -199,5 +195,13 @@ main#visualizar-processo-view {
         width: 100%;
         display: block;
         text-align: center;
+    }
+
+    .excluir-dado {
+        i {
+            font-size: 2rem;
+            vertical-align: middle;
+            color: #f1416c;
+        }
     }
 }

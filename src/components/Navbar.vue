@@ -6,8 +6,7 @@
             </h1>
             <ul class="navbar__items" v-if="this.$route.name != 'EmployeeHome' && this.$route.name != 'OrganizationHome'">
                 <li class="dropdown">
-                    <router-link :to="{ name: 'OrganizacaoLogin' }"
-                        class="navbar__item">Dashboard</router-link>
+                    <router-link :to="{ name: 'OrganizacaoLogin' }" class="navbar__item">Dashboard</router-link>
                 </li>
                 <li class="dropdown">
                     <button type="button" class="dropdown__button">Organizações</button>
@@ -19,7 +18,15 @@
                     </div>
                 </li>
                 <li class="dropdown">
-                    <router-link :to="{ name: 'ListarProcessos' }" class="navbar__item">Processos</router-link>
+                    <button type="button" class="dropdown__button">Processos</button>
+                    <div class="dropdown__content">
+                        <router-link :to="{ name: 'ListarProcessos' }" class="navbar__item group__item">Visão
+                            Geral</router-link>
+                        <router-link :to="{ name: 'CadastrarOrganizacao' }"
+                            class="navbar__item group__item">Documentos</router-link>
+                        <router-link :to="{ name: 'CadastrarOrganizacao' }"
+                            class="navbar__item group__item">Dados</router-link>
+                    </div>
                 </li>
                 <li class="dropdown">
                     <button type="button" class="dropdown__button">Ações Sociais</button>
@@ -27,17 +34,16 @@
                         <p class="drowpdown__group">Voluntariado</p>
                         <router-link :to="{ name: 'ListarAcoesVoluntariado' }" class="navbar__item group__item">Visão
                             Geral</router-link>
-                        <router-link :to="{ name: 'ListarAcoesVoluntariado' }"
-                            class="navbar__item group__item">Criar Campanha</router-link>
+                        <router-link :to="{ name: 'CadastrarAcaoVoluntariado' }" class="navbar__item group__item">Cadastrar</router-link>
                         <p class="drowpdown__group">ISP</p>
                         <router-link :to="{ name: 'ListarAcoesIsp' }" class="navbar__item group__item">Visão
                             Geral</router-link>
-                        <router-link :to="{ name: 'ListarAcoesIsp' }"
-                            class="navbar__item group__item">Cadastrar</router-link>
+                        <router-link :to="{ name: 'CadastrarAcaoIsp' }"
+                            class="navbar__item group__item">Registrar</router-link>
                         <p class="drowpdown__group">Acompanhamento</p>
-                        <router-link :to="{ name: 'ListarAcompanhamentos' }" class="navbar__item group__item">Solicitados</router-link>
                         <router-link :to="{ name: 'ListarAcompanhamentos' }"
-                            class="navbar__item group__item">Nova Solicitação</router-link>
+                            class="navbar__item group__item">Solicitados</router-link>
+                        <router-link :to="{ name: 'CadastrarAcompanhamento' }" class="navbar__item group__item">Solicitar</router-link>
                     </div>
                 </li>
             </ul>
@@ -209,4 +215,5 @@ export default {
 .navbar__user-role {
     text-align: right;
     text-transform: uppercase;
-}</style>
+}
+</style>

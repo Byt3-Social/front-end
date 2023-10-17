@@ -10,7 +10,7 @@
 head,
 body {
     font-family: 'Inter', sans-serif;
-    background-color: #FFFFFF;
+    background-color: #F8F9FA;
     font-size: 16px;
     line-height: 1.5;
     font-weight: 400;
@@ -90,7 +90,7 @@ textarea.form-input:focus {
     background-color: #E0E1E2;
 }
 
-input {
+input, select {
     &.field-error {
         border: 1px solid #f1416c;
     }
@@ -106,7 +106,7 @@ input {
 
 .v-enter-active,
 .v-leave-active {
-    transition: opacity 0.2s ease;
+    transition: opacity .3s ease;
 }
 
 .v-enter-from,
@@ -155,7 +155,11 @@ input {
     font-weight: 500;
     border: none;
     border-radius: 5rem;
-    margin-top: 3rem;
+    margin-top: 2rem;
+
+    &[disabled] {
+        opacity: .5;
+    }
 }
 
 .danger-button {
@@ -167,7 +171,7 @@ input {
     font-weight: 500;
     border: none;
     border-radius: 5rem;
-    margin-top: 3rem;
+    margin-top: 2rem;
 }
 
 .alerta {
@@ -177,29 +181,40 @@ input {
     flex-direction: row;
     align-items: center;
     justify-content: center;
-    margin-bottom: 3rem;
+    margin-bottom: 0;
     width: 100%;
 
     p {
         margin-bottom: 0;
     }
 
-    &--error {
-        border: 1px solid #f1416c;
-        color: #f1416c;
-        background-color: #fff5f8;
-    }
-
-    &--sucesso {
-        border: 1px solid #50cd89;
-        color: #50cd89;
-        background-color: #e8fff3;
-    }
-
+    &--ABERTO,
     &--info {
-        border: 1px solid #00145f;
-        color: #00145f;
         background-color: #F0F5FF;
+        color: #00145F;
+    }
+
+    &--EM_ANALISE,
+    &--PENDENTE {
+        background-color: #FFF8DD;
+        color: #FFC700;
+    }
+
+    &--APROVADO,
+    &--sucesso {
+        background-color: #E8FFF3;
+        color: #50CD89;
+    }
+
+    &--REPROVADO,
+    &--error {
+        background-color: #fff5f8;
+        color: #f1416c;
+    }
+
+    &--CADASTRADO {
+        background-color: #f8f5ff;
+        color: #7239ea;
     }
 
     &__icone {
@@ -211,4 +226,10 @@ input {
 
 .navbar {
     box-shadow: 0 0 1rem 0.5rem rgba(0, 0, 0, 0.1);
+}
+
+.spinner-border {
+    width: 1rem;
+    height: 1rem;
+    border-width: .1rem;
 }

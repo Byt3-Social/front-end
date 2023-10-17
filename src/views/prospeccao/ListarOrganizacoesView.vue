@@ -1,52 +1,61 @@
 <template>
     <Navbar></Navbar>
     <main id="listar-organizacoes-view">
-        <Header titulo="Organizações" icone="bi bi-building"></Header>
-        <FloatingPanel>
-            <template v-slot:FloatingPanelContent>
-                <div class="alerta alerta--sucesso"
-                    v-if="rotaAnterior != null && rotaAnterior.name == 'CadastrarOrganizacao' && this.$route.query.sucessoCadastro">
-                    <i class="alerta__icone bi bi-check-circle-fill"></i>
-                    <p class="alerta__message">Organização cadastrada com sucesso</p>
-                </div>
-                <div class="alerta alerta--sucesso"
-                    v-if="rotaAnterior != null && rotaAnterior.name == 'EditarOrganizacao' && this.$route.query.sucessoAtualizacao">
-                    <i class="alerta__icone bi bi-check-circle-fill"></i>
-                    <p class="alerta__message">Organização atualizada com sucesso</p>
-                </div>
-                <table class="table table-borderless">
-                    <thead>
-                        <tr>
-                            <td>Registro</td>
-                            <td>Organização</td>
-                            <td>Status</td>
-                            <td>Ações</td>
-                        </tr>
-                    </thead>
-                    <Transition>
-                        <tbody v-if="!carregandoRequisicao">
-                            <tr v-for="organizacao in organizacoes">
-                                <td>{{ organizacao.id }}</td>
-                                <td>{{ organizacao.nome }}</td>
-                                <td>
-                                    <span :class="`status status--${organizacao.status_cadastro}`">{{
-                                        organizacao.status_cadastro.replace("EM_ANALISE", "EM ANÁLISE") }}</span>
-                                </td>
-                                <td>
-                                    <router-link :to="{ name: 'EditarOrganizacao', params: { id: organizacao.id } }"
-                                        class="acao">
-                                        <i class="acao__icone bi bi-pencil-square acao--editar"></i>
-                                    </router-link>
-                                </td>
-                            </tr>
-                        </tbody>
-                    </Transition>
-                </table>
-                <Transition>
-                    <p class="carregando__message" v-if="carregandoRequisicao">Carregando...</p>
-                </Transition>
-            </template>
-        </FloatingPanel>
+        <Header titulo="Organizações" icone="bi bi-building-fill"></Header>
+        <Transition>
+            <FloatingPanel v-if="erroBuscaOrganizacoes">
+                <template v-slot:FloatingPanelContent>
+                    <div class="alerta alerta--info">
+                        <i class="alerta__icone bi bi-info-circle-fill"></i>
+                        <p class="alerta__message">Não foi possível recuperar os registros de organizações cadastradas</p>
+                    </div>
+                </template>
+            </FloatingPanel>
+        </Transition>
+        <Transition>
+            <FloatingPanel v-if="!erroBuscaOrganizacoes && organizacoes != null">
+                <template v-slot:FloatingPanelContent>
+                    <div>
+                        <div class="alerta alerta--sucesso"
+                            v-if="rotaAnterior != null && rotaAnterior.name == 'CadastrarOrganizacao' && this.$route.query.sucessoCadastro">
+                            <i class="alerta__icone bi bi-check-circle-fill"></i>
+                            <p class="alerta__message">Organização cadastrada com sucesso</p>
+                        </div>
+                        <div class="alerta alerta--sucesso"
+                            v-if="rotaAnterior != null && rotaAnterior.name == 'EditarOrganizacao' && this.$route.query.sucessoAtualizacao">
+                            <i class="alerta__icone bi bi-check-circle-fill"></i>
+                            <p class="alerta__message">Organização atualizada com sucesso</p>
+                        </div>
+                        <table class="table table-borderless">
+                            <thead>
+                                <tr>
+                                    <td>Registro</td>
+                                    <td>Organização</td>
+                                    <td>Status</td>
+                                    <td>Ações</td>
+                                </tr>
+                            </thead>
+                            <tbody>
+                                <tr v-for="organizacao in organizacoes">
+                                    <td>{{ organizacao.id }}</td>
+                                    <td>{{ organizacao.nome }}</td>
+                                    <td>
+                                        <span :class="`status status--${organizacao.statusCadastro}`">{{
+                                            organizacao.statusCadastro.replace("EM_ANALISE", "EM ANÁLISE") }}</span>
+                                    </td>
+                                    <td>
+                                        <router-link :to="{ name: 'EditarOrganizacao', params: { id: organizacao.id } }"
+                                            class="acao">
+                                            <i class="acao__icone bi bi-pencil-square acao--editar"></i>
+                                        </router-link>
+                                    </td>
+                                </tr>
+                            </tbody>
+                        </table>
+                    </div>
+                </template>
+            </FloatingPanel>
+        </Transition>
     </main>
     <FooterItem></FooterItem>
 </template>
@@ -70,8 +79,7 @@ export default {
         return {
             organizacoes: null,
 
-            carregandoRequisicao: false,
-
+            erroBuscaOrganizacoes: false,
             rotaAnterior: null,
         }
     },
@@ -89,14 +97,11 @@ export default {
 
             axios.get("http://localhost:8082/organizacoes")
                 .then((response) => {
-                    console.log(response);
                     this.organizacoes = response.data;
                 })
                 .catch((error) => {
-                    console.log(error);
+                    this.erroBuscaOrganizacoes = true;
                 });
-
-            this.carregandoRequisicao = false;
         }
     }
 }

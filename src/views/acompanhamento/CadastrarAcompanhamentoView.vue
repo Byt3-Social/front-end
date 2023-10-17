@@ -1,61 +1,73 @@
 <template>
     <Navbar></Navbar>
-    <main id="cadastrar-organizacao-view">
-        <Header titulo="Organização" icone="bi bi-building-fill-add"></Header>
+    <main id="cadastrar-acompanhamento-view">
+        <Header titulo="Acompanhamento" icone="bi bi-file-earmark-bar-graph-fill"></Header>
         <FloatingPanel>
             <template v-slot:FloatingPanelContent>
-                <div class="alerta alerta--error" v-if="erroCadastro">
-                    <i class="alerta__icone bi bi-x-circle-fill"></i>
-                    <p class="alerta__message">Não foi possível cadastrar essa organização</p>
-                </div>
                 <form action="#" method="post">
-                    <fieldset class="fieldset">
-                        <legend class="fieldset__legend">Empresa</legend>
+                    <div class="form-input-wrapper">
+                        <label for="acao.id" class="form-input-label">Selecione uma ação social</label>
+                        <select name="acao.id" id="acao.id" class="form-input" v-model="acompanhamento.acaoId">
+                            <option :value="null">Selecione uma ação social...</option>
+                            <option v-for="acao in acoes" :value="acao.id">{{ acao.nomeAcao }}</option>
+                        </select>
+                    </div>
 
-                        <div class="form-input-wrapper">
-                            <label for="nome" class="form-input-label">Razão social</label>
-                            <input type="text" name="nome" id="nome" class="form-input" v-model="nome" autofocus>
-                        </div>
-                        <div class="form-input-wrapper">
-                            <label for="cnpj" class="form-input-label">CNPJ</label>
-                            <input type="text" name="cnpj" id="cnpj" class="form-input" v-maska="cnpj"
-                                data-maska="##.###.###/####-##" autofocus>
-                        </div>
-                        <div class="form-input-wrapper">
-                            <label for="email" class="form-input-label">Email</label>
-                            <input type="email" name="email" id="email" class="form-input" v-model="email">
-                        </div>
-                        <div class="form-input-wrapper">
-                            <label for="telefone" class="form-input-label">Telefone</label>
-                            <input type="text" name="telefone" id="telefone" class="form-input" v-maska="telefone"
-                                data-maska="['(##) ####-####', '(##) #####-####']">
-                        </div>
-                    </fieldset>
+                    <div class="form-input-wrapper">
+                        <label for="organizacao.nome" class="form-input-label">Organização vinculada</label>
+                        <input type="text" name="organizacao.nome" id="organizacao.nome" class="form-input"
+                            :value="acompanhamento.acaoId != null ? matchOrganizacao(encontrarOrganizacao(acompanhamento.acaoId)) : `-`"
+                            disabled>
+                    </div>
 
-                    <fieldset class="fieldset">
-                        <legend class="fieldset__legend">Responsável</legend>
+                    <Transition>
+                        <div v-if="this.acompanhamento.acaoId != null">
+                            <div class="documento__solicitar">
+                                <select name="acompanhamento.indicador" id="acompanhamento.indicador" class="form-input" v-model="novoIndicador">
+                                    <option :value="null">Selecione um indicador...</option>
+                                    <option v-for="indicador in indicadores" :value="indicador.id"
+                                        :disabled="acompanhamento.indicadoresSolicitados.some(indicadorSolicitado => indicadorSolicitado == indicador.id)">
+                                        {{ indicador.nome }}</option>
+                                </select>
+                                <button type="button" class="documento__solicitar--button"
+                                    @click.prevent="solicitarIndicador()">Solicitar</button>
+                            </div>
 
-                        <div class="form-input-wrapper">
-                            <label for="responsavel.nome" class="form-input-label">Nome</label>
-                            <input type="text" name="responsavel.nome" id="responsavel.nome" class="form-input"
-                                v-model="responsavel.nome">
-                        </div>
-                        <div class="form-input-wrapper">
-                            <label for="responsavel.email" class="form-input-label">Email</label>
-                            <input type="email" name="responsavel.email" id="responsavel.email" class="form-input"
-                                v-model="responsavel.email">
-                        </div>
-                        <div class="form-input-wrapper">
-                            <label for="responsavel.telefone" class="form-input-label">Telefone</label>
-                            <input type="text" name="responsavel.telefone" id="responsavel.telefone" class="form-input"
-                                v-maska="responsavel.telefone" data-maska="['(##) ####-####', '(##) #####-####']">
-                        </div>
-                    </fieldset>
+                            <table class="table table-borderless">
+                                <thead>
+                                    <tr>
+                                        <td>Indicador</td>
+                                        <td>Remover</td>
+                                    </tr>
+                                </thead>
+                                <tbody>
+                                    <tr v-for="(indicador, index) in acompanhamento.indicadoresSolicitados">
+                                        <td>{{ matchIndicador(indicador) }}</td>
+                                        <td>
+                                            <button type="button" class="acao" @click.prevent="removerIndicador(index)">
+                                                <i class="bi bi-x-circle-fill acao__icone acao--excluir"></i>
+                                            </button>
+                                        </td>
+                                    </tr>
+                                </tbody>
+                            </table>
 
-                    <button class="primary-button" @click.prevent="cadastrarEmpresa()">
-                        <span v-show="carregandoRequisicao" class="spinner-border" aria-hidden="true"></span>
-                        <span v-show="!carregandoRequisicao">Cadastrar</span>
-                    </button>
+                            <div class="form-input-wrapper">
+                                <label for="acompanhamento.informacoesAdicionais" class="form-input-label">Informações Adicionais</label>
+                                <p>Utilize esse espaço caso queira solicitar o envio de algum documento por parte da organização</p>
+                                <textarea name="acompanhamento.informacoesAdicionais" id="acompanhamento.informacoesAdicionais" class="form-input"
+                                    v-model="acompanhamento.informacoesAdicionais"></textarea>
+                            </div>
+
+                            <Transition>
+                                <button class="primary-button" @click.prevent="cadastrarAcompanhamento()"
+                                    v-if="this.acompanhamento.indicadoresSolicitados.length > 0">
+                                    <span v-show="carregandoRequisicao" class="spinner-border" aria-hidden="true"></span>
+                                    <span v-show="!carregandoRequisicao">Solicitar</span>
+                                </button>
+                            </Transition>
+                        </div>
+                    </Transition>
                 </form>
             </template>
         </FloatingPanel>
@@ -63,7 +75,7 @@
     <FooterItem></FooterItem>
 </template>
 <script>
-import '../../assets/styles/prospeccao/cadastrar-organizacao-view.scss';
+import '../../assets/styles/acompanhamento/cadastrar-acompanhamento-view.scss';
 import Navbar from '../../components/Navbar.vue';
 import FooterItem from '../../components/Footer.vue';
 import Header from '../../components/Header.vue';
@@ -80,86 +92,106 @@ export default {
     },
     data() {
         return {
-            nome: null,
-            cnpj: {
-                masked: null,
-                unmasked: null,
-                completed: false,
+            acompanhamento: {
+                acaoId: null,
+                organizacaoId: null,
+                indicadoresSolicitados: [],
+                informacoesAdicionais: null,
             },
-            email: null,
-            telefone: {
-                masked: null,
-                unmasked: null,
-                completed: false,
-            },
-            responsavel: {
-                nome: null,
-                email: null,
-                telefone: {
-                    masked: null,
-                    unmasked: null,
-                    completed: false,
-                },
-            },
-
+            organizacoes: null,
+            acoes: null,
+            indicadores: null,
+            novoIndicador: null,
             carregandoRequisicao: false,
             erroCadastro: false,
         }
     },
+    created() {
+        this.buscarOrganizacoes();
+        this.buscarAcoes();
+        this.buscarIndicadores();
+    },
     methods: {
-        cadastrarEmpresa: function () {
-            this.carregandoRequisicao = true;
-
-            var data = {
-                nome: this.nome,
-                cnpj: this.cnpj.unmasked,
-                email: this.email,
-                telefone: this.telefone.unmasked,
-                responsavel: {
-                    nome: this.responsavel.nome,
-                    email: this.responsavel.email,
-                    telefone: this.responsavel.telefone.unmasked
-                },
-            };
-
-            axios.post("http://localhost:8082/organizacoes", data)
+        buscarAcoes: function () {
+            axios.get("http://localhost:8081/acoes-isp")
                 .then((response) => {
-                    this.$router.push({ name: 'ListarOrganizacoes', query: { sucessoCadastro: true } });
+                    console.log(response);
+                    this.acoes = response.data;
                 })
                 .catch((error) => {
-                    this.erroCadastro = true;
-                    window.scrollTo(0, 0);
-
-                    document.querySelectorAll(".form-input").forEach(field => {
-                        if (field.nextElementSibling != null) {
-                            field.classList.remove("field-error");
-                            field.nextElementSibling.remove();
-                        }
-                    });
-
-                    if (error.response.status != null && error.response.status == 409) {
-                        var elemento = document.querySelector(".alerta--error .alerta__message");
-                        elemento.innerText = "Organização já cadastrada";
-                    }
-
-                    if (error.response.status != null && error.response.status == 400 && error.response.data != null) {
-                        error.response.data.forEach(fieldError => {
-                            var campo = document.getElementById(fieldError.field);
-
-                            if (campo != null) {
-                                var span = document.createElement("span");
-                                span.classList.add("field-error__message");
-                                span.innerText = fieldError.message;
-
-                                campo.after(span);
-                                campo.classList.add("field-error");
-                            }
-                        });
-                    }
+                    console.log(error);
                 });
+        },
+        buscarOrganizacoes: function () {
+            axios.get("http://localhost:8082/organizacoes")
+                .then((response) => {
+                    console.log(response);
+                    this.organizacoes = response.data;
+                })
+                .catch((error) => {
+                    console.log(error);
+                });
+        },
+        buscarIndicadores: function () {
+            axios.get("http://localhost:8083/indicadores")
+                .then((response) => {
+                    console.log(response);
+                    this.indicadores = response.data;
+                })
+                .catch((error) => {
+                    console.log(error);
+                });
+        },
+        encontrarOrganizacao: function (id) {
+            for (let index = 0; index < this.acoes.length; index++) {
+                const acao = this.acoes[index];
 
-            this.carregandoRequisicao = false;
+                if (acao.id == id) {
+                    this.acompanhamento.organizacaoId = acao.organizacaoId;
+                    return acao.organizacaoId;
+                }
+            }
+
+            return null;
+        },
+        matchOrganizacao: function (id) {
+            for (let index = 0; index < this.organizacoes.length; index++) {
+                const organizacao = this.organizacoes[index];
+
+                if (organizacao.id == id) {
+                    return organizacao.nome;
+                }
+            }
+        },
+        matchIndicador: function (id) {
+            console.log(id);
+            for (let index = 0; index < this.indicadores.length; index++) {
+                const indicador = this.indicadores[index];
+
+                if (indicador.id == id) {
+                    return indicador.nome;
+                }
+            }
+        },
+        solicitarIndicador: function () {
+            if (this.novoIndicador != null) {
+                this.acompanhamento.indicadoresSolicitados.push(this.novoIndicador);
+                this.novoIndicador = null;
+            }
+        },
+        removerIndicador: function (index) {
+            this.acompanhamento.indicadoresSolicitados.splice(index, 1);
+        },
+        cadastrarAcompanhamento: function () {
+            axios.post("http://localhost:8083/acompanhamentos", this.acompanhamento)
+                .then((response) => {
+                    console.log(response);
+                    this.$router.push({ name: 'ListarAcompanhamentos', query: { sucessoSolicitacao: true } });
+                })
+                .catch((error) => {
+                    console.log(error);
+                });
         }
-    }
+    },
 }
 </script>

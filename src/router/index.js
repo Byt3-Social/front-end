@@ -12,9 +12,11 @@ import VisualizarProcessoView from '@/views/compliance/VisualizarProcessoView'
 
 import ListarAcoesVoluntariadoView from '@/views/acoes-sociais/ListarAcoesVoluntariadoView'
 import EditarAcaoVoluntariadoView from '@/views/acoes-sociais/EditarAcaoVoluntariadoView'
+import CadastrarAcaoVoluntariadoView from '@/views/acoes-sociais/CadastrarAcaoVoluntariadoView'
 import VisualizarDoacaoView from '@/views/acoes-sociais/VisualizarDoacaoView'
 import ListarAcoesIspView from '@/views/acoes-sociais/ListarAcoesIspView'
 import EditarAcaoIspView from '@/views/acoes-sociais/EditarAcaoIspView'
+import CadastrarAcaoIspView from '@/views/acoes-sociais/CadastrarAcaoIspView'
 import DoarView from '@/views/acoes-sociais/DoarView'
 
 import ListarAcompanhamentosView from '@/views/acompanhamento/ListarAcompanhamentosView'
@@ -73,6 +75,11 @@ const routes = [
         component: ListarAcoesVoluntariadoView
     },
     {
+        path: '/admin/acoes/voluntariado/cadastrar',
+        name: 'CadastrarAcaoVoluntariado',
+        component: CadastrarAcaoVoluntariadoView
+    },
+    {
         path: '/admin/acoes/voluntariado/:id',
         name: 'EditarAcaoVoluntariado',
         component: EditarAcaoVoluntariadoView
@@ -93,6 +100,11 @@ const routes = [
         component: EditarAcaoIspView
     },
     {
+        path: '/admin/acoes/isp/cadastrar',
+        name: 'CadastrarAcaoIsp',
+        component: CadastrarAcaoIspView
+    },
+    {
         path: '/employee/doacoes/:id',
         name: 'Doar',
         component: DoarView
@@ -102,6 +114,11 @@ const routes = [
         path: '/admin/acompanhamentos',
         name: 'ListarAcompanhamentos',
         component: ListarAcompanhamentosView
+    },
+    {
+        path: '/admin/acompanhamentos/solicitar',
+        name: 'CadastrarAcompanhamento',
+        component: CadastrarAcompanhamentoView
     },
     {
         path: '/admin/acompanhamentos/:id',

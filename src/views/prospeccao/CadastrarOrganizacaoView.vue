@@ -14,12 +14,12 @@
 
                         <div class="form-input-wrapper">
                             <label for="nome" class="form-input-label">Razão social</label>
-                            <input type="text" name="nome" id="nome" class="form-input" v-model="nome" autofocus>
+                            <input type="text" name="razaoSocial" id="nome" class="form-input" v-model="nome" autofocus>
                         </div>
                         <div class="form-input-wrapper">
                             <label for="cnpj" class="form-input-label">CNPJ</label>
                             <input type="text" name="cnpj" id="cnpj" class="form-input" v-maska="cnpj"
-                                data-maska="##.###.###/####-##" autofocus>
+                                data-maska="##.###.###/####-##">
                         </div>
                         <div class="form-input-wrapper">
                             <label for="email" class="form-input-label">Email</label>
@@ -52,7 +52,7 @@
                         </div>
                     </fieldset>
 
-                    <button class="primary-button" @click.prevent="cadastrarEmpresa()">
+                    <button class="primary-button" @click.prevent="cadastrarOrganizacao()">
                         <span v-show="carregandoRequisicao" class="spinner-border" aria-hidden="true"></span>
                         <span v-show="!carregandoRequisicao">Cadastrar</span>
                     </button>
@@ -107,7 +107,7 @@ export default {
         }
     },
     methods: {
-        cadastrarEmpresa: function () {
+        cadastrarOrganizacao: function () {
             this.carregandoRequisicao = true;
 
             var data = {
@@ -130,11 +130,12 @@ export default {
                     this.erroCadastro = true;
                     window.scrollTo(0, 0);
 
-                    document.querySelectorAll(".form-input").forEach(field => {
-                        if (field.nextElementSibling != null) {
-                            field.classList.remove("field-error");
-                            field.nextElementSibling.remove();
-                        }
+                    document.querySelectorAll(".field-error__message").forEach(field => {
+                        field.remove();
+                    });
+
+                    document.querySelectorAll(".field-error").forEach(field => {
+                        field.classList.remove("field-error");
                     });
 
                     if (error.response.status != null && error.response.status == 409) {

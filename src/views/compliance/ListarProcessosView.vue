@@ -2,32 +2,37 @@
     <Navbar></Navbar>
     <main id="listar-processos-view">
         <Header titulo="Processos" icone="bi bi-file-earmark-fill"></Header>
-        <FloatingPanel>
-            <template v-slot:FloatingPanelContent>
-                <div class="alerta alerta--sucesso"
-                    v-if="rotaAnterior != null && rotaAnterior.name == 'CadastrarOrganizacao' && this.$route.query.sucessoCadastro">
-                    <i class="alerta__icone bi bi-check-circle-fill"></i>
-                    <p class="alerta__message">Organização cadastrada com sucesso</p>
-                </div>
-                <div class="alerta alerta--sucesso"
-                    v-if="rotaAnterior != null && rotaAnterior.name == 'EditarOrganizacao' && this.$route.query.sucessoAtualizacao">
-                    <i class="alerta__icone bi bi-check-circle-fill"></i>
-                    <p class="alerta__message">Organização atualizada com sucesso</p>
-                </div>
-                <table class="table table-borderless">
-                    <thead>
-                        <tr>
-                            <td>CNPJ</td>
-                            <td>Organização</td>
-                            <td>Status</td>
-                            <td>Ações</td>
-                        </tr>
-                    </thead>
-                    <Transition>
-                        <tbody v-if="!carregandoRequisicao">
+        <Transition>
+            <FloatingPanel v-if="erroBuscaProcessos">
+                <template v-slot:FloatingPanelContent>
+                    <div class="alerta alerta--info">
+                        <i class="alerta__icone bi bi-info-circle-fill"></i>
+                        <p class="alerta__message">Não foi possível recuperar os registros de processos</p>
+                    </div>
+                </template>
+            </FloatingPanel>
+        </Transition>
+        <Transition>
+            <FloatingPanel v-if="!erroBuscaProcessos && processos != null">
+                <template v-slot:FloatingPanelContent>
+                    <div class="alerta alerta--sucesso"
+                        v-if="rotaAnterior != null && rotaAnterior.name == 'EditarOrganizacao' && this.$route.query.sucessoAtualizacao">
+                        <i class="alerta__icone bi bi-check-circle-fill"></i>
+                        <p class="alerta__message">Processo atualizado com sucesso</p>
+                    </div>
+                    <table class="table table-borderless">
+                        <thead>
+                            <tr>
+                                <td>CNPJ</td>
+                                <td>Organização</td>
+                                <td>Status</td>
+                                <td>Ações</td>
+                            </tr>
+                        </thead>
+                        <tbody>
                             <tr v-for="processo in processos">
-                                <td>{{ cnpjMask(processo.cnpj) }}</td>
-                                <td>{{ processo.nome_empresarial }}</td>
+                                <td>{{ utils.cnpjMask(processo.cnpj) }}</td>
+                                <td>{{ processo.nomeEmpresarial }}</td>
                                 <td>
                                     <span :class="`status status--${processo.status}`">{{
                                         processo.status.replace("EM_ANALISE", "EM ANÁLISE") }}</span>
@@ -40,13 +45,10 @@
                                 </td>
                             </tr>
                         </tbody>
-                    </Transition>
-                </table>
-                <Transition>
-                    <p class="carregando__message" v-if="carregandoRequisicao">Carregando...</p>
-                </Transition>
-            </template>
-        </FloatingPanel>
+                    </table>
+                </template>
+            </FloatingPanel>
+        </Transition>
     </main>
     <FooterItem></FooterItem>
 </template>
@@ -57,7 +59,7 @@ import FooterItem from '../../components/Footer.vue';
 import Header from '../../components/Header.vue';
 import FloatingPanel from '../../components/FloatingPanel.vue';
 import axios from 'axios';
-import { Mask } from "maska";
+import utils from '@/helpers/maska'
 
 export default {
     name: 'ListarOrganizacoesView',
@@ -70,14 +72,10 @@ export default {
     data() {
         return {
             processos: null,
-
-            carregandoRequisicao: false,
-
             rotaAnterior: null,
+            erroBuscaProcessos: false,
+            utils: utils
         }
-    },
-    mounted() {
-
     },
     beforeRouteEnter(to, from, next) {
         next(route => {
@@ -88,24 +86,14 @@ export default {
         this.buscarProcessos();
     },
     methods: {
-        cnpjMask: function (cnpj) {
-            var mask = new Mask({ mask: "##.###.###/####-##" });
-
-            return mask.masked(cnpj);
-        },
         buscarProcessos: function () {
-            this.carregandoRequisicao = true;
-
             axios.get("http://localhost:8083/processos")
                 .then((response) => {
-                    console.log(response);
                     this.processos = response.data;
                 })
                 .catch((error) => {
-                    console.log(error);
+                    this.erroBuscaProcessos = true;
                 });
-
-            this.carregandoRequisicao = false;
         }
     }
 }

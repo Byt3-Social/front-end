@@ -2,32 +2,42 @@
     <Navbar></Navbar>
     <main id="listar-acoes-voluntariado-view">
         <Header titulo="Voluntariado" icone="bi bi-collection-fill"></Header>
-        <FloatingPanel>
-            <template v-slot:FloatingPanelContent>
-                <div class="alerta alerta--sucesso"
-                    v-if="rotaAnterior != null && rotaAnterior.name == 'CadastrarOrganizacao' && this.$route.query.sucessoCadastro">
-                    <i class="alerta__icone bi bi-check-circle-fill"></i>
-                    <p class="alerta__message">Organização cadastrada com sucesso</p>
-                </div>
-                <div class="alerta alerta--sucesso"
-                    v-if="rotaAnterior != null && rotaAnterior.name == 'EditarOrganizacao' && this.$route.query.sucessoAtualizacao">
-                    <i class="alerta__icone bi bi-check-circle-fill"></i>
-                    <p class="alerta__message">Organização atualizada com sucesso</p>
-                </div>
-                <table class="table table-borderless">
-                    <thead>
-                        <tr>
-                            <td>Ação</td>
-                            <td>Organização</td>
-                            <td>Fase</td>
-                            <td>Ações</td>
-                        </tr>
-                    </thead>
-                    <Transition>
-                        <tbody v-if="!carregandoRequisicao">
-                            <tr v-for="acao in acoes">
-                                <td>{{ acao.nome_acao }}</td>
-                                <td>{{ organizacoes != null ? matchOrganizacao(acao.organizacao_id) : "-" }}</td>
+        <Transition>
+            <FloatingPanel v-if="erroBuscaAcoes">
+                <template v-slot:FloatingPanelContent>
+                    <div class="alerta alerta--info">
+                        <i class="alerta__icone bi bi-info-circle-fill"></i>
+                        <p class="alerta__message">Não foi possível recuperar as ações cadastradas</p>
+                    </div>
+                </template>
+            </FloatingPanel>
+        </Transition>
+        <Transition>
+            <FloatingPanel v-if="!erroBuscaAcoes && acoes != null && organizacoes != null">
+                <template v-slot:FloatingPanelContent>
+                    <div class="alerta alerta--sucesso"
+                        v-if="this.$route.query.sucessoExclusao && rotaAnterior == null">
+                        <i class="alerta__icone bi bi-check-circle-fill"></i>
+                        <p class="alerta__message">Ação excluída com sucesso</p>
+                    </div>
+                    <div class="alerta alerta--error" v-if="this.$route.query.falhaExclusao && rotaAnterior == null">
+                        <i class="alerta__icone bi bi-x-circle-fill"></i>
+                        <p class="alerta__message">Falha ao excluir a ação solicitada</p>
+                    </div>
+                    <table class="table table-borderless">
+                        <thead>
+                            <tr>
+                                <td>Ação</td>
+                                <td>Organização</td>
+                                <td>Fase</td>
+                                <td>Ações</td>
+                            </tr>
+                        </thead>
+                        <tbody>
+                            <tr v-for="(acao, index) in acoes">
+                                <td>{{ acao.nomeAcao }}</td>
+                                <td>{{ acao.organizacaoId != null && acao.organizacaoId != "" ?
+                                    matchOrganizacao(acao.organizacaoId) : "-" }}</td>
                                 <td>
                                     <span :class="`status status--${acao.fase}`">{{
                                         acao.fase.replace("EM_ANDAMENTO", "EM ANDAMENTO") }}</span>
@@ -37,16 +47,16 @@
                                         class="acao">
                                         <i class="acao__icone bi bi-pencil-square acao--editar"></i>
                                     </router-link>
+                                    <button type="button" class="acao" @click.prevent="excluirAcao(index, acao.id)">
+                                        <i class="bi bi-trash2-fill acao__icone acao--excluir"></i>
+                                    </button>
                                 </td>
                             </tr>
                         </tbody>
-                    </Transition>
-                </table>
-                <Transition>
-                    <p class="carregando__message" v-if="carregandoRequisicao">Carregando...</p>
-                </Transition>
-            </template>
-        </FloatingPanel>
+                    </table>
+                </template>
+            </FloatingPanel>
+        </Transition>
     </main>
     <FooterItem></FooterItem>
 </template>
@@ -57,7 +67,6 @@ import FooterItem from '../../components/Footer.vue';
 import Header from '../../components/Header.vue';
 import FloatingPanel from '../../components/FloatingPanel.vue';
 import axios from 'axios';
-import { Mask } from "maska";
 
 export default {
     name: 'ListarAcoesIspView',
@@ -71,14 +80,11 @@ export default {
         return {
             acoes: null,
             organizacoes: null,
-
-            carregandoRequisicao: false,
-
+            erroBuscaAcoes: false,
             rotaAnterior: null,
+            sucessoExclusao: false,
+            falhaExclusao: false,
         }
-    },
-    mounted() {
-
     },
     beforeRouteEnter(to, from, next) {
         next(route => {
@@ -90,44 +96,41 @@ export default {
         this.buscarOrganizacoes();
     },
     methods: {
-        cnpjMask: function (cnpj) {
-            var mask = new Mask({ mask: "##.###.###/####-##" });
-
-            return mask.masked(cnpj);
-        },
         buscarAcoes: function () {
-            this.carregandoRequisicao = true;
-
-            axios.get(process.env.VUE_APP_API_BASE_URL + "/acoes-voluntariado")
+            axios.get("http://localhost:8081/acoes-voluntariado")
                 .then((response) => {
-                    console.log(response);
                     this.acoes = response.data;
                 })
                 .catch((error) => {
-                    console.log(error);
+                    this.erroBuscaAcoes = true;
                 });
-
-            this.carregandoRequisicao = false;
         },
         buscarOrganizacoes: function () {
-            this.carregandoRequisicao = true;
-
             axios.get("http://localhost:8082/organizacoes")
                 .then((response) => {
-                    console.log(response);
                     this.organizacoes = response.data;
                 })
                 .catch((error) => {
-                    console.log(error);
+                    this.erroBuscaAcoes = true;
                 });
-
-            this.carregandoRequisicao = false;
         },
-        matchOrganizacao: function(id) {
+        excluirAcao: function (index, id) {
+            axios.delete("http://localhost:8081/acoes-voluntariado/" + id)
+                .then((response) => {
+                    this.acoes.splice(index, 1);
+
+                    this.$router.push({ name: 'ListarAcoesVoluntariado', query: { sucessoExclusao: true, timestamp: Date.now() } });
+                })
+                .catch((error) => {
+                    console.log(error);
+                    this.$router.push({ name: 'ListarAcoesVoluntariado', query: { falhaExclusao: true, timestamp: Date.now() } });
+                });
+        },
+        matchOrganizacao: function (id) {
             for (let index = 0; index < this.organizacoes.length; index++) {
                 const organizacao = this.organizacoes[index];
-                
-                if(organizacao.id == id) {
+
+                if (organizacao.id == id) {
                     return organizacao.nome;
                 }
             }

@@ -29,7 +29,8 @@ main#listar-processos-view {
                     color: #00145F;
                 }
 
-                &--EM_ANALISE {
+                &--EM_ANALISE,
+                &--PENDENTE {
                     background-color: #FFF8DD;
                     color: #FFC700;
                 }

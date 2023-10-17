@@ -2,51 +2,60 @@
     <Navbar></Navbar>
     <main id="listar-acoes-isp-view">
         <Header titulo="Investimento Social Privado" icone="bi bi-wallet2"></Header>
-        <FloatingPanel>
-            <template v-slot:FloatingPanelContent>
-                <div class="alerta alerta--sucesso"
-                    v-if="rotaAnterior != null && rotaAnterior.name == 'CadastrarOrganizacao' && this.$route.query.sucessoCadastro">
-                    <i class="alerta__icone bi bi-check-circle-fill"></i>
-                    <p class="alerta__message">Organização cadastrada com sucesso</p>
-                </div>
-                <div class="alerta alerta--sucesso"
-                    v-if="rotaAnterior != null && rotaAnterior.name == 'EditarOrganizacao' && this.$route.query.sucessoAtualizacao">
-                    <i class="alerta__icone bi bi-check-circle-fill"></i>
-                    <p class="alerta__message">Organização atualizada com sucesso</p>
-                </div>
-                <table class="table table-borderless">
-                    <thead>
-                        <tr>
-                            <td>Ação</td>
-                            <td>Organização</td>
-                            <td>Status</td>
-                            <td>Ações</td>
-                        </tr>
-                    </thead>
-                    <Transition>
-                        <tbody v-if="!carregandoRequisicao">
-                            <tr v-for="acao in acoes">
-                                <td>{{ acao.nome_acao }}</td>
-                                <td>{{ organizacoes != null ? matchOrganizacao(acao.organizacao_id) : "-" }}</td>
+        <Transition>
+            <FloatingPanel v-if="erroBuscaAcoes">
+                <template v-slot:FloatingPanelContent>
+                    <div class="alerta alerta--info">
+                        <i class="alerta__icone bi bi-info-circle-fill"></i>
+                        <p class="alerta__message">Não foi possível recuperar as ações cadastradas</p>
+                    </div>
+                </template>
+            </FloatingPanel>
+        </Transition>
+        <Transition>
+            <FloatingPanel v-if="!erroBuscaAcoes && acoes != null && organizacoes != null">
+                <template v-slot:FloatingPanelContent>
+                    <div class="alerta alerta--sucesso" v-if="this.$route.query.sucessoExclusao && rotaAnterior == null">
+                        <i class="alerta__icone bi bi-check-circle-fill"></i>
+                        <p class="alerta__message">Ação excluída com sucesso</p>
+                    </div>
+                    <div class="alerta alerta--error" v-if="this.$route.query.falhaExclusao && rotaAnterior == null">
+                        <i class="alerta__icone bi bi-x-circle-fill"></i>
+                        <p class="alerta__message">Falha ao excluir a ação solicitada</p>
+                    </div>
+                    <table class="table table-borderless">
+                        <thead>
+                            <tr>
+                                <td>Ação</td>
+                                <td>Organização</td>
+                                <td>Status</td>
+                                <td>Ações</td>
+                            </tr>
+                        </thead>
+                        <tbody>
+                            <tr v-for="(acao, index) in acoes">
+                                <td>{{ acao.nomeAcao }}</td>
+                                <td>{{ acao.organizacaoId != null && acao.organizacaoId != "" ?
+                                    matchOrganizacao(acao.organizacaoId) : "-" }}</td>
                                 <td>
                                     <span :class="`status status--${acao.status}`">{{
-                                        acao.status.replace("EM_ANDAMENTO", "EM ANDAMENTO").replace("AGUARDANDO_APORTE", "AGUARDANDO APORTE") }}</span>
+                                        acao.status.replace("EM_ANDAMENTO", "EM ANDAMENTO").replace("AGUARDANDO_APORTE",
+                                            "AGUARDANDO APORTE") }}</span>
                                 </td>
                                 <td>
-                                    <router-link :to="{ name: 'EditarAcaoIsp', params: { id: acao.id } }"
-                                        class="acao">
+                                    <router-link :to="{ name: 'EditarAcaoIsp', params: { id: acao.id } }" class="acao">
                                         <i class="acao__icone bi bi-pencil-square acao--editar"></i>
                                     </router-link>
+                                    <button type="button" class="acao" @click.prevent="excluirAcao(index, acao.id)">
+                                        <i class="bi bi-trash2-fill acao__icone acao--excluir"></i>
+                                    </button>
                                 </td>
                             </tr>
                         </tbody>
-                    </Transition>
-                </table>
-                <Transition>
-                    <p class="carregando__message" v-if="carregandoRequisicao">Carregando...</p>
-                </Transition>
-            </template>
-        </FloatingPanel>
+                    </table>
+                </template>
+            </FloatingPanel>
+        </Transition>
     </main>
     <FooterItem></FooterItem>
 </template>
@@ -57,7 +66,6 @@ import FooterItem from '../../components/Footer.vue';
 import Header from '../../components/Header.vue';
 import FloatingPanel from '../../components/FloatingPanel.vue';
 import axios from 'axios';
-import { Mask } from "maska";
 
 export default {
     name: 'ListarAcoesIspView',
@@ -71,14 +79,9 @@ export default {
         return {
             acoes: null,
             organizacoes: null,
-
-            carregandoRequisicao: false,
-
+            erroBuscaAcoes: false,
             rotaAnterior: null,
         }
-    },
-    mounted() {
-
     },
     beforeRouteEnter(to, from, next) {
         next(route => {
@@ -90,38 +93,35 @@ export default {
         this.buscarOrganizacoes();
     },
     methods: {
-        cnpjMask: function (cnpj) {
-            var mask = new Mask({ mask: "##.###.###/####-##" });
-
-            return mask.masked(cnpj);
-        },
         buscarAcoes: function () {
-            this.carregandoRequisicao = true;
-
             axios.get("http://localhost:8081/acoes-isp")
                 .then((response) => {
-                    console.log(response);
                     this.acoes = response.data;
                 })
                 .catch((error) => {
-                    console.log(error);
+                    this.erroBuscaAcoes = true;
                 });
-
-            this.carregandoRequisicao = false;
         },
         buscarOrganizacoes: function () {
-            this.carregandoRequisicao = true;
-
             axios.get("http://localhost:8082/organizacoes")
                 .then((response) => {
-                    console.log(response);
                     this.organizacoes = response.data;
                 })
                 .catch((error) => {
-                    console.log(error);
+                    this.erroBuscaAcoes = true;
                 });
+        },
+        excluirAcao: function (index, id) {
+            axios.delete("http://localhost:8081/acoes-isp/" + id)
+                .then((response) => {
+                    this.acoes.splice(index, 1);
 
-            this.carregandoRequisicao = false;
+                    this.$router.push({ name: 'ListarAcoesIsp', query: { sucessoExclusao: true, timestamp: Date.now() } });
+                })
+                .catch((error) => {
+                    console.log(error);
+                    this.$router.push({ name: 'ListarAcoesIsp', query: { falhaExclusao: true, timestamp: Date.now() } });
+                });
         },
         matchOrganizacao: function (id) {
             for (let index = 0; index < this.organizacoes.length; index++) {

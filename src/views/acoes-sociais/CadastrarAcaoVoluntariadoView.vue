@@ -1,35 +1,13 @@
 <template>
     <Navbar></Navbar>
-    <main id="cadastrar-acao-voluntariado-view">
+    <main id="editar-acao-voluntariado-view">
         <Header titulo="Voluntariado" icone="bi bi-collection-fill"></Header>
         <Transition>
-            <FloatingPanel v-if="erroBuscaAcao">
+            <FloatingPanel v-if="organizacoes != null && segmentos != null">
                 <template v-slot:FloatingPanelContent>
-                    <div class="alerta alerta--info">
-                        <i class="alerta__icone bi bi-info-circle-fill"></i>
-                        <p class="alerta__message">Não foi possível recuperar as informações da ação</p>
-                    </div>
-                </template>
-            </FloatingPanel>
-        </Transition>
-        <Transition>
-            <FloatingPanel v-if="!erroBuscaAcao && acao != null && organizacoes != null && segmentos != null">
-                <template v-slot:FloatingPanelContent>
-                    <div class="alerta alerta--error" v-if="erroAtualizacao">
+                    <div class="alerta alerta--error" v-if="erroCadastro">
                         <i class="alerta__icone bi bi-x-circle-fill"></i>
-                        <p class="alerta__message">Não foi possível atualizar as informações dessa ação</p>
-                    </div>
-                    <div class="alerta alerta--sucesso" v-if="this.$route.query.sucessoAtualizacao && rotaAnterior == null">
-                        <i class="alerta__icone bi bi-check-circle-fill"></i>
-                        <p class="alerta__message">Ação atualizada com sucesso</p>
-                    </div>
-                    <div class="alerta alerta--sucesso" v-if="this.$route.query.sucessoCadastro && rotaAnterior.name == 'CadastrarAcaoVoluntariado'">
-                        <i class="alerta__icone bi bi-check-circle-fill"></i>
-                        <p class="alerta__message">Ação cadastrada com sucesso</p>
-                    </div>
-                    <div class="alerta alerta--error" v-if="this.$route.query.falhaEstorno && rotaAnterior == null">
-                        <i class="alerta__icone bi bi-x-circle-fill"></i>
-                        <p class="alerta__message">Falha ao solicitar estorno dessa doação</p>
+                        <p class="alerta__message">Não foi possível cadastrar essa ação</p>
                     </div>
                     <ul class="tabs">
                         <li class="tabs__item">
@@ -40,33 +18,21 @@
                             <button class="tabs__button" :class="tab == 'CONFIGURACOES' ? 'active' : ''"
                                 @click="selecionarTab('CONFIGURACOES')">Configurações</button>
                         </li>
-                        <li class="tabs__item" v-if="acao != null && acao.campanha">
-                            <button class="tabs__button" :class="tab == 'DOACOES' ? 'active' : ''"
-                                @click="selecionarTab('DOACOES')">Doações</button>
-                        </li>
-                        <li class="tabs__item" v-if="acao != null && !acao.campanha">
-                            <button class="tabs__button" :class="tab == 'INSCRICOES' ? 'active' : ''"
-                                @click="selecionarTab('INSCRICOES')">Inscrições</button>
-                        </li>
-                        <li class="tabs__item">
-                            <button class="tabs__button" :class="tab == 'ARQUIVOS' ? 'active' : ''"
-                                @click="selecionarTab('ARQUIVOS')">Arquivos</button>
-                        </li>
                     </ul>
                     <form action="#" method="post" v-if="tab == 'DADOS-GERAIS' || tab == 'CONFIGURACOES'">
                         <div class="tabs__content" v-if="tab == 'DADOS-GERAIS'">
                             <div class="form-input-wrapper">
                                 <label for="acao.nomeAcao" class="form-input-label">Nome da ação</label>
                                 <input type="text" name="acao.nomeAcao" id="acao.nomeAcao" class="form-input"
-                                    v-model="acao.nomeAcao">
+                                    v-model="acao.nomeAcao" autofocus>
                             </div>
                             <div class="form-input-wrapper">
                                 <label for="acao.organizacaoId" class="form-input-label">Organização</label>
                                 <select name="acao.organizacaoId" id="acao.organizacaoId" class="form-input"
                                     v-model="acao.organizacaoId">
                                     <option :value="null">Selecione uma organização...</option>
-                                    <option v-for="organizacao in organizacoes" :value="organizacao.id"
-                                        :selected="acao.organizacaoId == organizacao.id">{{ organizacao.nome }}</option>
+                                    <option v-for="organizacao in organizacoes" :value="organizacao.id">{{ organizacao.nome
+                                    }}</option>
                                 </select>
                             </div>
                             <div class="form-row">
@@ -74,20 +40,20 @@
                                     <label for="acao.nivel" class="form-input-label">Nível</label>
                                     <select name="acao.nivel" id="acao.nivel" class="form-input" v-model="acao.nivel">
                                         <option :value="null" disabled>Selecione um nível...</option>
-                                        <option value="N1" :selected="acao.nivel == 'N1'">N1</option>
-                                        <option value="N2" :selected="acao.nivel == 'N2'">N2</option>
-                                        <option value="N3" :selected="acao.nivel == 'N3'">N3</option>
-                                        <option value="N4" :selected="acao.nivel == 'N4'">N4</option>
+                                        <option value="N1">N1</option>
+                                        <option value="N2">N2</option>
+                                        <option value="N3">N3</option>
+                                        <option value="N4">N4</option>
                                     </select>
                                 </div>
                                 <div class="form-input-wrapper">
                                     <label for="acao.fase" class="form-input-label">Fase</label>
                                     <select name="acao.fase" id="acao.fase" class="form-input" v-model="acao.fase">
                                         <option :value="null" disabled>Selecione uma fase...</option>
-                                        <option value="CRIADA" :selected="acao.fase == 'CRIADA'">Criada</option>
-                                        <option value="EM_ANDAMENTO" :selected="acao.fase == 'EM_ANDAMENTO'">Em andamento
+                                        <option value="CRIADA">Criada</option>
+                                        <option value="EM_ANDAMENTO">Em andamento
                                         </option>
-                                        <option value="FINALIZADA" :selected="acao.fase == 'FINALIZADA'">Finalizada</option>
+                                        <option value="FINALIZADA">Finalizada</option>
                                     </select>
                                 </div>
                             </div>
@@ -96,9 +62,9 @@
                                     <label for="acao.tipo" class="form-input-label">Tipo</label>
                                     <select name="acao.tipo" id="acao.tipo" class="form-input" v-model="acao.tipo">
                                         <option :value="null" disabled>Selecione um tipo...</option>
-                                        <option value="MENTORIA" :selected="acao.tipo == 'MENTORIA'">Mentoria</option>
-                                        <option value="DOACAO" :selected="acao.tipo == 'DOACAO'">Doação</option>
-                                        <option value="ENSINO" :selected="acao.tipo == 'ENSINO'">Ensino</option>
+                                        <option value="MENTORIA">Mentoria</option>
+                                        <option value="DOACAO">Doação</option>
+                                        <option value="ENSINO">Ensino</option>
                                     </select>
                                 </div>
                                 <div class="form-input-wrapper">
@@ -117,8 +83,8 @@
                                     <select name="acao.segmento" id="acao.segmento" class="form-input"
                                         v-model="acao.segmento.id">
                                         <option value="0" disabled>Selecione um segmento...</option>
-                                        <option v-for="segmento in segmentos" :value="segmento.id"
-                                            >{{ segmento.nome }}</option>
+                                        <option v-for="segmento in segmentos" v-if="acao != null" :value="segmento.id">{{
+                                            segmento.nome }}</option>
                                     </select>
                                 </div>
                                 <div class="form-input-wrapper">
@@ -177,16 +143,16 @@
                                     <select name="acao.campanha" id="acao.campanha" v-model="acao.campanha"
                                         class="form-input">
                                         <option :value="null" disabled>Escolha uma opção...</option>
-                                        <option :value="false" :selected="acao.campanha == false">Não</option>
-                                        <option :value="true" :selected="acao.campanha == true">Sim</option>
+                                        <option :value="false">Não</option>
+                                        <option :value="true">Sim</option>
                                     </select>
                                 </div>
                                 <div class="form-input-wrapper">
                                     <label for="acao.publica" class="form-input-label">Doações públicas</label>
                                     <select name="acao.publica" id="acao.publica" class="form-input" v-model="acao.publica">
                                         <option :value="null" disabled>Escolha uma opção...</option>
-                                        <option :value="false" :selected="acao.publica == false">Não</option>
-                                        <option :value="true" :selected="acao.publica == true">Sim</option>
+                                        <option :value="false">Não</option>
+                                        <option :value="true">Sim</option>
                                     </select>
                                 </div>
                             </div>
@@ -214,8 +180,8 @@
                                     <select name="acao.valorPersonalizado" class="form-input" id="acao.valorPersonalizado"
                                         v-model="acao.valorPersonalizado">
                                         <option :value="null" disabled>Escolha uma opção...</option>
-                                        <option :value="false" :selected="acao.valorPersonalizado == false">Não</option>
-                                        <option :value="true" :selected="acao.valorPersonalizado == true">Sim</option>
+                                        <option :value="false">Não</option>
+                                        <option :value="true">Sim</option>
                                     </select>
                                 </div>
                                 <div class="form-input-wrapper">
@@ -224,83 +190,13 @@
                                         class="form-input" v-model="acao.multiplicador">
                                 </div>
                             </div>
-
-                            <ImagemFileUploader arquivoSolicitado="Imagem" v-model:urlImagem="acao.imagem"
-                                @uploadImagem="uploadImagem" @excluirImagem="excluirImagem()"></ImagemFileUploader>
                         </div>
 
-                        <button class="primary-button" @click.prevent="atualizarAcaoVoluntariado(acao.id)">
+                        <button class="primary-button" @click.prevent="cadastrarAcaoVoluntariado()">
                             <span v-show="carregandoRequisicao" class="spinner-border" aria-hidden="true"></span>
-                            <span v-show="!carregandoRequisicao">Salvar</span>
+                            <span v-show="!carregandoRequisicao">Cadastrar</span>
                         </button>
                     </form>
-                    <div class="tabs__content" v-if="tab == 'DOACOES'">
-                        <table class="table table-borderless">
-                            <thead>
-                                <tr>
-                                    <td>Doador</td>
-                                    <td>Valor</td>
-                                    <td>Método</td>
-                                    <td>Status</td>
-                                    <td>Ações</td>
-                                </tr>
-                            </thead>
-                            <tbody>
-                                <tr v-for="doacao in acao.doacaos">
-                                    <td>{{ doacao.doador.nome }}</td>
-                                    <td>R$ {{ doacao.valor.toFixed(2).replace(".", ",") }}</td>
-                                    <td>{{ doacao.metodo.replace("CARTAO_CREDITO", "CRÉDITO") }}</td>
-                                    <td><span :class="`status status--${doacao.status}`">{{ doacao.status.replace("PAID",
-                                        "PAGO").replace("WAITING", "PROCESSANDO").replace("CANCELED", "CANCELADO")
-                                    }}</span>
-                                    </td>
-                                    <td>
-                                        <router-link :to="{ name: 'VisualizarDoacao', params: { id: doacao.id } }"
-                                            class="acao">
-                                            <i class="acao__icone bi bi-receipt acao--visualizar"></i>
-                                        </router-link>
-                                    </td>
-                                </tr>
-                            </tbody>
-                        </table>
-
-                        <p class="doacoes--vazio"
-                            v-if="acao.doacaos == null || (acao.doacaos != null && acao.doacaos.length == 0)">
-                            Não há doações recebidas até o momento</p>
-                    </div>
-                    <div class="tabs__content" v-if="tab == 'INSCRICOES'">
-                        <table class="table table-borderless">
-                            <thead>
-                                <tr>
-                                    <td>Colaborador</td>
-                                    <td>Status</td>
-                                </tr>
-                            </thead>
-                            <tbody>
-                                <tr v-for="inscricao in acao.inscricoes">
-                                    <td>{{ inscricao.usuario_id }}</td>
-                                    <td><span :class="`status status--${inscricao.status}`">{{ inscricao.status }}</span>
-                                    </td>
-                                </tr>
-                            </tbody>
-                        </table>
-
-                        <p class="doacoes--vazio"
-                            v-if="acao.inscricoes == null || (acao.inscricoes != null && acao.inscricoes.length == 0)">
-                            Não há inscritos até o momento</p>
-                    </div>
-                    <div class="tabs__content" v-if="tab == 'ARQUIVOS'">
-                        <SingleFileUploader arquivoSolicitado="Contrato" icone="file-text" pasta="contratos"
-                            v-model:arquivo="acao.contrato" @excluirArquivo="excluirArquivo($event, 'contrato')"
-                            @uploadArquivo="uploadArquivo($event, 'contrato')"
-                            @download="downloadArquivo($event, 'contrato')">
-                        </SingleFileUploader>
-
-                        <MultiFileUploader arquivoSolicitado="Arquivo" icone="file-plus" pasta="documentos"
-                            v-model:arquivos="acao.arquivos" @excluirArquivo="excluirArquivo($event, 'documento')"
-                            @uploadArquivo="uploadArquivo($event, 'documento')"
-                            @download="downloadArquivo($event, 'documento')"></MultiFileUploader>
-                    </div>
                 </template>
             </FloatingPanel>
         </Transition>
@@ -308,7 +204,7 @@
     <FooterItem></FooterItem>
 </template>
 <script>
-import '../../assets/styles/acoes-sociais/cadastrar-acao-voluntariado-view.scss';
+import '../../assets/styles/acoes-sociais/editar-acao-voluntariado-view.scss';
 import Navbar from '../../components/Navbar.vue';
 import FooterItem from '../../components/Footer.vue';
 import Header from '../../components/Header.vue';
@@ -319,7 +215,7 @@ import SingleFileUploader from '@/components/SingleFileUploader.vue';
 import MultiFileUploader from '@/components/MultiFileUploader.vue';
 
 export default {
-    name: 'EditarAcaoVoluntariadoView',
+    name: 'CadastrarAcaoVoluntariadoView',
     components: {
         Navbar,
         FooterItem,
@@ -330,14 +226,40 @@ export default {
         MultiFileUploader,
     },
     created() {
-        this.buscarAcaoVoluntariado(this.$route.params.id);
         this.buscarOrganizacoes();
         this.buscarSegmentos();
     },
     data() {
         return {
             tab: "DADOS-GERAIS",
-            acao: null,
+            acao: {
+                nomeAcao: null,
+                nivel: null,
+                fase: null,
+                formato: null,
+                tipo: null,
+                dataInicio: null,
+                dataTermino: null,
+                horario: null,
+                local: null,
+                informacoesAdicionais: null,
+                imagem: null,
+                vagas: null,
+                url: null,
+                meta: null,
+                tipoMeta: null,
+                campanha: null,
+                publica: null,
+                valorPersonalizado: null,
+                multiplicador: null,
+                sobreOrganizacao: null,
+                sobreAcao: null,
+                usuarioId: null,
+                organizacaoId: null,
+                segmento: {
+                    id: null,
+                },
+            },
             horario: {
                 masked: null,
                 unmasked: null,
@@ -347,14 +269,9 @@ export default {
             segmentos: null,
             erroBuscaAcao: false,
             carregandoRequisicao: false,
-            erroAtualizacao: false,
+            erroCadastro: false,
             rotaAnterior: null,
         }
-    },
-    beforeRouteEnter(to, from, next) {
-        next(route => {
-            route.rotaAnterior = from;
-        })
     },
     methods: {
         selecionarTab: function (tab) {
@@ -378,102 +295,18 @@ export default {
                     this.erroBuscaAcao = true;
                 });
         },
-        buscarAcaoVoluntariado: function (id) {
-            axios.get("http://localhost:8081/acoes-voluntariado/" + id)
-                .then((response) => {
-                    var acao = response.data;
-                    this.acao = acao;
-
-                    if(acao.segmento == null) {
-                        this.acao.segmento = {
-                            id: null
-                        }
-                    }
-
-                    console.log(acao);
-                })
-                .catch((error) => {
-                    this.erroBuscaAcao = true;
-                });
-        },
-        uploadImagem: function (e) {
-            var body = new FormData();
-            body.append('imagem', e);
-
-            axios.post("http://localhost:8081/acoes-voluntariado/" + this.acao.id + "/imagens", body, { "Content-Type": "multipart/form-data" })
-                .then((response) => {
-                    this.acao.imagem = response.data;
-                })
-                .catch((error) => {
-                    console.log(error);
-                });
-        },
-        excluirImagem: function () {
-            axios.delete("http://localhost:8081/acoes-voluntariado/" + this.acao.id + "/imagens")
-                .then((response) => {
-                    this.acao.imagem = null;
-                })
-                .catch((error) => {
-                    console.log(error);
-                });
-        },
-        uploadArquivo: function (e, tipo) {
-            var body = new FormData();
-            body.append('arquivo', e);
-
-            axios.post("http://localhost:8081/acoes/" + this.acao.id + "/arquivos?acao=voluntariado&upload=" + tipo, body, { "Content-Type": "multipart/form-data" })
-                .then((response) => {
-                    if (tipo == 'contrato') {
-                        this.acao.contrato = response.data;
-                    } else {
-                        this.acao.arquivos.push(response.data);
-                    }
-                })
-                .catch((error) => {
-                    console.log(error);
-                });
-        },
-        excluirArquivo: function (event, tipo) {
-            var id;
-            if (tipo == 'contrato') {
-                id = event;
-            } else {
-                id = this.acao.arquivos[event].id;
-            }
-
-            axios.delete("http://localhost:8081/acoes/arquivos/" + id + "?tipo=" + tipo)
-                .then((response) => {
-                    if (tipo == 'contrato') {
-                        this.acao.contrato = null;
-                    } else {
-                        this.acao.arquivos.splice(event, 1);
-                    }
-                })
-                .catch((error) => {
-                    console.log(error);
-                });
-        },
-        downloadArquivo: function (event, tipo) {
-            axios.get("http://localhost:8081/acoes/arquivos/" + event + "?download=" + tipo)
-                .then((response) => {
-                    window.location.href = response.data;
-                })
-                .catch((error) => {
-                    console.log(error);
-                });
-        },
-        atualizarAcaoVoluntariado: function (id) {
+        cadastrarAcaoVoluntariado: function () {
             this.acao.segmentoID = this.acao.segmento.id;
             this.acao.usuarioId = 1;
             this.acao.horario = this.horario.masked;
 
-            axios.put("http://localhost:8081/acoes-voluntariado/" + id, this.acao)
+            axios.post("http://localhost:8081/acoes-voluntariado", this.acao)
                 .then((response) => {
-                    this.$router.push({ name: 'EditarAcaoVoluntariado', params: { id: id }, query: { sucessoAtualizacao: true, timestamp: Date.now() } });
+                    this.$router.push({ name: 'EditarAcaoVoluntariado', params: { id: response.data }, query: { sucessoCadastro: true } });
                 })
                 .catch((error) => {
                     console.log(error);
-                    this.erroAtualizacao = true;
+                    this.erroCadastro = true;
                     window.scrollTo(0, 0);
 
                     document.querySelectorAll(".field-error__message").forEach(field => {
