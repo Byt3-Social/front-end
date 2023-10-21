@@ -4,21 +4,6 @@
             <h1 class="navbar__logo">
                 <img src="../assets/images/b3-social-logo.png" alt="">
             </h1>
-            <ul class="navbar__items">
-                <li>
-                    <router-link :to="{ name: 'Login' }" class="navbar__item"><a>Dashboard</a></router-link>
-                </li>
-                <li>
-                    <router-link :to="{ name: 'CadastroOrganizacao' }" class="navbar__item">Organizações</router-link>
-                </li>
-                <li>
-                    <router-link :to="{ name: 'CadastroProcesso' }" class="navbar__item">Processos</router-link>
-                </li>
-                <li>
-                    <router-link :to="{ name: 'DivulgacaoAcoesSociais' }" class="navbar__item">Ações Sociais</router-link>
-                </li>
-            </ul>
-
             <div class="navbar__user">
                 <p class="navbar__user-name">Olá Leandro!</p>
                 <img src="../assets/images/profile-picture.png" alt="" class="navbar__user-picture">

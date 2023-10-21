@@ -3,6 +3,7 @@ import { createRouter, createWebHistory } from 'vue-router'
 import LoginView from '@/views/autenticacao/LoginView'
 import CadastroOrganizacaoView from '@/views/prospeccao/CadastroOrganizacaoView'
 import CadastroProcessoView from '@/views/prospeccao/CadastroProcessoView'
+import DivulgacaoAcoesSociaisView from '@/views/divulgacao/DivulgacaoAcoesSociaisView'
 
 import NotFoundView from '@/views/NotFoundView'
 
@@ -21,6 +22,11 @@ const routes = [
         path: '/organizacoes/processo',
         name: 'CadastroProcesso',
         component: CadastroProcessoView
+    },
+    {
+        path: '/acoessociais/divulgacao',
+        name: 'DivulgacaoAcoesSociais',
+        component: DivulgacaoAcoesSociaisView
     },
     {
         path: '/:pathMatch(.*)*',
