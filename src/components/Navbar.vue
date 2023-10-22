@@ -23,10 +23,8 @@
                     <div class="dropdown__content">
                         <router-link :to="{ name: 'ListarProcessos' }" class="navbar__item group__item">Visão
                             Geral</router-link>
-                        <router-link :to="{ name: 'CadastrarOrganizacao' }"
-                            class="navbar__item group__item">Documentos</router-link>
-                        <router-link :to="{ name: 'CadastrarOrganizacao' }"
-                            class="navbar__item group__item">Dados</router-link>
+                        <router-link to="#" class="navbar__item group__item">Documentos</router-link>
+                        <router-link to="#" class="navbar__item group__item">Dados</router-link>
                     </div>
                 </li>
                 <li class="dropdown">
@@ -63,7 +61,7 @@
                 <img src="../assets/images/profile-picture.png" alt="" class="navbar__user-picture"
                     v-if="this.$route.meta.authScope == 'colaborador' && usuario.role == 'B3Social.Administrador'">
                 <div class="navbar__user-letra" v-if="this.$route.meta.authScope == 'colaborador'
-                    && usuario.role != 'B3Social.Administrador'">{{ usuario.name.charAt(0) }}</div>
+                    && usuario.role != 'B3Social.Administrador'">{{ usuario.nome.charAt(0) }}</div>
                 <div class="navbar__user-letra" v-if="usuario.role == 'B3Social.Organizacao'">{{ usuario.empresa.charAt(0)
                 }}</div>
             </div>
