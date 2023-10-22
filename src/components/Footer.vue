@@ -1,5 +1,5 @@
 <template>
-    <footer class="footer">
+    <footer class="footer" :class="this.$route.name == 'Doar' ? 'white-footer': ''">
         <p>&copy; B3 Social | Todos os direitos reservados</p>
     </footer>
 </template>
@@ -20,5 +20,10 @@ export default {
     .footer p {
         margin: 0;
         text-align: center;
+    }
+
+    .footer.white-footer {
+        background-color: #ffffff;
+        margin-top: 0;
     }
 </style>

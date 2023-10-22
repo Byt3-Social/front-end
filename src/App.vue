@@ -1,12 +1,9 @@
 <template>
-    <!-- <nav>
-        <router-link :to="{ name: 'Login' }">Login</router-link>
-    </nav> -->
-    <router-view />
+    <router-view :key="$route.fullPath" />
 </template>
 
 <script>
-import './assets/styles/default.css';
+import './assets/styles/default.scss';
 
 export default {
     name: 'App',

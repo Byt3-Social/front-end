@@ -1,0 +1,163 @@
+main#organizacao-home-view {
+    display: flex;
+    flex-direction: column;
+    align-items: center;
+    height: 100%;
+    width: 100%;
+
+    .primary-button {
+        margin: 0 0 1.5rem;
+    }
+
+    .alerta {
+        margin-bottom: 1.5rem;
+    }
+
+    .table {
+        width: 100%;
+        text-align: center;
+        vertical-align: middle;
+
+        thead {
+            border-bottom: 1px solid rgba(0, 0, 0, 0.1);
+            text-transform: uppercase;
+            font-weight: 500;
+        }
+
+        .status {
+            padding: .5rem 1rem;
+            border-radius: 2rem;
+            text-transform: uppercase;
+            font-weight: 500;
+
+            &--WAITING {
+                background-color: #F0F5FF;
+                color: #00145F;
+            }
+
+            &--PAID,
+            &--CONFIRMADA {
+                background-color: #E8FFF3;
+                color: #50CD89;
+            }
+
+            &--CANCELED,
+            &--CANCELADA {
+                background-color: #fff5f8;
+                color: #f1416c;
+            }
+
+            &--ABERTO {
+                background-color: #F0F5FF;
+                color: #00145F;
+            }
+
+            &--EM_ANALISE,
+            &--PENDENTE {
+                background-color: #FFF8DD;
+                color: #FFC700;
+            }
+
+            &--APROVADO {
+                background-color: #E8FFF3;
+                color: #50CD89;
+            }
+
+            &--REPROVADO {
+                background-color: #fff5f8;
+                color: #f1416c;
+            }
+
+            &--CADASTRADO {
+                background-color: #f8f5ff;
+                color: #7239ea;
+            }
+
+            &--EM_ANDAMENTO {
+                    background-color: #F0F5FF;
+                    color: #00145F;
+                }
+
+                &--FINALIZADO {
+                    background-color: #E8FFF3;
+                    color: #50CD89;
+                }
+
+                &--CADASTRADO,
+                &--CRIADA {
+                    background-color: #f8f5ff;
+                    color: #7239ea;
+                }
+
+                &--AGUARDANDO_APORTE {
+                    background-color: #DBDFE9;
+                    color: #071437;
+                }
+
+
+
+                
+
+                
+
+                
+        }
+
+        .acao {
+            outline: none;
+            border: none;
+            background-color: transparent;
+
+            &__icone {
+                font-size: 1.8rem;
+                margin: 0 .75rem;
+            }
+
+            &--editar {
+                color: #00145f;
+            }
+
+            &--excluir {
+                color: #ff6c6d;
+            }
+        }
+
+        td {
+            padding: 1rem 0;
+            color: rgba(0, 0, 0, 0.7);
+        }
+    }
+
+    .reuniao {
+        display: flex;
+        flex-direction: row;
+        width: 100%;
+        align-items: center;
+        justify-content: center;
+        padding: 1rem;
+        border: 1px solid #444791;
+        background-color: #f8f5ff;
+        border-radius: 1rem;
+        color: #444791;
+        margin-bottom: 1.5rem;
+
+        i {
+            font-size: 2rem;
+            margin-right: 1.5rem;
+        }
+
+        &__detalhes {
+            p {
+                margin-bottom: 0;
+            }
+
+            p:first-of-type {
+                font-weight: 600;
+            }
+
+            a {
+                text-decoration: none;
+            }
+        }
+    }
+}

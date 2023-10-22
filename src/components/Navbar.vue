@@ -2,34 +2,102 @@
     <nav class="navbar">
         <div class="navbar__wrapper">
             <h1 class="navbar__logo">
-                <img src="../assets/images/b3-social-logo.png" alt="">
+                <Logo cor="#00145f"></Logo>
             </h1>
-            <ul class="navbar__items">
-                <li>
-                    <router-link :to="{ name: 'Login' }" class="navbar__item"><a>Dashboard</a></router-link>
+            <ul class="navbar__items"
+                v-if="this.$route.meta.authScope != 'organizacao' && usuario.role != 'B3Social.Colaborador'">
+                <li class="dropdown">
+                    <router-link :to="{ name: 'ColaboradorHome' }" class="navbar__item">Início</router-link>
                 </li>
-                <li>
-                    <router-link :to="{ name: 'CadastroOrganizacao' }" class="navbar__item">Organizações</router-link>
+                <li class="dropdown">
+                    <button type="button" class="dropdown__button">Organizações</button>
+                    <div class="dropdown__content">
+                        <router-link :to="{ name: 'ListarOrganizacoes' }" class="navbar__item group__item">Visão
+                            Geral</router-link>
+                        <router-link :to="{ name: 'CadastrarOrganizacao' }"
+                            class="navbar__item group__item">Cadastrar</router-link>
+                    </div>
                 </li>
-                <li>
-                    <router-link :to="{ name: 'CadastroProcesso' }" class="navbar__item">Processos</router-link>
+                <li class="dropdown">
+                    <button type="button" class="dropdown__button">Processos</button>
+                    <div class="dropdown__content">
+                        <router-link :to="{ name: 'ListarProcessos' }" class="navbar__item group__item">Visão
+                            Geral</router-link>
+                        <router-link to="#" class="navbar__item group__item">Documentos</router-link>
+                        <router-link to="#" class="navbar__item group__item">Dados</router-link>
+                    </div>
                 </li>
-                <li>
-                    <router-link :to="{ name: 'Login' }" class="navbar__item">Ações Sociais</router-link>
+                <li class="dropdown">
+                    <button type="button" class="dropdown__button">Ações Sociais</button>
+                    <div class="dropdown__content">
+                        <p class="drowpdown__group">Voluntariado</p>
+                        <router-link :to="{ name: 'ListarAcoesVoluntariado' }" class="navbar__item group__item">Visão
+                            Geral</router-link>
+                        <router-link :to="{ name: 'CadastrarAcaoVoluntariado' }"
+                            class="navbar__item group__item">Cadastrar</router-link>
+                        <p class="drowpdown__group">ISP</p>
+                        <router-link :to="{ name: 'ListarAcoesIsp' }" class="navbar__item group__item">Visão
+                            Geral</router-link>
+                        <router-link :to="{ name: 'CadastrarAcaoIsp' }"
+                            class="navbar__item group__item">Registrar</router-link>
+                        <p class="drowpdown__group">Acompanhamento</p>
+                        <router-link :to="{ name: 'ListarAcompanhamentos' }"
+                            class="navbar__item group__item">Solicitados</router-link>
+                        <router-link :to="{ name: 'CadastrarAcompanhamento' }"
+                            class="navbar__item group__item">Solicitar</router-link>
+                    </div>
                 </li>
             </ul>
 
             <div class="navbar__user">
-                <p class="navbar__user-name">Olá Leandro!</p>
-                <img src="../assets/images/profile-picture.png" alt="" class="navbar__user-picture">
+                <div class="navbar__user-details">
+                    <p class="navbar__user-name" v-if="usuario.role != 'B3Social.Organizacao'">
+                        Olá {{ usuario.nome.split(" ")[0].toLowerCase() }}!</p>
+                    <p class="navbar__user-name" v-if="usuario.role == 'B3Social.Organizacao'">Olá {{
+                        usuario.empresa.toLowerCase() }}!</p>
+                    <small class="navbar__user-role" v-if="usuario.role != 'B3Social.Organizacao'">Colaborador B3</small>
+                    <small class="navbar__user-role" v-if="usuario.role == 'B3Social.Organizacao'">Parceiro B3</small>
+                </div>
+                <img src="../assets/images/profile-picture.png" alt="" class="navbar__user-picture"
+                    v-if="this.$route.meta.authScope == 'colaborador' && usuario.role == 'B3Social.Administrador'">
+                <div class="navbar__user-letra" v-if="this.$route.meta.authScope == 'colaborador'
+                    && usuario.role != 'B3Social.Administrador'">{{ usuario.nome.charAt(0) }}</div>
+                <div class="navbar__user-letra" v-if="usuario.role == 'B3Social.Organizacao'">{{ usuario.empresa.charAt(0)
+                }}</div>
             </div>
         </div>
     </nav>
 </template>
 
 <script>
+import Logo from '@/components/Logo.vue';
+
 export default {
-    name: 'Navbar'
+    name: 'Navbar',
+    components: {
+        Logo
+    },
+    data() {
+        return {
+            usuario: null,
+        }
+    },
+    created() {
+        var usuario;
+
+        if (this.$route.meta.authScope == 'colaborador') {
+            usuario = JSON.parse(localStorage.getItem('B3Social-Colaborador'));
+        } else {
+            usuario = JSON.parse(localStorage.getItem('B3Social-Organizacao'));
+        }
+
+        this.usuario = usuario;
+    },
+    methods: {
+        mostrarDropdown: function () {
+
+        }
+    },
 }
 </script>
 
@@ -49,13 +117,13 @@ export default {
     display: flex;
     flex-direction: row;
     width: 100%;
-    padding: 0;
+    padding: .5rem 0;
     align-items: center;
     justify-content: space-between;
 }
 
 .navbar__logo {
-    width: 15%;
+    width: 12%;
     margin: 0;
 }
 
@@ -76,9 +144,56 @@ export default {
     margin: 0;
 }
 
+.navbar .dropdown__button {
+    background-color: transparent;
+    outline: none;
+    border: none;
+    margin: 1rem 0;
+}
+
+.navbar .dropdown {
+    position: relative;
+    display: inline-block;
+}
+
+.navbar .drowpdown__group {
+    padding: .5rem 1rem;
+    margin: 0;
+    opacity: .5;
+    font-size: .8rem;
+    text-transform: uppercase;
+    font-weight: 500;
+}
+
+.navbar .dropdown .group__item {
+    padding-left: 2rem;
+}
+
+.navbar .dropdown__content {
+    display: none;
+    position: absolute;
+    background-color: #ffffff;
+    padding: 1rem 0;
+    min-width: 200px;
+    border-radius: .5rem;
+    box-shadow: 0px 0px 50px 0px rgba(82, 63, 105, .15);
+    z-index: 1;
+}
+
 .navbar__items .navbar__item {
     text-decoration: none;
     color: #000000;
+    width: 100%;
+    display: inline-block;
+    padding: .5rem 1rem;
+}
+
+.navbar .dropdown:hover .dropdown__content {
+    display: block;
+}
+
+.navbar__items .dropdown__content .navbar__item:hover {
+    background-color: #F0F5FF;
 }
 
 .navbar__user {
@@ -89,11 +204,22 @@ export default {
     align-items: center;
 }
 
+.navbar__user-details {
+    width: 100%;
+    margin-right: 1rem;
+}
+
 .navbar__user .navbar__user-name {
-    width: 50%;
+    width: 100%;
     margin: 0;
     font-weight: 600;
     text-align: right;
+    text-transform: capitalize;
+}
+
+.navbar__user-role {
+    text-align: right;
+    display: block;
 }
 
 .navbar__user .navbar__user-picture {
@@ -103,6 +229,32 @@ export default {
     display: block;
     margin: 0 auto;
     padding: .3rem;
-    border: 2.5px solid #00145f;
+    border: 2px solid #00145f;
+}
+
+.navbar__user .navbar__user-letra {
+    position: relative;
+    width: 30%;
+    border-radius: 50%;
+    display: block;
+    margin: 0 auto;
+    padding: .3rem;
+    border: 2px solid #00145f;
+    background-color: #00145f;
+    color: #ffffff;
+    text-align: center;
+    font-size: 1.5rem;
+}
+
+.navbar__user-details {
+    display: flex;
+    flex-direction: column;
+    width: 100%;
+    margin-right: 1rem;
+}
+
+.navbar__user-role {
+    text-align: right;
+    text-transform: uppercase;
 }
 </style>
