@@ -58,5 +58,5 @@ export default {
 
 <script setup>
 defineProps(['urlImagem', 'arquivoSolicitado']);
-defineEmits(['update:urlImagem']);
+defineEmits(['update:urlImagem', 'uploadImagem']);
 </script>

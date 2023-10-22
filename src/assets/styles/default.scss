@@ -191,6 +191,23 @@ select {
     margin-top: 2rem;
 }
 
+.warn-button {
+    display: block;
+    background-color: #FFD862;
+    width: 50%;
+    color: #ffffff;
+    padding: .75rem;
+    font-weight: 500;
+    border: none;
+    border-radius: 5rem;
+    margin: 2rem auto 0;
+    text-transform: uppercase;
+    color: #00145F;
+    font-size: 1.25rem;
+    text-decoration: none;
+    text-align: center;
+}
+
 .alerta {
     padding: 1rem;
     border-radius: .5rem;

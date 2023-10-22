@@ -26,6 +26,8 @@ import VisualizarAcompanhamentoView from '@/views/acompanhamento/VisualizarAcomp
 
 import ColaboradorHomeView from '@/views/colaborador/ColaboradorHomeView'
 import DoarView from '@/views/colaborador/DoarView'
+import HubAcoesView from '@/views/colaborador/HubAcoesView'
+import AcaoView from '@/views/colaborador/AcaoView'
 
 import OrganizacaoHomeView from '@/views/organizacao/OrganizacaoHomeView'
 import PreencherAcompanhamentoView from '@/views/organizacao/PreencherAcompanhamentoView'
@@ -226,6 +228,26 @@ const routes = [
             requiresAuth: true,
             authScope: 'colaborador',
             title: "B3 Social | Doar"
+        }
+    },
+    {
+        path: '/colaborador/acoes',
+        name: 'HubAcoes',
+        component: HubAcoesView,
+        meta: {
+            requiresAuth: true,
+            authScope: 'colaborador',
+            title: "B3 Social | Hub de Ações"
+        }
+    },
+    {
+        path: '/colaborador/acoes/:id',
+        name: 'Acao',
+        component: AcaoView,
+        meta: {
+            requiresAuth: true,
+            authScope: 'colaborador',
+            title: "B3 Social | Ação"
         }
     },
     /* Organização */

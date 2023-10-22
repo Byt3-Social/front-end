@@ -5,7 +5,8 @@
         <FloatingPanel>
             <template v-slot:FloatingPanelContent>
                 <div class="alerta alerta--info">
-                    <p>Acesse agora nosso novo <a href="#">Hub de ações sociais</a>!</p>
+                    <p>Acesse agora nosso novo <router-link :to="{ name: 'HubAcoes' }">Hub de ações sociais</router-link>!
+                    </p>
                 </div>
                 <button class="primary-button" @click.prevent="">
                     Indique uma organização
