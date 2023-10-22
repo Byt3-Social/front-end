@@ -7,6 +7,12 @@ main#colaborador-login-view {
     height: 100%;
     width: 100%;
 
+    .falha-login {
+        text-align: center;
+        margin-top: 1rem;
+        color: #f1416c;
+    }
+
     .background {
         width: 65%;
         height: 100%;

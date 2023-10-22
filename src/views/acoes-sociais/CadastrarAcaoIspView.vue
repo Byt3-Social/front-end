@@ -8,7 +8,7 @@
                 <template v-slot:FloatingPanelContent>
                     <div class="alerta alerta--error" v-if="erroCadastro">
                         <i class="alerta__icone bi bi-x-circle-fill"></i>
-                        <p class="alerta__message">Não foi possível atualizar as informações dessa ação</p>
+                        <p class="alerta__message">Não foi possível cadastrar ação</p>
                     </div>
                     <ul class="tabs">
                         <li class="tabs__item">
@@ -203,70 +203,65 @@ export default {
             this.tab = tab;
         },
         buscarOrganizacoes: function () {
-            axios.get("http://localhost:8082/organizacoes")
+            axios.get(process.env.VUE_APP_API_BASE_URL + "/prospeccao/organizacoes")
                 .then((response) => {
                     this.organizacoes = response.data;
                 })
-                .catch((error) => {
-                    console.log(error);
+                .catch(() => {
+
                 });
         },
         buscarSegmentos: function () {
-            axios.get("http://localhost:8081/segmentos")
+            axios.get(process.env.VUE_APP_API_BASE_URL + "/acoes-sociais/segmentos")
                 .then((response) => {
                     this.segmentos = response.data;
                 })
-                .catch((error) => {
-                    console.log(error);
+                .catch(() => {
+
                 });
         },
         buscarCategorias: function () {
-            axios.get("http://localhost:8081/categorias")
+            axios.get(process.env.VUE_APP_API_BASE_URL + "/acoes-sociais/categorias")
                 .then((response) => {
                     this.categorias = response.data;
                 })
-                .catch((error) => {
-                    console.log(error);
+                .catch(() => {
+
                 });
         },
         buscarAreas: function () {
-            axios.get("http://localhost:8081/areas")
+            axios.get(process.env.VUE_APP_API_BASE_URL + "/acoes-sociais/areas")
                 .then((response) => {
                     this.areas = response.data;
                 })
-                .catch((error) => {
-                    console.log(error);
+                .catch(() => {
+
                 });
         },
         buscarIncentivos: function () {
-            axios.get("http://localhost:8081/incentivos")
+            axios.get(process.env.VUE_APP_API_BASE_URL + "/acoes-sociais/incentivos")
                 .then((response) => {
                     this.incentivos = response.data;
                 })
-                .catch((error) => {
-                    console.log(error);
+                .catch(() => {
+
                 });
         },
         buscarEstados: function () {
             axios.get("https://servicodados.ibge.gov.br/api/v1/localidades/estados?orderBy=nome")
                 .then((response) => {
-                    console.log(response.data);
                     this.estados = response.data;
                 })
-                .catch((error) => {
-                    console.log(error);
+                .catch(() => {
+
                 });
         },
         cadastrarAcaoIsp: function () {
-            axios.post("http://localhost:8081/acoes-isp", this.acao)
+            axios.post(process.env.VUE_APP_API_BASE_URL + "/acoes-sociais/acoes-isp", this.acao)
                 .then((response) => {
                     this.$router.push({ name: 'EditarAcaoIsp', params: { id: response.data }, query: { sucessoCadastro: true, timestamp: Date.now() } });
                 })
                 .catch((error) => {
-                    console.log(error);
-                    this.erroCadastro = true;
-                    window.scrollTo(0, 0);
-
                     document.querySelectorAll(".field-error__message").forEach(field => {
                         field.remove();
                     });
@@ -275,7 +270,7 @@ export default {
                         field.classList.remove("field-error");
                     });
 
-                    if (error.response.status != null && error.response.status == 400 && error.response.data != null) {
+                    if (error.response && error.response.status != null && error.response.status == 400 && error.response.data != null) {
                         error.response.data.forEach(fieldError => {
                             var campo = document.getElementById("acao." + fieldError.field);
 
@@ -289,6 +284,9 @@ export default {
                             }
                         });
                     }
+
+                    this.erroCadastro = true;
+                    window.scrollTo(0, 0);
                 });
         },
     }

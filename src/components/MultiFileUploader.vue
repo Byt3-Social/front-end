@@ -4,7 +4,7 @@
             <i :class="`bi bi-${icone} documento__icone`"></i>
             <p class="documento__nome" v-if="!isDragging">{{ arquivoSolicitado }}</p>
             <p class="documento__nome" v-else>Solte o arquivo aqui</p>
-            <input type="file" name="file" id="fileInput" class="dropfile__input" @change="onChange" ref="file">
+            <input type="file" name="file" id="fileInput" class="dropfile__input" @change="onChange" ref="file" :disabled="disabled == true">
         </div>
         <div class="documento__enviado" v-for="(arquivo, index) in arquivos">
             <div class="documento__detalhes">
@@ -18,7 +18,7 @@
                 </div>
             </div>
             <div class="documento__acoes">
-                <button type="button" @click.prevent="$emit('download', arquivo.id)">
+                <button type="button" @click.prevent="$emit('download', arquivo.id)" v-if="download != false">
                     <i class="bi bi-cloud-arrow-down-fill documento__icone documento__icone--download"></i>
                 </button>
                 <button type="button" @click.prevent="$emit('excluirArquivo', index)">
@@ -49,9 +49,7 @@ export default {
     methods: {
         onChange(i) {
             this.files = this.$refs.file.files;
-            console.log(this.files);
             var url = this.$emit('uploadArquivo', this.files[0]);
-            console.log(url);
         },
         dragover() {
             this.isDragging = true;
@@ -73,6 +71,6 @@ export default {
 </script>
 
 <script setup>
-defineProps(['arquivos', 'arquivoSolicitado', 'icone', 'pasta']);
+defineProps(['arquivos', 'arquivoSolicitado', 'icone', 'pasta', 'disabled', 'download']);
 defineEmits(['update:arquivo', 'excluirArquivo', 'uploadArquivo', 'download']);
 </script>

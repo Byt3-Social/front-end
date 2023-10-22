@@ -278,20 +278,20 @@ export default {
             this.tab = tab;
         },
         buscarOrganizacoes: function () {
-            axios.get("http://localhost:8082/organizacoes")
+            axios.get(process.env.VUE_APP_API_BASE_URL + "/prospeccao/organizacoes")
                 .then((response) => {
                     this.organizacoes = response.data;
                 })
-                .catch((error) => {
+                .catch(() => {
                     this.erroBuscaAcao = true;
                 });
         },
         buscarSegmentos: function () {
-            axios.get("http://localhost:8081/segmentos")
+            axios.get(process.env.VUE_APP_API_BASE_URL + "/acoes-sociais/segmentos")
                 .then((response) => {
                     this.segmentos = response.data;
                 })
-                .catch((error) => {
+                .catch(() => {
                     this.erroBuscaAcao = true;
                 });
         },
@@ -300,15 +300,11 @@ export default {
             this.acao.usuarioId = 1;
             this.acao.horario = this.horario.masked;
 
-            axios.post("http://localhost:8081/acoes-voluntariado", this.acao)
+            axios.post(process.env.VUE_APP_API_BASE_URL + "/acoes-sociais/acoes-voluntariado", this.acao)
                 .then((response) => {
                     this.$router.push({ name: 'EditarAcaoVoluntariado', params: { id: response.data }, query: { sucessoCadastro: true } });
                 })
                 .catch((error) => {
-                    console.log(error);
-                    this.erroCadastro = true;
-                    window.scrollTo(0, 0);
-
                     document.querySelectorAll(".field-error__message").forEach(field => {
                         field.remove();
                     });
@@ -317,7 +313,7 @@ export default {
                         field.classList.remove("field-error");
                     });
 
-                    if (error.response.status != null && error.response.status == 400 && error.response.data != null) {
+                    if (error.response && error.response.status != null && error.response.status == 400 && error.response.data != null) {
                         error.response.data.forEach(fieldError => {
                             var campo = document.getElementById("acao." + fieldError.field);
 
@@ -331,6 +327,9 @@ export default {
                             }
                         });
                     }
+
+                    this.erroCadastro = true;
+                    window.scrollTo(0, 0);
                 });
         },
     }

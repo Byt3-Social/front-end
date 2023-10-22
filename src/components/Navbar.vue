@@ -4,9 +4,10 @@
             <h1 class="navbar__logo">
                 <Logo cor="#00145f"></Logo>
             </h1>
-            <ul class="navbar__items" v-if="this.$route.name != 'EmployeeHome' && this.$route.name != 'OrganizationHome'">
+            <ul class="navbar__items"
+                v-if="this.$route.meta.authScope != 'organizacao' && usuario.role != 'B3Social.Colaborador'">
                 <li class="dropdown">
-                    <router-link :to="{ name: 'OrganizacaoLogin' }" class="navbar__item">Dashboard</router-link>
+                    <router-link :to="{ name: 'ColaboradorHome' }" class="navbar__item">Início</router-link>
                 </li>
                 <li class="dropdown">
                     <button type="button" class="dropdown__button">Organizações</button>
@@ -34,7 +35,8 @@
                         <p class="drowpdown__group">Voluntariado</p>
                         <router-link :to="{ name: 'ListarAcoesVoluntariado' }" class="navbar__item group__item">Visão
                             Geral</router-link>
-                        <router-link :to="{ name: 'CadastrarAcaoVoluntariado' }" class="navbar__item group__item">Cadastrar</router-link>
+                        <router-link :to="{ name: 'CadastrarAcaoVoluntariado' }"
+                            class="navbar__item group__item">Cadastrar</router-link>
                         <p class="drowpdown__group">ISP</p>
                         <router-link :to="{ name: 'ListarAcoesIsp' }" class="navbar__item group__item">Visão
                             Geral</router-link>
@@ -43,17 +45,27 @@
                         <p class="drowpdown__group">Acompanhamento</p>
                         <router-link :to="{ name: 'ListarAcompanhamentos' }"
                             class="navbar__item group__item">Solicitados</router-link>
-                        <router-link :to="{ name: 'CadastrarAcompanhamento' }" class="navbar__item group__item">Solicitar</router-link>
+                        <router-link :to="{ name: 'CadastrarAcompanhamento' }"
+                            class="navbar__item group__item">Solicitar</router-link>
                     </div>
                 </li>
             </ul>
 
             <div class="navbar__user">
                 <div class="navbar__user-details">
-                    <p class="navbar__user-name">Olá Leandro!</p>
-                    <small class="navbar__user-role">Colaborador B3</small>
+                    <p class="navbar__user-name" v-if="usuario.role != 'B3Social.Organizacao'">
+                        Olá {{ usuario.nome.split(" ")[0].toLowerCase() }}!</p>
+                    <p class="navbar__user-name" v-if="usuario.role == 'B3Social.Organizacao'">Olá {{
+                        usuario.empresa.toLowerCase() }}!</p>
+                    <small class="navbar__user-role" v-if="usuario.role != 'B3Social.Organizacao'">Colaborador B3</small>
+                    <small class="navbar__user-role" v-if="usuario.role == 'B3Social.Organizacao'">Parceiro B3</small>
                 </div>
-                <img src="../assets/images/profile-picture.png" alt="" class="navbar__user-picture">
+                <img src="../assets/images/profile-picture.png" alt="" class="navbar__user-picture"
+                    v-if="this.$route.meta.authScope == 'colaborador' && usuario.role == 'B3Social.Administrador'">
+                <div class="navbar__user-letra" v-if="this.$route.meta.authScope == 'colaborador'
+                    && usuario.role != 'B3Social.Administrador'">{{ usuario.name.charAt(0) }}</div>
+                <div class="navbar__user-letra" v-if="usuario.role == 'B3Social.Organizacao'">{{ usuario.empresa.charAt(0)
+                }}</div>
             </div>
         </div>
     </nav>
@@ -67,11 +79,27 @@ export default {
     components: {
         Logo
     },
+    data() {
+        return {
+            usuario: null,
+        }
+    },
+    created() {
+        var usuario;
+
+        if (this.$route.meta.authScope == 'colaborador') {
+            usuario = JSON.parse(localStorage.getItem('B3Social-Colaborador'));
+        } else {
+            usuario = JSON.parse(localStorage.getItem('B3Social-Organizacao'));
+        }
+
+        this.usuario = usuario;
+    },
     methods: {
         mostrarDropdown: function () {
 
         }
-    }
+    },
 }
 </script>
 
@@ -188,6 +216,7 @@ export default {
     margin: 0;
     font-weight: 600;
     text-align: right;
+    text-transform: capitalize;
 }
 
 .navbar__user-role {
@@ -203,6 +232,20 @@ export default {
     margin: 0 auto;
     padding: .3rem;
     border: 2px solid #00145f;
+}
+
+.navbar__user .navbar__user-letra {
+    position: relative;
+    width: 30%;
+    border-radius: 50%;
+    display: block;
+    margin: 0 auto;
+    padding: .3rem;
+    border: 2px solid #00145f;
+    background-color: #00145f;
+    color: #ffffff;
+    text-align: center;
+    font-size: 1.5rem;
 }
 
 .navbar__user-details {

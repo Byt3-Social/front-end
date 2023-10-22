@@ -15,8 +15,7 @@
         <Transition>
             <FloatingPanel v-if="!erroBuscaAcoes && acoes != null && organizacoes != null">
                 <template v-slot:FloatingPanelContent>
-                    <div class="alerta alerta--sucesso"
-                        v-if="this.$route.query.sucessoExclusao && rotaAnterior == null">
+                    <div class="alerta alerta--sucesso" v-if="this.$route.query.sucessoExclusao && rotaAnterior == null">
                         <i class="alerta__icone bi bi-check-circle-fill"></i>
                         <p class="alerta__message">Ação excluída com sucesso</p>
                     </div>
@@ -69,7 +68,7 @@ import FloatingPanel from '../../components/FloatingPanel.vue';
 import axios from 'axios';
 
 export default {
-    name: 'ListarAcoesIspView',
+    name: 'ListarAcoesVoluntariadoView',
     components: {
         Navbar,
         FooterItem,
@@ -97,32 +96,31 @@ export default {
     },
     methods: {
         buscarAcoes: function () {
-            axios.get("http://localhost:8081/acoes-voluntariado")
+            axios.get(process.env.VUE_APP_API_BASE_URL + "/acoes-sociais/acoes-voluntariado")
                 .then((response) => {
                     this.acoes = response.data;
                 })
-                .catch((error) => {
+                .catch(() => {
                     this.erroBuscaAcoes = true;
                 });
         },
         buscarOrganizacoes: function () {
-            axios.get("http://localhost:8082/organizacoes")
+            axios.get(process.env.VUE_APP_API_BASE_URL + "/prospeccao/organizacoes")
                 .then((response) => {
                     this.organizacoes = response.data;
                 })
-                .catch((error) => {
+                .catch(() => {
                     this.erroBuscaAcoes = true;
                 });
         },
         excluirAcao: function (index, id) {
-            axios.delete("http://localhost:8081/acoes-voluntariado/" + id)
-                .then((response) => {
+            axios.delete(process.env.VUE_APP_API_BASE_URL + "/acoes-sociais/acoes-voluntariado/" + id)
+                .then(() => {
                     this.acoes.splice(index, 1);
 
                     this.$router.push({ name: 'ListarAcoesVoluntariado', query: { sucessoExclusao: true, timestamp: Date.now() } });
                 })
-                .catch((error) => {
-                    console.log(error);
+                .catch(() => {
                     this.$router.push({ name: 'ListarAcoesVoluntariado', query: { falhaExclusao: true, timestamp: Date.now() } });
                 });
         },

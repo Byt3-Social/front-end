@@ -12,7 +12,7 @@
                 <i class="bi bi-file-pdf-fill"></i>
                 <div class="documento__info">
                     <p>{{ nomeOriginal }}</p>
-                    <p v-if="status == 'PENDENTE_REENVIO'">Enviado (reenvio solicitado)</p>
+                    <p v-if="status == 'PENDENTE_REENVIO'">Enviado - Reenvio solicitado</p>
                     <p v-else-if="assinaturaDigital != null">Enviado (assinado)</p>
                     <p v-else="assinaturaDigital != null">Enviado (não assinado)</p>
                     <p>{{ tamanhoArquivo }} bytes</p>

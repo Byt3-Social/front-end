@@ -35,9 +35,7 @@ export default {
     methods: {
         onChange(i) {
             this.files = this.$refs.file.files;
-            console.log(this.files);
-            var url = this.$emit('uploadImagem', this.files[0]);
-            console.log(url);
+            this.$emit('uploadImagem', this.files[0]);
         },
         dragover() {
             this.isDragging = true;

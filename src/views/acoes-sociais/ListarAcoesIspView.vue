@@ -94,32 +94,31 @@ export default {
     },
     methods: {
         buscarAcoes: function () {
-            axios.get("http://localhost:8081/acoes-isp")
+            axios.get(process.env.VUE_APP_API_BASE_URL + "/acoes-sociais/acoes-isp")
                 .then((response) => {
                     this.acoes = response.data;
                 })
-                .catch((error) => {
+                .catch(() => {
                     this.erroBuscaAcoes = true;
                 });
         },
         buscarOrganizacoes: function () {
-            axios.get("http://localhost:8082/organizacoes")
+            axios.get(process.env.VUE_APP_API_BASE_URL + "/prospeccao/organizacoes")
                 .then((response) => {
                     this.organizacoes = response.data;
                 })
-                .catch((error) => {
+                .catch(() => {
                     this.erroBuscaAcoes = true;
                 });
         },
         excluirAcao: function (index, id) {
-            axios.delete("http://localhost:8081/acoes-isp/" + id)
-                .then((response) => {
+            axios.delete(process.env.VUE_APP_API_BASE_URL + "/acoes-sociais/acoes-isp/" + id)
+                .then(() => {
                     this.acoes.splice(index, 1);
 
                     this.$router.push({ name: 'ListarAcoesIsp', query: { sucessoExclusao: true, timestamp: Date.now() } });
                 })
-                .catch((error) => {
-                    console.log(error);
+                .catch(() => {
                     this.$router.push({ name: 'ListarAcoesIsp', query: { falhaExclusao: true, timestamp: Date.now() } });
                 });
         },

@@ -114,33 +114,30 @@ export default {
     },
     methods: {
         buscarAcompanhamentos: function () {
-            axios.get("http://localhost:8083/acompanhamentos")
+            axios.get(process.env.VUE_APP_API_BASE_URL + "/acompanhamento/acompanhamentos")
                 .then((response) => {
-                    console.log(response);
                     this.acompanhamentos = response.data;
                 })
-                .catch((error) => {
-                    console.log(error);
+                .catch(() => {
+
                 });
         },
         buscarAcoes: function () {
-            axios.get("http://localhost:8081/acoes-isp")
+            axios.get(process.env.VUE_APP_API_BASE_URL + "/acoes-sociais/acoes-isp")
                 .then((response) => {
-                    console.log(response);
                     this.acoes = response.data;
                 })
-                .catch((error) => {
-                    console.log(error);
+                .catch(() => {
+
                 });
         },
         buscarOrganizacoes: function () {
-            axios.get("http://localhost:8082/organizacoes")
+            axios.get(process.env.VUE_APP_API_BASE_URL + "/prospeccao/organizacoes")
                 .then((response) => {
-                    console.log(response);
                     this.organizacoes = response.data;
                 })
-                .catch((error) => {
-                    console.log(error);
+                .catch(() => {
+
                 });
         },
         matchOrganizacao: function (id) {
@@ -162,13 +159,12 @@ export default {
             }
         },
         excluirAcompanhamento: function (index, id) {
-            axios.delete("http://localhost:8083/acompanhamentos/" + id)
-                .then((response) => {
+            axios.delete(process.env.VUE_APP_API_BASE_URL + "/acompanhamento/acompanhamentos/" + id)
+                .then(() => {
                     this.acompanhamentos.splice(index, 1);
                     this.$router.push({ name: 'ListarAcompanhamentos', query: { sucessoExclusao: true, timestamp: Date.now() } });
                 })
-                .catch((error) => {
-                    console.log(error);
+                .catch(() => {
                     this.$router.push({ name: 'ListarAcompanhamentos', query: { falhaExclusao: true, timestamp: Date.now() } });
                 });
         },

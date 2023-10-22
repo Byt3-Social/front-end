@@ -16,9 +16,9 @@
             <FloatingPanel
                 v-if="!erroBuscaAcompanhamento && acompanhamento != null && organizacoes != null && acoes != null">
                 <template v-slot:FloatingPanelContent>
-                    <div class="alerta alerta--error" v-if="erroCadastro">
-                        <i class="alerta__icone bi bi-x-circle-fill"></i>
-                        <p class="alerta__message">Não foi possível editar as informações dessa organização</p>
+                    <div class="alerta alerta--sucesso" v-if="this.$route.query.sucessoSolicitacao && rotaAnterior == null">
+                        <i class="alerta__icone bi bi-check-circle-fill"></i>
+                        <p class="alerta__message">Reunião solicitada com sucesso</p>
                     </div>
                     <ul class="tabs">
                         <li class="tabs__item">
@@ -48,14 +48,16 @@
                         <div class="bloco">
                             <label class="bloco__atributo">Nome (Representante)</label>
                             <p class="bloco__atributo--preenchido">
-                                {{ acompanhamento.representante != null ? (acompanhamento.representante.nome != null ?
+                                {{ acompanhamento.representante != null ? (acompanhamento.representante.nome != null &&
+                                    acompanhamento.representante.nome != '' ?
                                     acompanhamento.representante.nome : 'Não preenchido') : 'Não preenchido' }}
                             </p>
                         </div>
                         <div class="bloco">
                             <label class="bloco__atributo">Email (Representante)</label>
                             <p class="bloco__atributo--preenchido">
-                                {{ acompanhamento.representante != null ? (acompanhamento.representante.email != null ?
+                                {{ acompanhamento.representante != null ? (acompanhamento.representante.email != null &&
+                                    acompanhamento.representante.nome != '' ?
                                     acompanhamento.representante.email : 'Não preenchido') : 'Não preenchido' }}
                             </p>
                         </div>
@@ -63,7 +65,7 @@
                             <label class="bloco__atributo">Telefone (Representante)</label>
                             <p class="bloco__atributo--preenchido">
                                 {{ acompanhamento.representante != null ?
-                                    (acompanhamento.representante.telefone != null ?
+                                    (acompanhamento.representante.telefone != null && acompanhamento.representante.nome != '' ?
                                         utils.telefoneMask(acompanhamento.representante.telefone) : 'Não preenchido') :
                                     'Não preenchido' }}
                             </p>
@@ -71,8 +73,9 @@
                         <div class="bloco">
                             <label class="bloco__atributo">Cargo (Representante)</label>
                             <p class="bloco__atributo--preenchido">
-                                {{ acompanhamento.representante != null ? (acompanhamento.representante.cargo != null ?
-                                    acompanhamento.representante.cargo : 'Não preenchido') : 'Não preenchido' }}
+                                {{ acompanhamento.representante != null && acompanhamento.representante.nome != '' ?
+                                    (acompanhamento.representante.cargo != null ?
+                                        acompanhamento.representante.cargo : 'Não preenchido') : 'Não preenchido' }}
                             </p>
                         </div>
                         <div class="bloco">
@@ -87,8 +90,11 @@
                         </div>
                         <div class="bloco info-adicional">
                             <label class="bloco__atributo">Informações adicionais</label>
-                            <p class="bloco__atributo--preenchido">{{ acompanhamento.informacoesAdicionais != null &&
-                                acompanhamento.informacoesAdicionais != '' ? acompanhamento.informacoesAdicionais : 'Não preenchido' }}</p>
+                            <p class="bloco__atributo--preenchido">
+                                {{ acompanhamento.informacoesAdicionais != null &&
+                                    acompanhamento.informacoesAdicionais != '' ? acompanhamento.informacoesAdicionais :
+                                    'Não informada' }}
+                            </p>
                         </div>
 
                         <hr class="divisor">
@@ -100,38 +106,95 @@
                         </div>
                     </div>
                     <div class="tabs__content" v-if="tab == 'REUNIOES'">
-                        <button class="primary-button solicitar-reuniao" @click.prevent="atualizarEmpresa()">
-                            Solicitar reunião
-                        </button>
-                        <div class="reuniao">
-                            <i class="bi bi-microsoft-teams"></i>
-                            <div class="reuniao__detalhes">
-                                <p>Microsoft Teams</p>
-                                <p>Aguardando agendamento</p>
-                            </div>
+                        <ul class="tabs">
+                            <li class="tabs__item">
+                                <button class="tabs__button" :class="subTab == 'SOLICITAR' ? 'active' : ''"
+                                    @click="selecionarSubTab('SOLICITAR')">Solicitar</button>
+                            </li>
+                            <li class="tabs__item">
+                                <button class="tabs__button" :class="subTab == 'SOLICITADAS' ? 'active' : ''"
+                                    @click="selecionarSubTab('SOLICITADAS')">Solicitadas</button>
+                            </li>
+                        </ul>
+
+                        <div class="tabs__content" v-if="subTab == 'SOLICITAR'">
+                            <Transition>
+                                <div class="disponibilidade">
+                                    <label for="#">Informe as opções de horários disponíveis para realizar a reunião</label>
+                                    <div class="form-row data-horario-wrapper">
+                                        <div class="form-input-wrapper">
+                                            <input type="date" name="reuniao.data" id="reuniao.data" class="form-input"
+                                                v-model="reuniao.data">
+                                        </div>
+                                        <div class="form-input-wrapper">
+                                            <input type="text" name="reuniao.horario" id="reuniao.horario"
+                                                class="form-input" placeholder="Horário" v-maska="horario"
+                                                data-maska="##:##" v-model="reuniao.horario">
+                                        </div>
+                                        <div class="form-input-wrapper">
+                                            <button type="button" class="documento__solicitar--button"
+                                                @click.prevent="incluirDisponibilidade()">Incluir</button>
+                                        </div>
+                                    </div>
+
+                                    <table class="table table-borderless">
+                                        <thead>
+                                            <tr>
+                                                <td>Disponibilidade</td>
+                                                <td>Remover</td>
+                                            </tr>
+                                        </thead>
+                                        <tbody>
+                                            <tr v-for="(disponibilidade, index) in disponibilidadeReuniao">
+                                                <td>{{ (new Date(disponibilidade)).toLocaleDateString('pt-BR', options) }}
+                                                </td>
+                                                <td>
+                                                    <button type="button" class="acao"
+                                                        @click.prevent="removerDisponibilidade(index)">
+                                                        <i class="bi bi-x-circle-fill acao__icone acao--excluir"></i>
+                                                    </button>
+                                                </td>
+                                            </tr>
+                                        </tbody>
+                                    </table>
+
+                                    <p class="text-center" v-if="this.disponibilidadeReuniao.length < 1">
+                                        Não há horários disponíveis</p>
+                                </div>
+                            </Transition>
+                            <button class="primary-button solicitar-reuniao" @click.prevent="solicitarReuniao()"
+                                v-if="disponibilidadeReuniao.length > 0">
+                                <span v-show="carregandoRequisicao" class="spinner-border" aria-hidden="true"></span>
+                                <span v-show="!carregandoRequisicao">Solicitar reunião</span>
+                            </button>
                         </div>
-                        <div class="reuniao">
-                            <i class="bi bi-microsoft-teams"></i>
-                            <div class="reuniao__detalhes">
-                                <p>Microsoft Teams</p>
-                                <p>11 de outubro de 2023 às 20:30</p>
-                                <a href="#">Entrar na reunião</a>
+                        <div class="tabs__content" v-if="subTab == 'SOLICITADAS'">
+                            <div class="reuniao" v-for="reuniao in this.acompanhamento.reunioes">
+                                <i class="bi bi-microsoft-teams"></i>
+                                <div class="reuniao__detalhes">
+                                    <p>Microsoft Teams</p>
+                                    <p v-if="reuniao.status == 'SOLICITADA'">Aguardando agendamento</p>
+                                    <p v-if="reuniao.status == 'AGENDADA'">{{ (new
+                                        Date(encontrarHorario(reuniao.horarios))).toLocaleDateString('pt-BR', options)
+                                    }}</p>
+                                    <a :href="reuniao.link" target="__blank"
+                                        v-if="reuniao.status == 'AGENDADA' && addHours(encontrarHorario(reuniao.horarios), 2) > Date.now()">
+                                        Entrar na reunião
+                                    </a>
+                                    <p
+                                        v-if="reuniao.status == 'AGENDADA' && addHours(encontrarHorario(reuniao.horarios), 2) < Date.now()">
+                                        Acesso expirado</p>
+                                </div>
                             </div>
-                        </div>
-                        <div class="reuniao">
-                            <i class="bi bi-microsoft-teams"></i>
-                            <div class="reuniao__detalhes">
-                                <p>Microsoft Teams</p>
-                                <p>11 de outubro de 2023 às 20:30</p>
-                                <p>Acesso expirado</p>
-                            </div>
+
+                            <p class="text-center disponibilidade" v-if="this.acompanhamento.reunioes.length < 1">
+                                Não há reuniões registradas para esse acompanhamento</p>
                         </div>
                     </div>
                     <div class="tabs__content" v-if="tab == 'ARQUIVOS'">
                         <MultiFileUploader arquivoSolicitado="Arquivo" icone="file-plus" pasta="arquivos"
-                            v-model:arquivos="acompanhamento.arquivos" @excluirArquivo="excluirArquivo($event, 'documento')"
-                            @uploadArquivo="uploadArquivo($event, 'documento')"
-                            @download="downloadArquivo($event, 'documento')"></MultiFileUploader>
+                            v-model:arquivos="acompanhamento.arquivos" @excluirArquivo="excluirArquivo($event)"
+                            :disabled="true" @download="downloadArquivo($event)"></MultiFileUploader>
                     </div>
                 </template>
             </FloatingPanel>
@@ -166,9 +229,15 @@ export default {
     data() {
         return {
             tab: 'INDICADORES',
+            subTab: 'SOLICITAR',
             acompanhamento: null,
             organizacoes: null,
             acoes: null,
+            reuniao: {
+                data: null,
+                horario: null
+            },
+            disponibilidadeReuniao: [],
             options: {
                 year: 'numeric',
                 month: 'long',
@@ -179,41 +248,65 @@ export default {
             },
             erroBuscaAcompanhamento: false,
             utils: utils,
+            rotaAnterior: null,
+            carregandoRequisicao: false,
         }
+    },
+    beforeRouteEnter(to, from, next) {
+        next(route => {
+            route.rotaAnterior = from;
+        })
     },
     methods: {
         selecionarTab: function (tab) {
             this.tab = tab;
         },
+        selecionarSubTab: function (tab) {
+            this.subTab = tab;
+        },
         buscarAcoes: function () {
-            axios.get("http://localhost:8081/acoes-isp")
+            axios.get(process.env.VUE_APP_API_BASE_URL + "/acoes-sociais/acoes-isp")
                 .then((response) => {
-                    console.log(response);
                     this.acoes = response.data;
                 })
-                .catch((error) => {
-                    console.log(error);
+                .catch(() => {
+
                 });
         },
         buscarOrganizacoes: function () {
-            axios.get("http://localhost:8082/organizacoes")
+            axios.get(process.env.VUE_APP_API_BASE_URL + "/prospeccao/organizacoes")
                 .then((response) => {
-                    console.log(response);
                     this.organizacoes = response.data;
                 })
-                .catch((error) => {
-                    console.log(error);
+                .catch(() => {
+
                 });
         },
         buscarAcompanhamento: function (id) {
-            axios.get("http://localhost:8083/acompanhamentos/" + id)
+            axios.get(process.env.VUE_APP_API_BASE_URL + "/acompanhamento/acompanhamentos/" + id)
                 .then((response) => {
                     this.acompanhamento = response.data;
-                    console.log(response.data);
                 })
-                .catch((error) => {
+                .catch(() => {
                     this.erroBuscaAcompanhamento = true;
-                    console.log(error);
+                });
+        },
+        excluirArquivo: function (event) {
+            axios.delete(process.env.VUE_APP_API_BASE_URL + "/acompanhamento/acompanhamentos/arquivos/" + this.acompanhamento.arquivos[event].id)
+                .then(() => {
+                    this.acompanhamento.arquivos.splice(event, 1);
+                })
+                .catch(() => {
+
+                });
+        },
+        downloadArquivo: function (event) {
+            axios.get(process.env.VUE_APP_API_BASE_URL + "/acompanhamento/acompanhamentos/arquivos/" + event)
+                .then((response) => {
+                    window.location.href = response.data;
+                })
+                .catch(() => {
+
                 });
         },
         matchOrganizacao: function (id) {
@@ -234,6 +327,50 @@ export default {
                 }
             }
         },
+        addHours: function addHours(date, hours) {
+            const dateCopy = new Date(date);
+
+            dateCopy.setHours(dateCopy.getHours() + hours);
+
+            return dateCopy;
+        },
+        encontrarHorario: function (horarios) {
+            for (let index = 0; index < horarios.length; index++) {
+                const horario = horarios[index];
+
+                if (horario.escolhido == true) {
+                    return horario.dataHorario;
+                }
+            }
+        },
+        incluirDisponibilidade: function () {
+            if (this.reuniao.data != null && this.reuniao.horario != null) {
+                var horario = this.reuniao.data + "T" + this.reuniao.horario;
+                this.disponibilidadeReuniao.push(new Date(horario));
+                this.reuniao.data = null;
+                this.reuniao.horario = null;
+            }
+        },
+        removerDisponibilidade: function (index) {
+            this.disponibilidadeReuniao.splice(index, 1);
+        },
+        solicitarReuniao: function () {
+            this.carregandoRequisicao = true;
+
+            var body = {
+                acompanhamentoId: this.acompanhamento.id,
+                disponibilidades: this.disponibilidadeReuniao
+            }
+
+            axios.post(process.env.VUE_APP_API_BASE_URL + "/acompanhamento/reunioes", body)
+                .then(() => {
+                    this.carregandoRequisicao = false;
+                    this.$router.push({ name: 'VisualizarAcompanhamento', params: { id: this.acompanhamento.id }, query: { sucessoSolicitacao: true, timestamp: Date.now() } });
+                })
+                .catch((error) => {
+                    this.carregandoRequisicao = false;
+                })
+        }
     }
 }
 </script>

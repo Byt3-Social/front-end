@@ -62,7 +62,7 @@ import axios from 'axios';
 import utils from '@/helpers/maska'
 
 export default {
-    name: 'ListarOrganizacoesView',
+    name: 'ListarProcessosView',
     components: {
         Navbar,
         FooterItem,
@@ -87,11 +87,11 @@ export default {
     },
     methods: {
         buscarProcessos: function () {
-            axios.get("http://localhost:8083/processos")
+            axios.get(process.env.VUE_APP_API_BASE_URL + "/compliance/processos")
                 .then((response) => {
                     this.processos = response.data;
                 })
-                .catch((error) => {
+                .catch(() => {
                     this.erroBuscaProcessos = true;
                 });
         }

@@ -90,7 +90,8 @@ textarea.form-input:focus {
     background-color: #E0E1E2;
 }
 
-input, select {
+input,
+select {
     &.field-error {
         border: 1px solid #f1416c;
     }
@@ -162,6 +163,22 @@ input, select {
     }
 }
 
+.secondary-button {
+    display: block;
+    background-color: #767676;
+    width: 100%;
+    color: #ffffff;
+    padding: .75rem;
+    font-weight: 500;
+    border: none;
+    border-radius: 5rem;
+    margin-bottom: -1rem;
+
+    &[disabled] {
+        opacity: .5;
+    }
+}
+
 .danger-button {
     display: block;
     background-color: #f1416c;
@@ -221,6 +238,7 @@ input, select {
         width: 5%;
         text-align: center;
         font-size: 1.8rem;
+        margin-right: 1rem;
     }
 }
 
@@ -232,4 +250,18 @@ input, select {
     width: 1rem;
     height: 1rem;
     border-width: .1rem;
+}
+
+input:-webkit-autofill,
+textarea:-webkit-autofill,
+select:-webkit-autofill {
+    background-color: transparent !important;
+    -webkit-box-shadow: 0 0 0 50px #F1F1F2 inset;
+}
+
+input:-webkit-autofill:focus,
+textarea:-webkit-autofill:focus,
+select:-webkit-autofill:focus {
+    background-color: transparent !important;
+    -webkit-box-shadow: 0 0 0 50px #E0E1E2 inset;
 }

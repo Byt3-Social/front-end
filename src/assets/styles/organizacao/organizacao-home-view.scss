@@ -28,7 +28,6 @@ main#organizacao-home-view {
             padding: .5rem 1rem;
             border-radius: 2rem;
             text-transform: uppercase;
-            font-size: .9rem;
             font-weight: 500;
 
             &--WAITING {
@@ -47,6 +46,61 @@ main#organizacao-home-view {
                 background-color: #fff5f8;
                 color: #f1416c;
             }
+
+            &--ABERTO {
+                background-color: #F0F5FF;
+                color: #00145F;
+            }
+
+            &--EM_ANALISE,
+            &--PENDENTE {
+                background-color: #FFF8DD;
+                color: #FFC700;
+            }
+
+            &--APROVADO {
+                background-color: #E8FFF3;
+                color: #50CD89;
+            }
+
+            &--REPROVADO {
+                background-color: #fff5f8;
+                color: #f1416c;
+            }
+
+            &--CADASTRADO {
+                background-color: #f8f5ff;
+                color: #7239ea;
+            }
+
+            &--EM_ANDAMENTO {
+                    background-color: #F0F5FF;
+                    color: #00145F;
+                }
+
+                &--FINALIZADO {
+                    background-color: #E8FFF3;
+                    color: #50CD89;
+                }
+
+                &--CADASTRADO,
+                &--CRIADA {
+                    background-color: #f8f5ff;
+                    color: #7239ea;
+                }
+
+                &--AGUARDANDO_APORTE {
+                    background-color: #DBDFE9;
+                    color: #071437;
+                }
+
+
+
+                
+
+                
+
+                
         }
 
         .acao {

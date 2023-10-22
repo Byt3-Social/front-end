@@ -1,6 +1,6 @@
 <template>
     <Navbar></Navbar>
-    <main id="cadastrar-acao-voluntariado-view">
+    <main id="editar-acao-voluntariado-view">
         <Header titulo="Voluntariado" icone="bi bi-collection-fill"></Header>
         <Transition>
             <FloatingPanel v-if="erroBuscaAcao">
@@ -13,7 +13,8 @@
             </FloatingPanel>
         </Transition>
         <Transition>
-            <FloatingPanel v-if="!erroBuscaAcao && acao != null && organizacoes != null && segmentos != null">
+            <FloatingPanel
+                v-if="!erroBuscaAcao && acao != null && organizacoes != null && segmentos != null && estatisticas != null">
                 <template v-slot:FloatingPanelContent>
                     <div class="alerta alerta--error" v-if="erroAtualizacao">
                         <i class="alerta__icone bi bi-x-circle-fill"></i>
@@ -23,13 +24,10 @@
                         <i class="alerta__icone bi bi-check-circle-fill"></i>
                         <p class="alerta__message">Ação atualizada com sucesso</p>
                     </div>
-                    <div class="alerta alerta--sucesso" v-if="this.$route.query.sucessoCadastro && rotaAnterior.name == 'CadastrarAcaoVoluntariado'">
+                    <div class="alerta alerta--sucesso"
+                        v-if="this.$route.query.sucessoCadastro && rotaAnterior.name == 'CadastrarAcaoVoluntariado'">
                         <i class="alerta__icone bi bi-check-circle-fill"></i>
                         <p class="alerta__message">Ação cadastrada com sucesso</p>
-                    </div>
-                    <div class="alerta alerta--error" v-if="this.$route.query.falhaEstorno && rotaAnterior == null">
-                        <i class="alerta__icone bi bi-x-circle-fill"></i>
-                        <p class="alerta__message">Falha ao solicitar estorno dessa doação</p>
                     </div>
                     <ul class="tabs">
                         <li class="tabs__item">
@@ -53,7 +51,8 @@
                                 @click="selecionarTab('ARQUIVOS')">Arquivos</button>
                         </li>
                     </ul>
-                    <form action="#" method="post" v-if="tab == 'DADOS-GERAIS' || tab == 'CONFIGURACOES'">
+                    <form action="#" method="post"
+                        v-if="tab == 'DADOS-GERAIS' || tab == 'CONFIGURACOES' || tab == 'DOACOES'">
                         <div class="tabs__content" v-if="tab == 'DADOS-GERAIS'">
                             <div class="form-input-wrapper">
                                 <label for="acao.nomeAcao" class="form-input-label">Nome da ação</label>
@@ -117,8 +116,8 @@
                                     <select name="acao.segmento" id="acao.segmento" class="form-input"
                                         v-model="acao.segmento.id">
                                         <option value="0" disabled>Selecione um segmento...</option>
-                                        <option v-for="segmento in segmentos" :value="segmento.id"
-                                            >{{ segmento.nome }}</option>
+                                        <option v-for="segmento in segmentos" :value="segmento.id">{{ segmento.nome }}
+                                        </option>
                                     </select>
                                 </div>
                                 <div class="form-input-wrapper">
@@ -173,20 +172,17 @@
                         <div class="tabs__content" v-if="tab == 'CONFIGURACOES'">
                             <div class="form-row">
                                 <div class="form-input-wrapper">
+                                    <label for="acao.url" class="form-input-label">URL</label>
+                                    <input type="text" name="acao.url" id="acao.url" class="form-input" v-model="acao.url"
+                                        disabled>
+                                </div>
+                                <div class="form-input-wrapper">
                                     <label for="acao.campanha" class="form-input-label">Habilitar doações?</label>
                                     <select name="acao.campanha" id="acao.campanha" v-model="acao.campanha"
                                         class="form-input">
                                         <option :value="null" disabled>Escolha uma opção...</option>
                                         <option :value="false" :selected="acao.campanha == false">Não</option>
                                         <option :value="true" :selected="acao.campanha == true">Sim</option>
-                                    </select>
-                                </div>
-                                <div class="form-input-wrapper">
-                                    <label for="acao.publica" class="form-input-label">Doações públicas</label>
-                                    <select name="acao.publica" id="acao.publica" class="form-input" v-model="acao.publica">
-                                        <option :value="null" disabled>Escolha uma opção...</option>
-                                        <option :value="false" :selected="acao.publica == false">Não</option>
-                                        <option :value="true" :selected="acao.publica == true">Sim</option>
                                     </select>
                                 </div>
                             </div>
@@ -196,9 +192,9 @@
                                     <select name="acao.tipoMeta" id="acao.tipoMeta" class="form-input"
                                         v-model="acao.tipoMeta">
                                         <option :value="null" disabled>Escolha uma opção...</option>
-                                        <option value="DOACOES">Doações</option>
+                                        <option value="DOACOES" :disabled="!this.acao.campanha">Doações</option>
                                         <option value="INSCRITOS">Inscritos</option>
-                                        <option value="VALOR">Valor arrecadado</option>
+                                        <option value="VALOR" :disabled="!this.acao.campanha">Valor arrecadado</option>
                                     </select>
                                 </div>
                                 <div class="form-input-wrapper">
@@ -207,67 +203,216 @@
                                         v-model="acao.meta">
                                 </div>
                             </div>
-                            <div class="form-row">
-                                <div class="form-input-wrapper">
-                                    <label for="acao.valorPersonalizado" class="form-input-label">Aceita doações
-                                        personalizadas?</label>
-                                    <select name="acao.valorPersonalizado" class="form-input" id="acao.valorPersonalizado"
-                                        v-model="acao.valorPersonalizado">
-                                        <option :value="null" disabled>Escolha uma opção...</option>
-                                        <option :value="false" :selected="acao.valorPersonalizado == false">Não</option>
-                                        <option :value="true" :selected="acao.valorPersonalizado == true">Sim</option>
-                                    </select>
-                                </div>
-                                <div class="form-input-wrapper">
-                                    <label for="acao.multiplicador" class="form-input-label">Multiplicador</label>
-                                    <input type="number" name="acao.multiplicador" id="acao.multiplicador"
-                                        class="form-input" v-model="acao.multiplicador">
-                                </div>
-                            </div>
 
                             <ImagemFileUploader arquivoSolicitado="Imagem" v-model:urlImagem="acao.imagem"
                                 @uploadImagem="uploadImagem" @excluirImagem="excluirImagem()"></ImagemFileUploader>
                         </div>
+                        <div class="tabs__content" v-if="tab == 'DOACOES'">
+                            <ul class="tabs">
+                                <li class="tabs__item">
+                                    <button type="button" class="tabs__button"
+                                        :class="subTab == 'ESTATISTICAS' ? 'active' : ''"
+                                        @click.prevent="selecionarSubTab('ESTATISTICAS')">Estatísticas</button>
+                                </li>
+                                <li class="tabs__item">
+                                    <button type="button" class="tabs__button" :class="subTab == 'DOACOES' ? 'active' : ''"
+                                        @click.prevent="selecionarSubTab('DOACOES')">Doações</button>
+                                </li>
+                                <li class="tabs__item">
+                                    <button type="button" class="tabs__button" :class="subTab == 'AJUSTES' ? 'active' : ''"
+                                        @click.prevent="selecionarSubTab('AJUSTES')">Ajustes</button>
+                                </li>
+                            </ul>
 
-                        <button class="primary-button" @click.prevent="atualizarAcaoVoluntariado(acao.id)">
+                            <div class="tabs__content" v-if="subTab == 'ESTATISTICAS'">
+                                <div class="cards">
+                                    <div class="card-item">
+                                        <p class="card__titulo">Arrecadado</p>
+                                        <p class="card__valor">
+                                            {{ new Intl.NumberFormat('pt-BR', {
+                                                style: 'currency',
+                                                currency: 'BRL',
+                                            }).format(estatisticas.arrecadado.valor) }}
+                                        </p>
+                                        <p>
+                                            {{ estatisticas.arrecadado.quantidade }} doações
+                                        </p>
+                                    </div>
+                                    <div class="card-item">
+                                        <p class="card__titulo">Processando</p>
+                                        <p class="card__valor">
+                                            {{ new Intl.NumberFormat('pt-BR', {
+                                                style: 'currency',
+                                                currency: 'BRL',
+                                            }).format(estatisticas.processando.valor) }}
+                                        </p>
+                                        <p>
+                                            {{ estatisticas.processando.quantidade }} doações
+                                        </p>
+                                    </div>
+                                    <div class="card-item">
+                                        <p class="card__titulo">Cancelada</p>
+                                        <p class="card__valor">
+                                            {{ new Intl.NumberFormat('pt-BR', {
+                                                style: 'currency',
+                                                currency: 'BRL',
+                                            }).format(estatisticas.cancelado.valor) }}
+                                        </p>
+                                        <p>
+                                            {{ estatisticas.cancelado.quantidade }} doações
+                                        </p>
+                                    </div>
+                                </div>
+
+                                <div class="graficos">
+                                    <div>
+                                        <apexchart width="500" type="line" :options="options" :series="series"></apexchart>
+                                        <p class="text-center">
+                                            <strong>Total arrecadado x Dia</strong>
+                                        </p>
+                                    </div>
+                                    <div>
+                                        <apexchart width="500" type="pie" :options="optionsDonut" :series="seriesDonut">
+                                        </apexchart>
+                                        <p class="text-center">
+                                            <strong>Pencentual de doações por método de pagamento</strong>
+                                        </p>
+                                    </div>
+                                </div>
+                            </div>
+
+                            <div class="tabs__content" v-if="subTab == 'DOACOES'">
+                                <table class="table table-borderless">
+                                    <thead>
+                                        <tr>
+                                            <td>Doador</td>
+                                            <td>Valor</td>
+                                            <td>Método</td>
+                                            <td>Status</td>
+                                            <td>Ações</td>
+                                        </tr>
+                                    </thead>
+                                    <tbody>
+                                        <tr v-for="doacao in acao.doacaos">
+                                            <td>{{ doacao.doador.nome }}</td>
+                                            <td>
+                                                {{ new Intl.NumberFormat('pt-BR', {
+                                                    style: 'currency',
+                                                    currency: 'BRL',
+                                                }).format(doacao.valor) }}
+                                            </td>
+                                            <td>{{ doacao.metodo.replace("CARTAO_CREDITO", "CRÉDITO") }}</td>
+                                            <td><span :class="`status status--${doacao.status}`">{{
+                                                doacao.status.replace("PAID",
+                                                    "PAGO").replace("WAITING", "PROCESSANDO").replace("CANCELED",
+                                                        "CANCELADO")
+                                            }}</span>
+                                            </td>
+                                            <td>
+                                                <router-link :to="{ name: 'VisualizarDoacao', params: { id: doacao.id } }"
+                                                    class="acao">
+                                                    <i class="acao__icone bi bi-receipt acao--visualizar"></i>
+                                                </router-link>
+                                            </td>
+                                        </tr>
+                                    </tbody>
+                                </table>
+
+                                <p class="doacoes--vazio"
+                                    v-if="acao.doacaos == null || (acao.doacaos != null && acao.doacaos.length == 0)">
+                                    Não há doações recebidas até o momento</p>
+                            </div>
+                            <div class="tabs__content" v-if="subTab == 'AJUSTES'">
+                                <div class="form-input-wrapper">
+                                    <label for="acao.publica" class="form-input-label">Doações públicas</label>
+                                    <select name="acao.publica" id="acao.publica" class="form-input" v-model="acao.publica">
+                                        <option :value="null" disabled>Escolha uma opção...</option>
+                                        <option :value="false" :selected="acao.publica == false">Não</option>
+                                        <option :value="true" :selected="acao.publica == true">Sim</option>
+                                    </select>
+                                </div>
+
+                                <div class="form-row">
+                                    <div class="form-input-wrapper">
+                                        <label for="acao.valorPersonalizado" class="form-input-label">Aceita doações
+                                            personalizadas?</label>
+                                        <select name="acao.valorPersonalizado" class="form-input"
+                                            id="acao.valorPersonalizado" v-model="acao.valorPersonalizado">
+                                            <option :value="null" disabled>Escolha uma opção...</option>
+                                            <option :value="false" :selected="acao.valorPersonalizado == false">Não</option>
+                                            <option :value="true" :selected="acao.valorPersonalizado == true">Sim</option>
+                                        </select>
+                                    </div>
+                                    <div class="form-input-wrapper">
+                                        <label for="acao.multiplicador" class="form-input-label">Multiplicador</label>
+                                        <input type="number" name="acao.multiplicador" id="acao.multiplicador"
+                                            class="form-input" v-model="acao.multiplicador">
+                                    </div>
+                                </div>
+
+                                <div class="opcao-contribuicao-wrapper">
+                                    <div class="form-input-wrapper">
+                                        <label for="opcao.valor" class="form-input-label">Valor</label>
+                                        <input type="number" name="opcao.valor" id="opcao.valor" class="form-input"
+                                            v-model="opcao.valor" step="0.01" min="1.00" placeholder="Ex: 10,00">
+                                    </div>
+                                    <div class="form-input-wrapper">
+                                        <label for="opcao.descricao" class="form-input-label">Descrição</label>
+                                        <input type="text" name="opcao.descricao" id="opcao.descricao" class="form-input"
+                                            v-model="opcao.descricao" placeholder="Opcional">
+                                    </div>
+                                    <div class="form-input-wrapper">
+                                        <button class="primary-button incluir-opcao"
+                                            @click.prevent="incluirOpcaoContribuicao()">
+                                            Incluir
+                                        </button>
+                                    </div>
+                                </div>
+
+                                <table class="table table-borderless">
+                                    <thead>
+                                        <tr>
+                                            <td>Valor</td>
+                                            <td>Remover</td>
+                                        </tr>
+                                    </thead>
+                                    <tbody>
+                                        <tr v-for="(opcao, index) in acao.opcoesContribuicao">
+                                            <td>
+                                                <p class="opcao__valor">
+                                                    {{ new Intl.NumberFormat('pt-BR', {
+                                                        style: 'currency',
+                                                        currency: 'BRL',
+                                                    }).format(opcao.valor) }}
+                                                </p>
+                                                <p v-if="opcao.descricao != null && opcao.descricao != ''">{{
+                                                    opcao.descricao }}</p>
+                                            </td>
+                                            <td>
+                                                <button type="button" class="acao"
+                                                    @click.prevent="removerOpcaoContribuicao(index)">
+                                                    <i class="bi bi-x-circle-fill acao__icone acao--excluir"></i>
+                                                </button>
+                                            </td>
+                                        </tr>
+                                        <tr v-if="this.acao.valorPersonalizado">
+                                            <td>Aceita valor personalizado</td>
+                                            <td>-</td>
+                                        </tr>
+                                    </tbody>
+                                </table>
+
+                                <p class="text-center"
+                                    v-if="this.acao.opcoesContribuicao.length < 1 && !this.acao.valorPersonalizado">
+                                    Não há valores de contribuição disponíveis</p>
+                            </div>
+                        </div>
+                        <button class="primary-button" @click.prevent="atualizarAcaoVoluntariado(acao.id)"
+                            v-if="tab == 'DADOS-GERAIS' || tab == 'CONFIGURACOES' || (tab == 'DOACOES' && subTab == 'AJUSTES')">
                             <span v-show="carregandoRequisicao" class="spinner-border" aria-hidden="true"></span>
                             <span v-show="!carregandoRequisicao">Salvar</span>
                         </button>
                     </form>
-                    <div class="tabs__content" v-if="tab == 'DOACOES'">
-                        <table class="table table-borderless">
-                            <thead>
-                                <tr>
-                                    <td>Doador</td>
-                                    <td>Valor</td>
-                                    <td>Método</td>
-                                    <td>Status</td>
-                                    <td>Ações</td>
-                                </tr>
-                            </thead>
-                            <tbody>
-                                <tr v-for="doacao in acao.doacaos">
-                                    <td>{{ doacao.doador.nome }}</td>
-                                    <td>R$ {{ doacao.valor.toFixed(2).replace(".", ",") }}</td>
-                                    <td>{{ doacao.metodo.replace("CARTAO_CREDITO", "CRÉDITO") }}</td>
-                                    <td><span :class="`status status--${doacao.status}`">{{ doacao.status.replace("PAID",
-                                        "PAGO").replace("WAITING", "PROCESSANDO").replace("CANCELED", "CANCELADO")
-                                    }}</span>
-                                    </td>
-                                    <td>
-                                        <router-link :to="{ name: 'VisualizarDoacao', params: { id: doacao.id } }"
-                                            class="acao">
-                                            <i class="acao__icone bi bi-receipt acao--visualizar"></i>
-                                        </router-link>
-                                    </td>
-                                </tr>
-                            </tbody>
-                        </table>
-
-                        <p class="doacoes--vazio"
-                            v-if="acao.doacaos == null || (acao.doacaos != null && acao.doacaos.length == 0)">
-                            Não há doações recebidas até o momento</p>
-                    </div>
                     <div class="tabs__content" v-if="tab == 'INSCRICOES'">
                         <table class="table table-borderless">
                             <thead>
@@ -308,7 +453,7 @@
     <FooterItem></FooterItem>
 </template>
 <script>
-import '../../assets/styles/acoes-sociais/cadastrar-acao-voluntariado-view.scss';
+import '../../assets/styles/acoes-sociais/editar-acao-voluntariado-view.scss';
 import Navbar from '../../components/Navbar.vue';
 import FooterItem from '../../components/Footer.vue';
 import Header from '../../components/Header.vue';
@@ -333,22 +478,93 @@ export default {
         this.buscarAcaoVoluntariado(this.$route.params.id);
         this.buscarOrganizacoes();
         this.buscarSegmentos();
+        this.buscarEstatisticas(this.$route.params.id);
     },
     data() {
         return {
             tab: "DADOS-GERAIS",
+            subTab: 'ESTATISTICAS',
             acao: null,
             horario: {
                 masked: null,
                 unmasked: null,
                 completed: false,
             },
+            opcao: {
+                valor: null,
+                descricao: null,
+            },
             organizacoes: null,
+            estatisticas: null,
             segmentos: null,
             erroBuscaAcao: false,
             carregandoRequisicao: false,
             erroAtualizacao: false,
             rotaAnterior: null,
+            options: {
+                markers: {
+                    size: 5,
+                },
+                stroke: {
+                    curve: 'smooth',
+                },
+                chart: {
+                    fontFamily: 'Inter',
+                    toolbar: {
+                        show: false,
+                    },
+                },
+                colors: ['#00145f', '#cccccc', '#4fc3f6'],
+                grid: {
+                    show: false
+                },
+                yaxis: {
+                    show: false,
+                    title: {
+                        text: "Doações",
+                        style: {
+                            fontSize: '16px',
+                        }
+                    },
+                    labels: {
+                        formatter: function (val, index) {
+                            return new Intl.NumberFormat('pt-BR', {
+                                style: 'currency',
+                                currency: 'BRL',
+                            }).format(val);
+                        }
+                    }
+                },
+                xaxis: {
+                    type: 'datetime',
+                },
+                noData: {
+                    text: "Não há estatísticas para essa ação"
+                }
+            },
+            series: [{
+                data: [],
+                name: 'Valor arrecadado'
+            }],
+            optionsDonut: {
+                chart: {
+                    toolbar: {
+                        show: false,
+                    },
+                },
+                colors: ['#00145f', '#4fc3f6', '#cccccc'],
+                grid: {
+                    show: false
+                },
+                labels: ['PIX', 'Cartão de Crédito', 'Boleto'],
+                legend: {
+                    show: true,
+                },
+                noData: {
+                    text: "Não há estatísticas para essa ação"
+                }
+            },
+            seriesDonut: [],
         }
     },
     beforeRouteEnter(to, from, next) {
@@ -360,39 +576,57 @@ export default {
         selecionarTab: function (tab) {
             this.tab = tab;
         },
+        selecionarSubTab: function (tab) {
+            this.subTab = tab;
+        },
         buscarOrganizacoes: function () {
-            axios.get("http://localhost:8082/organizacoes")
+            axios.get(process.env.VUE_APP_API_BASE_URL + "/prospeccao/organizacoes")
                 .then((response) => {
                     this.organizacoes = response.data;
                 })
-                .catch((error) => {
+                .catch(() => {
                     this.erroBuscaAcao = true;
                 });
         },
+        buscarEstatisticas: function (id) {
+            axios.get(process.env.VUE_APP_API_BASE_URL + "/acoes-sociais/doacoes/" + id + "/estatisticas")
+                .then((response) => {
+                    this.estatisticas = response.data;
+
+                    this.series[0].data = this.estatisticas.doacoesPorDia;
+
+                    this.seriesDonut.push(this.estatisticas.doacoesPorMetodoDoacao[0].total);
+                    this.seriesDonut.push(this.estatisticas.doacoesPorMetodoDoacao[2].total);
+                    this.seriesDonut.push(this.estatisticas.doacoesPorMetodoDoacao[1].total);
+                })
+                .catch(() => {
+                    
+                });
+        },
         buscarSegmentos: function () {
-            axios.get("http://localhost:8081/segmentos")
+            axios.get(process.env.VUE_APP_API_BASE_URL + "/acoes-sociais/segmentos")
                 .then((response) => {
                     this.segmentos = response.data;
                 })
-                .catch((error) => {
+                .catch(() => {
                     this.erroBuscaAcao = true;
                 });
         },
         buscarAcaoVoluntariado: function (id) {
-            axios.get("http://localhost:8081/acoes-voluntariado/" + id)
+            axios.get(process.env.VUE_APP_API_BASE_URL + "/acoes-sociais/acoes-voluntariado/" + id)
                 .then((response) => {
                     var acao = response.data;
                     this.acao = acao;
 
-                    if(acao.segmento == null) {
+                    this.acao.url = process.env.VUE_APP_ACAO_BASE_URL + this.acao.url;
+
+                    if (acao.segmento == null) {
                         this.acao.segmento = {
                             id: null
                         }
                     }
-
-                    console.log(acao);
                 })
-                .catch((error) => {
+                .catch(() => {
                     this.erroBuscaAcao = true;
                 });
         },
@@ -400,28 +634,28 @@ export default {
             var body = new FormData();
             body.append('imagem', e);
 
-            axios.post("http://localhost:8081/acoes-voluntariado/" + this.acao.id + "/imagens", body, { "Content-Type": "multipart/form-data" })
+            axios.post(process.env.VUE_APP_API_BASE_URL + "/acoes-sociais/acoes-voluntariado/" + this.acao.id + "/imagens", body, { "Content-Type": "multipart/form-data" })
                 .then((response) => {
                     this.acao.imagem = response.data;
                 })
-                .catch((error) => {
-                    console.log(error);
+                .catch(() => {
+                    
                 });
         },
         excluirImagem: function () {
-            axios.delete("http://localhost:8081/acoes-voluntariado/" + this.acao.id + "/imagens")
-                .then((response) => {
+            axios.delete(process.env.VUE_APP_API_BASE_URL + "/acoes-sociais/acoes-voluntariado/" + this.acao.id + "/imagens")
+                .then(() => {
                     this.acao.imagem = null;
                 })
-                .catch((error) => {
-                    console.log(error);
+                .catch(() => {
+                    
                 });
         },
         uploadArquivo: function (e, tipo) {
             var body = new FormData();
             body.append('arquivo', e);
 
-            axios.post("http://localhost:8081/acoes/" + this.acao.id + "/arquivos?acao=voluntariado&upload=" + tipo, body, { "Content-Type": "multipart/form-data" })
+            axios.post(process.env.VUE_APP_API_BASE_URL + "/acoes-sociais/acoes/" + this.acao.id + "/arquivos?acao=voluntariado&upload=" + tipo, body, { "Content-Type": "multipart/form-data" })
                 .then((response) => {
                     if (tipo == 'contrato') {
                         this.acao.contrato = response.data;
@@ -429,8 +663,8 @@ export default {
                         this.acao.arquivos.push(response.data);
                     }
                 })
-                .catch((error) => {
-                    console.log(error);
+                .catch(() => {
+                    
                 });
         },
         excluirArquivo: function (event, tipo) {
@@ -441,41 +675,53 @@ export default {
                 id = this.acao.arquivos[event].id;
             }
 
-            axios.delete("http://localhost:8081/acoes/arquivos/" + id + "?tipo=" + tipo)
-                .then((response) => {
+            axios.delete(process.env.VUE_APP_API_BASE_URL + "/acoes-sociais/acoes/arquivos/" + id + "?tipo=" + tipo)
+                .then(() => {
                     if (tipo == 'contrato') {
                         this.acao.contrato = null;
                     } else {
                         this.acao.arquivos.splice(event, 1);
                     }
                 })
-                .catch((error) => {
-                    console.log(error);
+                .catch(() => {
+                    
                 });
         },
         downloadArquivo: function (event, tipo) {
-            axios.get("http://localhost:8081/acoes/arquivos/" + event + "?download=" + tipo)
+            axios.get(process.env.VUE_APP_API_BASE_URL + "/acoes-sociais/acoes/arquivos/" + event + "?download=" + tipo)
                 .then((response) => {
                     window.location.href = response.data;
                 })
-                .catch((error) => {
-                    console.log(error);
+                .catch(() => {
+                    
                 });
+        },
+        incluirOpcaoContribuicao: function () {
+            if (this.opcao.valor != null && this.opcao.valor != '') {
+                var opcao = {
+                    valor: this.opcao.valor,
+                    descricao: this.opcao.descricao,
+                }
+
+                this.acao.opcoesContribuicao.push(opcao);
+
+                this.opcao.valor = null;
+                this.opcao.descricao = null;
+            }
+        },
+        removerOpcaoContribuicao: function (index) {
+            this.acao.opcoesContribuicao.splice(index, 1);
         },
         atualizarAcaoVoluntariado: function (id) {
             this.acao.segmentoID = this.acao.segmento.id;
             this.acao.usuarioId = 1;
             this.acao.horario = this.horario.masked;
 
-            axios.put("http://localhost:8081/acoes-voluntariado/" + id, this.acao)
-                .then((response) => {
+            axios.put(process.env.VUE_APP_API_BASE_URL + "/acoes-sociais/acoes-voluntariado/" + id, this.acao)
+                .then(() => {
                     this.$router.push({ name: 'EditarAcaoVoluntariado', params: { id: id }, query: { sucessoAtualizacao: true, timestamp: Date.now() } });
                 })
                 .catch((error) => {
-                    console.log(error);
-                    this.erroAtualizacao = true;
-                    window.scrollTo(0, 0);
-
                     document.querySelectorAll(".field-error__message").forEach(field => {
                         field.remove();
                     });
@@ -484,7 +730,7 @@ export default {
                         field.classList.remove("field-error");
                     });
 
-                    if (error.response.status != null && error.response.status == 400 && error.response.data != null) {
+                    if (error.response && error.response.status != null && error.response.status == 400 && error.response.data != null) {
                         error.response.data.forEach(fieldError => {
                             var campo = document.getElementById("acao." + fieldError.field);
 
@@ -498,6 +744,9 @@ export default {
                             }
                         });
                     }
+
+                    this.erroAtualizacao = true;
+                    window.scrollTo(0, 0);
                 });
         },
     }

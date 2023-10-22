@@ -85,94 +85,112 @@
                         <div class="bloco">
                             <label class="bloco__atributo">Nome empresarial</label>
                             <p class="bloco__atributo--preenchido">
-                                {{ processo.nomeEmpresarial != null ? processo.nomeEmpresarial : "Não preenchido" }}
+                                {{ processo.nomeEmpresarial != null && processo.nomeEmpresarial != '' ?
+                                    processo.nomeEmpresarial : "Não preenchido" }}
                             </p>
                         </div>
 
                         <div class="bloco">
                             <label class="bloco__atributo">Nome fantasia</label>
                             <p class="bloco__atributo--preenchido">
-                                {{ processo.nomeFantasia != null ? processo.nomeFantasia : "Não preenchido" }}
+                                {{ processo.nomeFantasia != null && processo.nomeFantasia != '' ? processo.nomeFantasia :
+                                    "Não preenchido" }}
                             </p>
                         </div>
                         <div class="bloco">
                             <label class="bloco__atributo">Data de abertura</label>
                             <p class="bloco__atributo--preenchido">
-                                {{ processo.dataAbertura != null ? (new
-                                    Date(processo.dataAbertura)).toLocaleDateString("pt-BR") : "Não preenchido" }}
+                                {{ processo.dataAbertura != null && processo.dataAbertura != '' ? (new
+                                    Date((processo.dataAbertura + "T00:00:00"))).toLocaleDateString("pt-BR") : "Não preenchido"
+                                }}
                             </p>
                         </div>
 
                         <div class="bloco">
                             <label class="bloco__atributo">Porte</label>
                             <p class="bloco__atributo--preenchido">
-                                {{ processo.porte != null ? processo.porte : "Não preenchido" }}
+                                {{ processo.porte != null && processo.porte != '' ? processo.porte : "Não preenchido" }}
                             </p>
                         </div>
                         <div class="bloco">
                             <label class="bloco__atributo">Endereço</label>
-                            <p class="bloco__atributo--preenchido">
-                                {{ processo.endereco != null && processo.numero != null ? processo.endereco + ", " +
-                                    processo.numero : "Não preenchido" }}
+                            <p class="bloco__atributo--preenchido" v-if="processo.endereco != null">
+                                {{ processo.endereco.endereco != null && processo.endereco.endereco != '' &&
+                                    processo.endereco.numero != null && processo.endereco.numero != '' ?
+                                    processo.endereco.endereco + ", " + processo.endereco.numero : "Não preenchido" }}
                             </p>
+                            <p class="bloco__atributo--preenchido" v-else>Não preenchido</p>
                         </div>
 
                         <div class="bloco">
                             <label class="bloco__atributo">Bairro</label>
-                            <p class="bloco__atributo--preenchido">
-                                {{ processo.bairro != null ? processo.bairro : "Não preenchido" }}
+                            <p class="bloco__atributo--preenchido" v-if="processo.endereco != null">
+                                {{ processo.endereco.bairro != null && processo.endereco.bairro != '' ?
+                                    processo.endereco.bairro : "Não preenchido" }}
                             </p>
+                            <p class="bloco__atributo--preenchido" v-else>Não preenchido</p>
                         </div>
                         <div class="bloco">
                             <label class="bloco__atributo">Complemento</label>
-                            <p class="bloco__atributo--preenchido">
-                                {{ processo.complemento != null ? processo.complemento : "Não preenchido" }}
+                            <p class="bloco__atributo--preenchido" v-if="processo.endereco != null">
+                                {{ processo.endereco.complemento != null && processo.endereco.complemento != '' ?
+                                    processo.endereco.complemento : "Não preenchido"
+                                }}
                             </p>
+                            <p class="bloco__atributo--preenchido" v-else>Não preenchido</p>
                         </div>
 
                         <div class="bloco">
                             <label class="bloco__atributo">Cidade</label>
-                            <p class="bloco__atributo--preenchido">
-                                {{ processo.cidade != null ? processo.cidade : "Não preenchido" }}
+                            <p class="bloco__atributo--preenchido" v-if="processo.endereco != null">
+                                {{ processo.endereco.cidade != null && processo.endereco.cidade != '' ?
+                                    processo.endereco.cidade : "Não preenchido" }}
                             </p>
+                            <p class="bloco__atributo--preenchido" v-else>Não preenchido</p>
                         </div>
                         <div class="bloco">
                             <label class="bloco__atributo">Estado</label>
-                            <p class="bloco__atributo--preenchido">
-                                {{ processo.estado != null ? processo.estado : "Não preenchido" }}
+                            <p class="bloco__atributo--preenchido" v-if="processo.endereco != null">
+                                {{ processo.endereco.estado != null && processo.endereco.estado != '' ?
+                                    processo.endereco.estado : "Não preenchido" }}
                             </p>
+                            <p class="bloco__atributo--preenchido" v-else>Não preenchido</p>
                         </div>
 
                         <div class="bloco">
                             <label class="bloco__atributo">Email</label>
                             <p class="bloco__atributo--preenchido">
-                                {{ processo.email != null ? processo.email : "Não preenchido" }}
+                                {{ processo.email != null && processo.email != '' ? processo.email : "Não preenchido" }}
                             </p>
                         </div>
                         <div class="bloco">
                             <label class="bloco__atributo">Telefone</label>
                             <p class="bloco__atributo--preenchido">
-                                {{ processo.telefone != null ? utils.telefoneMask(processo.telefone) : "Não preenchido" }}
+                                {{ processo.telefone != null && processo.telefone != '' ?
+                                    utils.telefoneMask(processo.telefone) : "Não preenchido" }}
                             </p>
                         </div>
 
                         <div class="bloco">
                             <label class="bloco__atributo">Representante</label>
                             <p class="bloco__atributo--preenchido">
-                                {{ processo.responsavel.nome != null ? processo.responsavel.nome : "Não preenchido" }}
+                                {{ processo.responsavel.nome != null && processo.responsavel.nome != '' ?
+                                    processo.responsavel.nome : "Não preenchido" }}
                             </p>
                         </div>
                         <div class="bloco">
                             <label class="bloco__atributo">Email (Representante)</label>
                             <p class="bloco__atributo--preenchido">
-                                {{ processo.responsavel.email != null ? processo.responsavel.email : "Não preenchido" }}
+                                {{ processo.responsavel.email != null && processo.responsavel.email != '' ?
+                                    processo.responsavel.email : "Não preenchido" }}
                             </p>
                         </div>
 
                         <div class="bloco">
                             <label class="bloco__atributo">Telefone (Representante)</label>
                             <p class="bloco__atributo--preenchido">
-                                {{ processo.responsavel.telefone != null ? utils.telefoneMask(processo.responsavel.telefone)
+                                {{ processo.responsavel.telefone != null && processo.responsavel.telefone != '' ?
+                                    utils.telefoneMask(processo.responsavel.telefone)
                                     : "Não preenchido"
                                 }}
                             </p>
@@ -243,7 +261,8 @@
                         </div>
 
                         <DadoSolicitado v-for="(dado, index) in processo.dadosSolicitados" :key="index"
-                            :nome="dado.dado.nome" :valor="dado.valor != null && dado != '' ? dado.valor : 'Não preenchido'"
+                            :nome="dado.dado.nome" :tipo="dado.dado.tipo"
+                            :valor="dado.valor != null && dado.valor != '' ? dado.valor : 'Não preenchido'"
                             @excluir="desvincularDadoSolicitado(processo.id, dado.id, index)">
                         </DadoSolicitado>
                     </div>
@@ -326,36 +345,33 @@ export default {
             this.tab = tab;
         },
         buscarProcesso: function (id) {
-            axios.get("http://localhost:8083/processos/" + id)
+            axios.get(process.env.VUE_APP_API_BASE_URL + "/compliance/processos/" + id)
                 .then((response) => {
                     var processo = response.data;
+
                     this.processo = processo;
                     this.status = processo.status;
-
-
                 })
-                .catch((error) => {
+                .catch(() => {
                     this.erroBuscaProcesso = true;
                 });
         },
         buscarDocumentos: function () {
-            axios.get("http://localhost:8083/documentos")
+            axios.get(process.env.VUE_APP_API_BASE_URL + "/compliance/documentos")
                 .then((response) => {
-                    var documentos = response.data;
-                    this.documentos = documentos;
+                    this.documentos = response.data;
                 })
-                .catch((error) => {
-                    console.log(error);
+                .catch(() => {
+
                 });
         },
         buscarDados: function () {
-            axios.get("http://localhost:8083/dados")
+            axios.get(process.env.VUE_APP_API_BASE_URL + "/compliance/dados")
                 .then((response) => {
-                    var dados = response.data;
-                    this.dados = dados;
+                    this.dados = response.data;
                 })
-                .catch((error) => {
-                    console.log(error);
+                .catch(() => {
+
                 });
         },
         atualizarStatusOrganizacao: function (id) {
@@ -363,66 +379,65 @@ export default {
                 status: this.processo.status
             };
 
-            axios.put("http://localhost:8083/processos/" + id + "/status", json)
-                .then((response) => {
+            axios.put(process.env.VUE_APP_API_BASE_URL + "/compliance/processos/" + id + "/status", json)
+                .then(() => {
                     this.$router.push({ name: 'VisualizarProcesso', params: { id: id }, query: { sucessoAtualizacao: true, timestamp: Date.now() } });
                 })
-                .catch((error) => {
-                    console.log(error);
+                .catch(() => {
+
                 });
         },
         desvincularDadoSolicitado: function (processoId, dadoId, index) {
-            axios.delete("http://localhost:8083/processos/" + processoId + "/dados-solicitados/" + dadoId)
-                .then((response) => {
+            axios.delete(process.env.VUE_APP_API_BASE_URL + "/compliance/processos/" + processoId + "/dados-solicitados/" + dadoId)
+                .then(() => {
                     this.processo.dadosSolicitados.splice(index, 1);
                 })
-                .catch((error) => {
+                .catch(() => {
                     this.$router.push({ name: 'VisualizarProcesso', params: { id: processoId }, query: { falhaExclusaoDado: true, timestamp: Date.now() } });
                 });
         },
         vincularDadoSolicitado: function (processoId, dadoId) {
-            axios.post("http://localhost:8083/processos/" + processoId + "/dados/" + dadoId)
+            axios.post(process.env.VUE_APP_API_BASE_URL + "/compliance/processos/" + processoId + "/dados/" + dadoId)
                 .then((response) => {
                     this.processo.dadosSolicitados.push(response.data);
                 })
-                .catch((error) => {
+                .catch(() => {
                     this.$router.push({ name: 'VisualizarProcesso', params: { id: processoId }, query: { falhaSolicitacaoDado: true, timestamp: Date.now() } });
                 });
         },
         desvincularDocumentoSolicitado: function (processoId, documentoId, index) {
-            axios.delete("http://localhost:8083/processos/" + processoId + "/documentos-solicitados/" + documentoId)
-                .then((response) => {
+            axios.delete(process.env.VUE_APP_API_BASE_URL + "/compliance/processos/" + processoId + "/documentos-solicitados/" + documentoId)
+                .then(() => {
                     this.processo.documentosSolicitados.splice(index, 1);
                 })
-                .catch((error) => {
+                .catch(() => {
                     this.$router.push({ name: 'VisualizarProcesso', params: { id: processoId }, query: { falhaExclusaoDocumento: true, timestamp: Date.now() } });
-                    console.log(error);
                 });
         },
         vincularDocumentoSolicitado: function (processoId, documentoId) {
-            axios.post("http://localhost:8083/processos/" + processoId + "/documentos/" + documentoId)
+            axios.post(process.env.VUE_APP_API_BASE_URL + "/compliance/processos/" + processoId + "/documentos/" + documentoId)
                 .then((response) => {
                     this.processo.documentosSolicitados.push(response.data);
                 })
-                .catch((error) => {
+                .catch(() => {
                     this.$router.push({ name: 'VisualizarProcesso', params: { id: processoId }, query: { falhaSolicitacaoDocumento: true, timestamp: Date.now() } });
                 });
         },
         baixarDocumentoSolicitado: function (id) {
-            axios.get("http://localhost:8083/documentos-solicitados/" + id + "/aws-s3")
+            axios.get(process.env.VUE_APP_API_BASE_URL + "/compliance/documentos-solicitados/" + id + "/aws")
                 .then((response) => {
                     window.location.href = response.data;
                 })
-                .catch((error) => {
-                    console.log(error);
+                .catch(() => {
+
                 });
         },
         reenviarDocumentoSolicitado: function (documentoId, index) {
-            axios.post("http://localhost:8083/documentos-solicitados/" + documentoId + "/reenvio")
-                .then((response) => {
+            axios.post(process.env.VUE_APP_API_BASE_URL + "/compliance/documentos-solicitados/" + documentoId + "/reenvio")
+                .then(() => {
                     this.processo.documentosSolicitados[index].status = "PENDENTE_REENVIO";
                 })
-                .catch((error) => {
+                .catch(() => {
                     this.$router.push({ name: 'VisualizarProcesso', params: { id: processoId }, query: { falhaSolicitacaoReenvio: true, timestamp: Date.now() } });
                 });
         },

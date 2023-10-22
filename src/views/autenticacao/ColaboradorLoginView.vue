@@ -8,7 +8,13 @@
             <div class="login__logo-wrapper">
                 <Logo cor="#00145F"></Logo>
             </div>
-            <button class="primary-button" @click="login()">Entrar</button>
+            <button class="primary-button" @click="login()">
+                <span v-show="logando" class="spinner-border" aria-hidden="true"></span>
+                <span v-show="!logando">Entrar</span>
+            </button>
+            <Transition>
+                <p class="falha-login" v-if="falhaLogin">Não foi possível realizar sua autenticação</p>
+            </Transition>
         </section>
     </main>
 </template>
@@ -18,14 +24,24 @@ import '../../assets/styles/autenticacao/colaborador-login-view.scss';
 import Logo from '@/components/Logo.vue';
 import axios from 'axios';
 import { PublicClientApplication } from "@azure/msal-browser";
+import decode from 'jwt-decode';
 
 export default {
     name: 'ColaboradorLoginView',
     components: {
         Logo
     },
+    data() {
+        return {
+            logando: false,
+            falhaLogin: false,
+        }
+    },
     methods: {
         login: async function () {
+            this.falhaLogin = false;
+            this.logando = true;
+
             const msalConfig = {
                 auth: {
                     clientId: process.env.VUE_APP_CLIENT_ID,
@@ -43,9 +59,6 @@ export default {
             try {
                 const loginResponse = await msalInstance.loginPopup(loginRequest);
 
-                console.log(loginResponse);
-                console.log(loginResponse.account.username);
-
                 var account = msalInstance.getAccountByUsername(loginResponse.account.username)
 
                 var request = {
@@ -54,29 +67,38 @@ export default {
                 };
 
                 msalInstance.acquireTokenSilent(request).then(tokenResponse => {
-                    console.log(tokenResponse);
-
                     axios.defaults.headers.common['Authorization'] = 'Bearer ' + tokenResponse.accessToken;
 
-                    axios
-                        .post(process.env.VUE_APP_API_BASE_URL + "/colaborador/login")
-                        .then((response) => {
-                            console.log(response);
+                    axios.post(process.env.VUE_APP_API_BASE_URL + "/auth/colaborador/login")
+                        .then(() => {
+                            var decoded = decode(tokenResponse.accessToken);
+
+                            var colaborador = {
+                                token: tokenResponse.accessToken,
+                                nome: decoded.name,
+                                email: decoded.unique_name,
+                                role: decoded.roles[0],
+                            };
+
+                            localStorage.setItem("B3Social-Colaborador", JSON.stringify(colaborador));
+                            this.logando = false;
+                            this.$router.push({ name: 'ColaboradorHome' });
                         })
                         .catch((error) => {
-                            console.log(error);
+                            this.logando = false;
+                            this.falhaLogin = true;
                         });
                 }).catch(async (error) => {
-                    console.log(error);
                     if (error instanceof InteractionRequiredAuthError) {
-                        // fallback to interaction when silent call fails
                         return msalInstance.acquireTokenPopup(request);
                     }
 
-                    // handle other errors
+                    this.logando = false;
+                    this.falhaLogin = true;
                 })
             } catch (error) {
-                console.log(error);
+                this.logando = false;
+                this.falhaLogin = true;
             }
         }
     }

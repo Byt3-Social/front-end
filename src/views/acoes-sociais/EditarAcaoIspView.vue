@@ -179,7 +179,12 @@
                                 </thead>
                                 <tbody>
                                     <tr v-if="aporteInicial != null && aporteInicial != ''">
-                                        <td>R$ {{ aporteInicial.toFixed(2).replace(".", ",") }}</td>
+                                        <td>
+                                            {{ new Intl.NumberFormat('pt-BR', {
+                                                style: 'currency',
+                                                currency: 'BRL',
+                                            }).format(aporteInicial) }}
+                                        </td>
                                         <td>
                                             {{ (new
                                                 Date(acao.createdAt)).toLocaleDateString('pt-BR',
@@ -187,7 +192,12 @@
                                         </td>
                                     </tr>
                                     <tr v-for="(aporte, index) in acao.aportes">
-                                        <td>R$ {{ aporte.valor.toFixed(2).replace(".", ",") }}</td>
+                                        <td>
+                                            {{ new Intl.NumberFormat('pt-BR', {
+                                                style: 'currency',
+                                                currency: 'BRL',
+                                            }).format(aporte.valor) }}
+                                        </td>
                                         <td>
                                             {{ (new
                                                 Date(aporte.data)).toLocaleDateString('pt-BR',
@@ -296,64 +306,62 @@ export default {
             this.tab = tab;
         },
         buscarOrganizacoes: function () {
-            axios.get("http://localhost:8082/organizacoes")
+            axios.get(process.env.VUE_APP_API_BASE_URL + "/prospeccao/organizacoes")
                 .then((response) => {
                     this.organizacoes = response.data;
                 })
-                .catch((error) => {
-                    console.log(error);
+                .catch(() => {
+
                 });
         },
         buscarSegmentos: function () {
-            axios.get("http://localhost:8081/segmentos")
+            axios.get(process.env.VUE_APP_API_BASE_URL + "/acoes-sociais/segmentos")
                 .then((response) => {
                     this.segmentos = response.data;
                 })
-                .catch((error) => {
-                    console.log(error);
+                .catch(() => {
+
                 });
         },
         buscarCategorias: function () {
-            axios.get("http://localhost:8081/categorias")
+            axios.get(process.env.VUE_APP_API_BASE_URL + "/acoes-sociais/categorias")
                 .then((response) => {
                     this.categorias = response.data;
                 })
-                .catch((error) => {
-                    console.log(error);
+                .catch(() => {
+
                 });
         },
         buscarAreas: function () {
-            axios.get("http://localhost:8081/areas")
+            axios.get(process.env.VUE_APP_API_BASE_URL + "/acoes-sociais/areas")
                 .then((response) => {
                     this.areas = response.data;
                 })
-                .catch((error) => {
-                    console.log(error);
+                .catch(() => {
+
                 });
         },
         buscarIncentivos: function () {
-            axios.get("http://localhost:8081/incentivos")
+            axios.get(process.env.VUE_APP_API_BASE_URL + "/acoes-sociais/incentivos")
                 .then((response) => {
                     this.incentivos = response.data;
                 })
-                .catch((error) => {
-                    console.log(error);
+                .catch(() => {
+
                 });
         },
         buscarEstados: function () {
             axios.get("https://servicodados.ibge.gov.br/api/v1/localidades/estados?orderBy=nome")
                 .then((response) => {
-                    console.log(response.data);
                     this.estados = response.data;
                 })
-                .catch((error) => {
-                    console.log(error);
+                .catch(() => {
+
                 });
         },
         buscarAcaoIsp: function (id) {
-            axios.get("http://localhost:8081/acoes-isp/" + id)
+            axios.get(process.env.VUE_APP_API_BASE_URL + "/acoes-sociais/acoes-isp/" + id)
                 .then((response) => {
-                    console.log(response.data);
                     var acao = response.data;
                     this.acao = acao;
 
@@ -368,8 +376,7 @@ export default {
                     this.acao.locaisImpactados = this.locaisImpactados;
                     this.aporteInicial = acao.aporteInicial;
                 })
-                .catch((error) => {
-                    console.log(error);
+                .catch(() => {
                     this.erroBuscaAcao = true;
                 });
         },
@@ -390,7 +397,7 @@ export default {
             var body = new FormData();
             body.append('arquivo', e);
 
-            axios.post("http://localhost:8081/acoes/" + this.acao.id + "/arquivos?acao=isp&upload=" + tipo, body, { "Content-Type": "multipart/form-data" })
+            axios.post(process.env.VUE_APP_API_BASE_URL + "/acoes-sociais/acoes/" + this.acao.id + "/arquivos?acao=isp&upload=" + tipo, body, { "Content-Type": "multipart/form-data" })
                 .then((response) => {
                     if (tipo == 'contrato') {
                         this.acao.contrato = response.data;
@@ -398,8 +405,8 @@ export default {
                         this.acao.arquivos.push(response.data);
                     }
                 })
-                .catch((error) => {
-                    console.log(error);
+                .catch(() => {
+
                 });
         },
         excluirArquivo: function (event, tipo) {
@@ -410,25 +417,25 @@ export default {
                 id = this.acao.arquivos[event].id;
             }
 
-            axios.delete("http://localhost:8081/acoes/arquivos/" + id + "?tipo=" + tipo)
-                .then((response) => {
+            axios.delete(process.env.VUE_APP_API_BASE_URL + "/acoes-sociais/acoes/arquivos/" + id + "?tipo=" + tipo)
+                .then(() => {
                     if (tipo == 'contrato') {
                         this.acao.contrato = null;
                     } else {
                         this.acao.arquivos.splice(event, 1);
                     }
                 })
-                .catch((error) => {
-                    console.log(error);
+                .catch(() => {
+
                 });
         },
         downloadArquivo: function (event, tipo) {
-            axios.get("http://localhost:8081/acoes/arquivos/" + event + "?download=" + tipo)
+            axios.get(process.env.VUE_APP_API_BASE_URL + "/acoes-sociais/acoes/arquivos/" + event + "?download=" + tipo)
                 .then((response) => {
                     window.location.href = response.data;
                 })
-                .catch((error) => {
-                    console.log(error);
+                .catch(() => {
+
                 });
         },
         atualizarAcaoIsp: function (id) {
@@ -436,15 +443,11 @@ export default {
             this.acao.area = this.areaId;
             this.acao.incentivo = this.incentivoId;
 
-            axios.put("http://localhost:8081/acoes-isp/" + id, this.acao)
-                .then((response) => {
+            axios.put(process.env.VUE_APP_API_BASE_URL + "/acoes-sociais/acoes-isp/" + id, this.acao)
+                .then(() => {
                     this.$router.push({ name: 'EditarAcaoIsp', params: { id: id }, query: { sucessoAtualizacao: true, timestamp: Date.now() } });
                 })
                 .catch((error) => {
-                    console.log(error);
-                    this.erroAtualizacao = true;
-                    window.scrollTo(0, 0);
-
                     document.querySelectorAll(".field-error__message").forEach(field => {
                         field.remove();
                     });
@@ -453,7 +456,7 @@ export default {
                         field.classList.remove("field-error");
                     });
 
-                    if (error.response.status != null && error.response.status == 400 && error.response.data != null) {
+                    if (error.response && error.response.status != null && error.response.status == 400 && error.response.data != null) {
                         error.response.data.forEach(fieldError => {
                             var campo = document.getElementById("acao." + fieldError.field);
 
@@ -467,6 +470,9 @@ export default {
                             }
                         });
                     }
+
+                    this.erroAtualizacao = true;
+                    window.scrollTo(0, 0);
                 });
         },
     }

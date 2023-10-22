@@ -1,11 +1,13 @@
 main#doar-view {
     width: 100%;
-    max-width: 1100px;
     display: flex;
+    justify-content: center;
     flex-direction: row;
+    background-color: #ffffff;
 
     .formulario-pagamento {
         width: 100%;
+        max-width: 1100px;
         display: flex;
         flex-direction: row;
         justify-content: space-between;
@@ -83,6 +85,46 @@ main#doar-view {
             i {
                 font-size: 1.5rem;
                 vertical-align: middle;
+            }
+        }
+    }
+
+    .valor-personalizado {
+        margin-left: 2rem;
+        background-color: #F1F1F2;
+        line-height: 1.5;
+        padding: .25rem .5rem;
+        border-radius: .5rem;
+        border: none;
+        outline: none;
+    }
+
+    label[for=opcaoPersonalizada].checkbox {
+        margin-bottom: .5rem;
+    }
+
+    .pix {
+        width: 100%;
+
+        #pix__qrcode {
+            width: 40%;
+            margin: 1rem auto 0;
+            display: block;
+        }
+
+        #pix__copiar {
+            margin-top: 1rem;
+        }
+
+        p {
+            text-align: center;
+            margin-top: 1rem;
+
+            i {
+                font-size: 2rem;
+                vertical-align: middle;
+                margin-right: .5rem;
+                color: #36b4aa;
             }
         }
     }

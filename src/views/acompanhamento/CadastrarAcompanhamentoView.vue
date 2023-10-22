@@ -23,10 +23,11 @@
                     <Transition>
                         <div v-if="this.acompanhamento.acaoId != null">
                             <div class="documento__solicitar">
-                                <select name="acompanhamento.indicador" id="acompanhamento.indicador" class="form-input" v-model="novoIndicador">
+                                <select name="acompanhamento.indicador" id="acompanhamento.indicador" class="form-input"
+                                    v-model="novoIndicador">
                                     <option :value="null">Selecione um indicador...</option>
                                     <option v-for="indicador in indicadores" :value="indicador.id"
-                                        :disabled="acompanhamento.indicadoresSolicitados.some(indicadorSolicitado => indicadorSolicitado == indicador.id)">
+                                        :disabled="acompanhamento.novosIndicadoresSolicitados.some(indicadorSolicitado => indicadorSolicitado == indicador.id)">
                                         {{ indicador.nome }}</option>
                                 </select>
                                 <button type="button" class="documento__solicitar--button"
@@ -41,7 +42,7 @@
                                     </tr>
                                 </thead>
                                 <tbody>
-                                    <tr v-for="(indicador, index) in acompanhamento.indicadoresSolicitados">
+                                    <tr v-for="(indicador, index) in acompanhamento.novosIndicadoresSolicitados">
                                         <td>{{ matchIndicador(indicador) }}</td>
                                         <td>
                                             <button type="button" class="acao" @click.prevent="removerIndicador(index)">
@@ -53,15 +54,18 @@
                             </table>
 
                             <div class="form-input-wrapper">
-                                <label for="acompanhamento.informacoesAdicionais" class="form-input-label">Informações Adicionais</label>
-                                <p>Utilize esse espaço caso queira solicitar o envio de algum documento por parte da organização</p>
-                                <textarea name="acompanhamento.informacoesAdicionais" id="acompanhamento.informacoesAdicionais" class="form-input"
+                                <label for="acompanhamento.informacoesAdicionais" class="form-input-label">Informações
+                                    Adicionais</label>
+                                <p>Utilize esse espaço caso queira solicitar o envio de algum documento por parte da
+                                    organização</p>
+                                <textarea name="acompanhamento.informacoesAdicionais"
+                                    id="acompanhamento.informacoesAdicionais" class="form-input"
                                     v-model="acompanhamento.informacoesAdicionais"></textarea>
                             </div>
 
                             <Transition>
                                 <button class="primary-button" @click.prevent="cadastrarAcompanhamento()"
-                                    v-if="this.acompanhamento.indicadoresSolicitados.length > 0">
+                                    v-if="this.acompanhamento.novosIndicadoresSolicitados.length > 0">
                                     <span v-show="carregandoRequisicao" class="spinner-border" aria-hidden="true"></span>
                                     <span v-show="!carregandoRequisicao">Solicitar</span>
                                 </button>
@@ -95,7 +99,7 @@ export default {
             acompanhamento: {
                 acaoId: null,
                 organizacaoId: null,
-                indicadoresSolicitados: [],
+                novosIndicadoresSolicitados: [],
                 informacoesAdicionais: null,
             },
             organizacoes: null,
@@ -113,33 +117,30 @@ export default {
     },
     methods: {
         buscarAcoes: function () {
-            axios.get("http://localhost:8081/acoes-isp")
+            axios.get(process.env.VUE_APP_API_BASE_URL + "/acoes-sociais/acoes-isp")
                 .then((response) => {
-                    console.log(response);
                     this.acoes = response.data;
                 })
-                .catch((error) => {
-                    console.log(error);
+                .catch(() => {
+
                 });
         },
         buscarOrganizacoes: function () {
-            axios.get("http://localhost:8082/organizacoes")
+            axios.get(process.env.VUE_APP_API_BASE_URL + "/prospeccao/organizacoes")
                 .then((response) => {
-                    console.log(response);
                     this.organizacoes = response.data;
                 })
-                .catch((error) => {
-                    console.log(error);
+                .catch(() => {
+
                 });
         },
         buscarIndicadores: function () {
-            axios.get("http://localhost:8083/indicadores")
+            axios.get(process.env.VUE_APP_API_BASE_URL + "/acompanhamento/indicadores")
                 .then((response) => {
-                    console.log(response);
                     this.indicadores = response.data;
                 })
-                .catch((error) => {
-                    console.log(error);
+                .catch(() => {
+
                 });
         },
         encontrarOrganizacao: function (id) {
@@ -164,7 +165,6 @@ export default {
             }
         },
         matchIndicador: function (id) {
-            console.log(id);
             for (let index = 0; index < this.indicadores.length; index++) {
                 const indicador = this.indicadores[index];
 
@@ -175,21 +175,20 @@ export default {
         },
         solicitarIndicador: function () {
             if (this.novoIndicador != null) {
-                this.acompanhamento.indicadoresSolicitados.push(this.novoIndicador);
+                this.acompanhamento.novosIndicadoresSolicitados.push(this.novoIndicador);
                 this.novoIndicador = null;
             }
         },
         removerIndicador: function (index) {
-            this.acompanhamento.indicadoresSolicitados.splice(index, 1);
+            this.acompanhamento.novosIndicadoresSolicitados.splice(index, 1);
         },
         cadastrarAcompanhamento: function () {
-            axios.post("http://localhost:8083/acompanhamentos", this.acompanhamento)
+            axios.post(process.env.VUE_APP_API_BASE_URL + "/acompanhamento/acompanhamentos", this.acompanhamento)
                 .then((response) => {
-                    console.log(response);
                     this.$router.push({ name: 'ListarAcompanhamentos', query: { sucessoSolicitacao: true } });
                 })
-                .catch((error) => {
-                    console.log(error);
+                .catch(() => {
+
                 });
         }
     },

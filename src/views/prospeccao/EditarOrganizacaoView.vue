@@ -16,7 +16,7 @@
             <FloatingPanel v-if="!erroBuscaOrganizacao && organizacao != null">
                 <template v-slot:FloatingPanelContent>
                     <form action="#" method="post">
-                        <div class="alerta alerta--error" v-if="erroCadastro">
+                        <div class="alerta alerta--error" v-if="erroAtualizacao">
                             <i class="alerta__icone bi bi-x-circle-fill"></i>
                             <p class="alerta__message">Não foi possível atualizar as informações dessa organização</p>
                         </div>
@@ -130,10 +130,6 @@ export default {
                     completed: true,
                 },
             },
-
-            carregandoRequisicao: false,
-            erroBuscaOrganizacao: false,
-            erroCadastro: false,
             options: {
                 year: 'numeric',
                 month: 'long',
@@ -142,16 +138,18 @@ export default {
                 hour: '2-digit',
                 minute: '2-digit',
             },
+            carregandoRequisicao: false,
+            erroBuscaOrganizacao: false,
+            erroAtualizacao: false,
         }
     },
     methods: {
         buscarOrganizacao: function (id) {
-            axios.get("http://localhost:8082/organizacoes/" + id)
+            axios.get(process.env.VUE_APP_API_BASE_URL + "/prospeccao/organizacoes/" + id)
                 .then((response) => {
-                    var organizacao = response.data;
-                    this.organizacao = organizacao;
+                    this.organizacao = response.data;
                 })
-                .catch((error) => {
+                .catch(() => {
                     this.erroBuscaOrganizacao = true;
                 });
         },
@@ -161,21 +159,21 @@ export default {
             this.organizacao.cnpj = this.cnpj.unmasked;
             this.organizacao.telefone = this.telefone.unmasked;
             this.organizacao.responsavel.telefone = this.responsavel.telefone.unmasked;
-            
-            axios.put("http://localhost:8082/organizacoes/" + this.organizacao.id, this.organizacao)
-                .then((response) => {
+
+            axios.put(process.env.VUE_APP_API_BASE_URL + "/prospeccao/organizacoes/" + this.organizacao.id, this.organizacao)
+                .then(() => {
                     this.$router.push({ name: 'ListarOrganizacoes', query: { sucessoAtualizacao: true } });
                 })
                 .catch((error) => {
-                    console.log(error);
-                    this.erroCadastro = true;
-                    window.scrollTo(0, 0);
-
                     document.querySelectorAll(".field-error__message").forEach(field => {
                         field.remove();
                     });
 
-                    if (error.response.status != null && error.response.status == 400 && error.response.data != null) {
+                    document.querySelectorAll(".field-error").forEach(field => {
+                        field.classList.remove("field-error");
+                    });
+
+                    if (error.response && error.response.status != null && error.response.status == 400 && error.response.data != null) {
                         error.response.data.forEach(fieldError => {
                             var campo = document.getElementById(fieldError.field);
 
@@ -189,9 +187,11 @@ export default {
                             }
                         });
                     }
-                });
 
-            this.carregandoRequisicao = false;
+                    this.carregandoRequisicao = false;
+                    this.erroAtualizacao = true;
+                    window.scrollTo(0, 0);
+                });
         }
     }
 }

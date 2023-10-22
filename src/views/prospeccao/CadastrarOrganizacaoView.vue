@@ -4,7 +4,7 @@
         <Header titulo="Organização" icone="bi bi-building-fill-add"></Header>
         <FloatingPanel>
             <template v-slot:FloatingPanelContent>
-                <div class="alerta alerta--error" v-if="erroCadastro">
+                <div class="alerta alerta--error" v-show="erroCadastro">
                     <i class="alerta__icone bi bi-x-circle-fill"></i>
                     <p class="alerta__message">Não foi possível cadastrar essa organização</p>
                 </div>
@@ -14,7 +14,7 @@
 
                         <div class="form-input-wrapper">
                             <label for="nome" class="form-input-label">Razão social</label>
-                            <input type="text" name="razaoSocial" id="nome" class="form-input" v-model="nome" autofocus>
+                            <input type="text" name="razaoSocial" id="nome" class="form-input" v-model="nome">
                         </div>
                         <div class="form-input-wrapper">
                             <label for="cnpj" class="form-input-label">CNPJ</label>
@@ -122,14 +122,11 @@ export default {
                 },
             };
 
-            axios.post("http://localhost:8082/organizacoes", data)
-                .then((response) => {
+            axios.post(process.env.VUE_APP_API_BASE_URL + "/prospeccao/organizacoes", data)
+                .then(() => {
                     this.$router.push({ name: 'ListarOrganizacoes', query: { sucessoCadastro: true } });
                 })
                 .catch((error) => {
-                    this.erroCadastro = true;
-                    window.scrollTo(0, 0);
-
                     document.querySelectorAll(".field-error__message").forEach(field => {
                         field.remove();
                     });
@@ -143,7 +140,7 @@ export default {
                         elemento.innerText = "Organização já cadastrada";
                     }
 
-                    if (error.response.status != null && error.response.status == 400 && error.response.data != null) {
+                    if (error.response && error.response.status != null && error.response.status == 400 && error.response.data != null) {
                         error.response.data.forEach(fieldError => {
                             var campo = document.getElementById(fieldError.field);
 
@@ -157,9 +154,11 @@ export default {
                             }
                         });
                     }
-                });
 
-            this.carregandoRequisicao = false;
+                    this.carregandoRequisicao = false;
+                    this.erroCadastro = true;
+                    window.scrollTo(0, 0);
+                });
         }
     }
 }

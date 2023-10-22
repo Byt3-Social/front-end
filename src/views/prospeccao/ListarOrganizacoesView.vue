@@ -78,7 +78,6 @@ export default {
     data() {
         return {
             organizacoes: null,
-
             erroBuscaOrganizacoes: false,
             rotaAnterior: null,
         }
@@ -93,13 +92,11 @@ export default {
     },
     methods: {
         buscarOrganizacoes: function () {
-            this.carregandoRequisicao = true;
-
-            axios.get("http://localhost:8082/organizacoes")
+            axios.get(process.env.VUE_APP_API_BASE_URL + "/prospeccao/organizacoes")
                 .then((response) => {
                     this.organizacoes = response.data;
                 })
-                .catch((error) => {
+                .catch(() => {
                     this.erroBuscaOrganizacoes = true;
                 });
         }

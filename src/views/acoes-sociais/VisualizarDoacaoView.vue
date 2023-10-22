@@ -17,7 +17,11 @@
                 <template v-slot:FloatingPanelContent>
                     <div class="alerta alerta--sucesso" v-if="this.$route.query.sucessoEstorno && rotaAnterior == null">
                         <i class="alerta__icone bi bi-check-circle-fill"></i>
-                        <p class="alerta__message">Estorno solicitado com sucesso</p>
+                        <p class="alerta__message">Estorno realizado com sucesso</p>
+                    </div>
+                    <div class="alerta alerta--error" v-if="this.$route.query.falhaEstorno && rotaAnterior == null">
+                        <i class="alerta__icone bi bi-x-circle-fill"></i>
+                        <p class="alerta__message">Falha ao solicitar estorno dessa doação</p>
                     </div>
                     <div class="detalhes-transacao">
                         <div class="bloco">
@@ -43,7 +47,7 @@
                         <div class="bloco">
                             <label class="bloco__atributo">Status</label>
                             <p class="bloco__atributo--preenchido">{{ doacao.status.replace("PAID",
-                                "PAGO").replace("WAITING", "PROCESSANDO").replace("CANCELED", "CANCELADO") }}</p>
+                                "PAGO").replace("WAITING", "AGUARDANDO PAGAMENTO").replace("CANCELED", "CANCELADO") }}</p>
                         </div>
                         <div class="bloco">
                             <label class="bloco__atributo">Método</label>
@@ -52,7 +56,12 @@
                         </div>
                         <div class="bloco">
                             <label class="bloco__atributo">Valor</label>
-                            <p class="bloco__atributo--preenchido">R$ {{ doacao.valor.toFixed(2).replace(".", ",") }}</p>
+                            <p class="bloco__atributo--preenchido">
+                                {{ new Intl.NumberFormat('pt-BR', {
+                                    style: 'currency',
+                                    currency: 'BRL',
+                                }).format(doacao.valor) }}
+                            </p>
                         </div>
                         <div class="bloco">
                             <label class="bloco__atributo">Link</label>
@@ -81,7 +90,8 @@
                     </div>
 
 
-                    <button class="danger-button" @click.prevent="estornarDoacao()" v-if="doacao.status != 'CANCELED'">
+                    <button class="danger-button" @click.prevent="estornarDoacao()"
+                        v-if="doacao.status == 'PAID' || doacao.status == 'AUTHORIZED'">
                         <span v-show="carregandoRequisicao" class="spinner-border" aria-hidden="true"></span>
                         <span v-show="!carregandoRequisicao">Estornar</span>
                     </button>
@@ -138,26 +148,25 @@ export default {
     },
     methods: {
         buscarDoacao: function (id) {
-            axios.get("http://localhost:8081/doacoes/" + id)
+            axios.get(process.env.VUE_APP_API_BASE_URL + "/acoes-sociais/doacoes/" + id)
                 .then((response) => {
                     var doacao = response.data;
                     this.doacao = doacao;
                 })
-                .catch((error) => {
+                .catch(() => {
                     this.erroBuscaDoacao = true;
                 });
         },
         estornarDoacao: function () {
             this.carregandoRequisicao = true;
 
-            axios.post("http://localhost:8081/doacoes/" + this.doacao.id + "/cancelamentos")
-                .then((response) => {
-                    console.log(response);
+            axios.post(process.env.VUE_APP_API_BASE_URL + "/acoes-sociais/doacoes/" + this.doacao.id + "/cancelamentos")
+                .then(() => {
                     this.$router.push({ name: 'VisualizarDoacao', params: { id: this.doacao.id }, query: { sucessoEstorno: true, timestamp: Date.now() } });
 
                     this.carregandoRequisicao = false;
                 })
-                .catch((error) => {
+                .catch(() => {
                     this.$router.push({ name: 'VisualizarDoacao', params: { id: this.doacao.id }, query: { falhaEstorno: true, timestamp: Date.now() } });
 
                     this.carregandoRequisicao = false;
