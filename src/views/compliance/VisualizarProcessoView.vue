@@ -179,6 +179,15 @@
                             </p>
                         </div>
                         <div class="bloco">
+                            <label class="bloco__atributo">CPF (Representante)</label>
+                            <p class="bloco__atributo--preenchido">
+                                {{ processo.responsavel.cpf != null && processo.responsavel.cpf != '' ?
+                                    utils.cpfMask(processo.responsavel.cpf)
+                                    : "Não preenchido"
+                                }}
+                            </p>
+                        </div>
+                        <div class="bloco">
                             <label class="bloco__atributo">Email (Representante)</label>
                             <p class="bloco__atributo--preenchido">
                                 {{ processo.responsavel.email != null && processo.responsavel.email != '' ?
@@ -193,6 +202,12 @@
                                     utils.telefoneMask(processo.responsavel.telefone)
                                     : "Não preenchido"
                                 }}
+                            </p>
+                        </div>
+                        <div class="bloco">
+                            <label class="bloco__atributo">Aberto em</label>
+                            <p class="bloco__atributo--preenchido">
+                                {{ (new Date(processo.createdAt)).toLocaleDateString("pt-BR") }}
                             </p>
                         </div>
                         <div class="bloco">

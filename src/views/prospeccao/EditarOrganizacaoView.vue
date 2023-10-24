@@ -68,6 +68,11 @@
                                     v-model="organizacao.responsavel.nome">
                             </div>
                             <div class="form-input-wrapper">
+                                <label for="responsavel.cpf" class="form-input-label">CPF</label>
+                                <input type="text" name="responsavel.cpf" id="responsavel.cpf" class="form-input"
+                                    v-model="organizacao.responsavel.cpf" v-maska="responsavel.cpf" data-maska="###.###.###-##">
+                            </div>
+                            <div class="form-input-wrapper">
                                 <label for="responsavel.email" class="form-input-label">Email</label>
                                 <input type="email" name="responsavel.email" id="responsavel.email" class="form-input"
                                     v-model="organizacao.responsavel.email">
@@ -124,6 +129,11 @@ export default {
                 completed: false,
             },
             responsavel: {
+                cpf: {
+                    masked: null,
+                    unmasked: null,
+                    completed: true,
+                },
                 telefone: {
                     masked: null,
                     unmasked: null,
@@ -158,6 +168,7 @@ export default {
 
             this.organizacao.cnpj = this.cnpj.unmasked;
             this.organizacao.telefone = this.telefone.unmasked;
+            this.organizacao.responsavel.cpf = this.responsavel.cpf.unmasked;
             this.organizacao.responsavel.telefone = this.responsavel.telefone.unmasked;
 
             axios.put(process.env.VUE_APP_API_BASE_URL + "/prospeccao/organizacoes/" + this.organizacao.id, this.organizacao)

@@ -8,17 +8,35 @@
         </div>
         <div class="documento__enviado" v-if="arquivo != null && arquivo.caminhoS3 != null">
             <div class="documento__detalhes">
-                <i class="bi bi-file-pdf-fill"></i>
-                <div class="documento__info">
-                    <p v-if="organizacao == true">{{ arquivo.nomeArquivoOriginal }}</p>
-                    <p v-else>{{ (arquivo.caminhoS3.split("/" + pasta + "/"))[1] }}</p>
-                    <p>
-                        Submetido em: {{ (new
-                            Date(arquivo.updatedAt)).toLocaleDateString('pt-BR',
-                                options) }} <strong>- {{ arquivo.status != null && arquivo.status == 'PENDENTE_REENVIO' ?
-            'Reenvio solicitado' : null }}</strong>
-                    </p>
-                    <p v-if="organizacao == true">{{ arquivo.tamanhoArquivo }} bytes</p>
+                <div class="documento__info-section">
+                    <i class="bi bi-file-pdf-fill"></i>
+                    <div class="documento__info">
+                        <p v-if="organizacao == true">{{ arquivo.nomeArquivoOriginal }}</p>
+                        <p v-else>{{ (arquivo.caminhoS3.split("/" + pasta + "/"))[1] }}</p>
+                        <p>
+                            Submetido em: {{ (new
+                                Date(arquivo.updatedAt)).toLocaleDateString('pt-BR',
+                                    options) }}
+                        </p>
+                        <p v-if="arquivo.status != null && arquivo.status == 'PENDENTE_REENVIO'">
+                            <strong>Reenvio solicitado</strong>
+                        </p>
+                        <p v-if="organizacao == true">{{ arquivo.tamanhoArquivo }} bytes</p>
+                    </div>
+                </div>
+                <div class="documento__info-section" v-if="pdsign != null && pdsign.status == 'DONE'">
+                    <i class="bi bi-patch-check-fill assinado"></i>
+                    <div class="documento__info">
+                        <p>Assinado digitalmente via PDSign</p>
+                        <p>{{ pdsign.members[0].name }}</p>
+                        <p>CPF: {{ utils.cpfMask(pdsign.members[0].documentCode) }}</p>
+                    </div>
+                </div>
+                <div class="documento__info-section" v-if="pdsign != null && pdsign.status != 'DONE'">
+                    <i class="bi bi-patch-exclamation-fill nao-assinado"></i>
+                    <div class="documento__info">
+                        <p>Não assinado</p>
+                    </div>
                 </div>
             </div>
             <div class="documento__acoes">
@@ -36,10 +54,13 @@
     </div>
 </template>
 <script>
+import utils from '@/helpers/maska';
+
 export default {
     name: 'SingleFileUploader',
     data() {
         return {
+            utils: utils,
             isDragging: false,
             upload: this.urlUpload,
             files: null,
@@ -78,6 +99,6 @@ export default {
 </script>
 
 <script setup>
-defineProps(['arquivo', 'arquivoSolicitado', 'icone', 'pasta', 'download', 'organizacao']);
+defineProps(['arquivo', 'arquivoSolicitado', 'icone', 'pasta', 'download', 'organizacao', 'pdsign']);
 defineEmits(['update:arquivo', 'excluirArquivo', 'uploadArquivo', 'download']);
 </script>

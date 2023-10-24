@@ -147,24 +147,31 @@
                                 <div class="form-input-wrapper">
                                     <label for="processo.responsavel.nome" class="form-input-label">Representante</label>
                                     <input type="text" name="processo.responsavel.nome" id="processo.responsavel.nome"
-                                        class="form-input" v-model="processo.responsavel.nome">
+                                        class="form-input" v-model="processo.responsavel.nome" disabled>
                                 </div>
                                 <div class="form-input-wrapper">
                                     <label for="processo.responsavel.email" class="form-input-label">Email
                                         (Representante)</label>
                                     <input type="email" name="processo.responsavel.email" id="processo.responsavel.email"
-                                        class="form-input" v-model="processo.responsavel.email">
+                                        class="form-input" v-model="processo.responsavel.email" disabled>
                                 </div>
                             </div>
 
                             <div class="form-row">
+                                <div class="form-input-wrapper">
+                                    <label for="processo.responsavel.cpf" class="form-input-label">CPF
+                                        (Representante)</label>
+                                    <input type="text" name="processo.responsavel.cpf" id="processo.responsavel.cpf"
+                                        class="form-input" v-model="processo.responsavel.cpf" data-maska="###.###.###-##"
+                                        v-maska="representante.cpf" disabled>
+                                </div>
                                 <div class="form-input-wrapper">
                                     <label for="representante.telefone" class="form-input-label">Telefone
                                         (Representante)</label>
                                     <input type="text" name="processo.responsavel.telefone"
                                         id="processo.responsavel.telefone" class="form-input"
                                         v-model="processo.responsavel.telefone" v-maska="representante.telefone"
-                                        data-maska="['(##) ####-####', '(##) #####-####']">
+                                        data-maska="['(##) ####-####', '(##) #####-####']" disabled>
                                 </div>
                             </div>
                         </div>
@@ -255,7 +262,7 @@
                             :pasta="processo.id + '_' + processo.cnpj" :organizacao="true"
                             v-model:arquivo="processo.documentosSolicitados[index]"
                             @excluirArquivo="excluirArquivo($event, index)"
-                            @uploadArquivo="uploadArquivo($event, documento.id, index)" :download="false">
+                            @uploadArquivo="uploadArquivo($event, documento.id, index)" :download="false" :pdsign="pdsign != null ? matchProcessoPDSign(documento.pdsignProcessoId) : null">
                         </SingleFileUploader>
                     </div>
                 </template>
@@ -285,11 +292,13 @@ export default {
     },
     created() {
         this.buscarProcesso(this.$route.params.id);
+        this.buscarProcessoPDSign(this.$route.params.id);
     },
     data() {
         return {
             tab: "DADOS-GERAIS",
             processo: null,
+            pdsign: null,
             cnpj: {
                 masked: null,
                 unmasked: null,
@@ -310,6 +319,11 @@ export default {
                 estado: null,
             },
             representante: {
+                cpf: {
+                    masked: null,
+                    unmasked: null,
+                    completed: false,
+                },
                 telefone: {
                     masked: null,
                     unmasked: null,
@@ -344,6 +358,15 @@ export default {
     methods: {
         selecionarTab: function (tab) {
             this.tab = tab;
+        },
+        buscarProcessoPDSign: function (id) {
+            axios.get(process.env.VUE_APP_API_BASE_URL + "/compliance/processos/" + id + "/pdsign")
+                .then((response) => {
+                    this.pdsign = response.data;
+                })
+                .catch(() => {
+                    
+                });
         },
         buscarProcesso: async function (id) {
             await this.buscarEstados();
@@ -405,6 +428,15 @@ export default {
 
                 if (estado.sigla == sigla) {
                     return estado.id;
+                }
+            }
+        },
+        matchProcessoPDSign: function(id) {
+            for (let index = 0; index < this.pdsign.length; index++) {
+                const processo = this.pdsign[index];
+
+                if (processo.id == id) {
+                    return processo;
                 }
             }
         },

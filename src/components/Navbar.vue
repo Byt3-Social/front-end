@@ -54,9 +54,9 @@
                     <p class="navbar__user-name" v-if="usuario.role != 'B3Social.Organizacao'">
                         Olá {{ usuario.nome.split(" ")[0].toLowerCase() }}!</p>
                     <p class="navbar__user-name" v-if="usuario.role == 'B3Social.Organizacao'">Olá {{
-                        usuario.empresa.toLowerCase() }}!</p>
+                        usuario.empresa }}!</p>
                     <small class="navbar__user-role" v-if="usuario.role != 'B3Social.Organizacao'">Colaborador B3</small>
-                    <small class="navbar__user-role" v-if="usuario.role == 'B3Social.Organizacao'">Parceiro B3</small>
+                    <button type="button" class="navbar__user-sair" v-if="usuario.role == 'B3Social.Organizacao'" @click.prevent="logout()">Sair</button>
                 </div>
                 <img src="../assets/images/profile-picture.png" alt="" class="navbar__user-picture"
                     v-if="this.$route.meta.authScope == 'colaborador' && usuario.role == 'B3Social.Administrador'">
@@ -96,6 +96,10 @@ export default {
     methods: {
         mostrarDropdown: function () {
 
+        },
+        logout: function() {
+            localStorage.removeItem("B3Social-Organizacao");
+            this.$router.push({ name: 'OrganizacaoLogin' });
         }
     },
 }
@@ -218,8 +222,21 @@ export default {
 }
 
 .navbar__user-role {
+    text-transform: uppercase;
     text-align: right;
     display: block;
+}
+
+.navbar__user-sair {
+    text-align: right;
+    display: block;
+    text-transform: uppercase;
+    color: #f1416c;
+    background-color: transparent;
+    border: none;
+    outline: none;
+    font-weight: 600;
+    font-size: .9rem;
 }
 
 .navbar__user .navbar__user-picture {
@@ -251,10 +268,5 @@ export default {
     flex-direction: column;
     width: 100%;
     margin-right: 1rem;
-}
-
-.navbar__user-role {
-    text-align: right;
-    text-transform: uppercase;
 }
 </style>

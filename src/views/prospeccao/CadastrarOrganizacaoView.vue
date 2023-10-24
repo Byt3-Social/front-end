@@ -41,6 +41,11 @@
                                 v-model="responsavel.nome">
                         </div>
                         <div class="form-input-wrapper">
+                            <label for="responsavel.cpf" class="form-input-label">CPF</label>
+                            <input type="text" name="responsavel.cpf" id="responsavel.cpf" class="form-input"
+                                v-maska="responsavel.cpf" data-maska="###.###.###-##">
+                        </div>
+                        <div class="form-input-wrapper">
                             <label for="responsavel.email" class="form-input-label">Email</label>
                             <input type="email" name="responsavel.email" id="responsavel.email" class="form-input"
                                 v-model="responsavel.email">
@@ -95,6 +100,11 @@ export default {
             responsavel: {
                 nome: null,
                 email: null,
+                cpf: {
+                    masked: null,
+                    unmasked: null,
+                    completed: false,
+                },
                 telefone: {
                     masked: null,
                     unmasked: null,
@@ -117,6 +127,7 @@ export default {
                 telefone: this.telefone.unmasked,
                 responsavel: {
                     nome: this.responsavel.nome,
+                    cpf: this.responsavel.cpf.unmasked,
                     email: this.responsavel.email,
                     telefone: this.responsavel.telefone.unmasked
                 },
