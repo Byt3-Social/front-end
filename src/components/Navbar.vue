@@ -181,7 +181,7 @@ export default {
     min-width: 200px;
     border-radius: .5rem;
     box-shadow: 0px 0px 50px 0px rgba(82, 63, 105, .15);
-    z-index: 1;
+    z-index: 100;
 }
 
 .navbar__items .navbar__item {

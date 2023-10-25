@@ -226,7 +226,8 @@
                         <SingleFileUploader arquivoSolicitado="Contrato" icone="file-text" pasta="contratos"
                             v-model:arquivo="acao.contrato" @excluirArquivo="excluirArquivo($event, 'contrato')"
                             @uploadArquivo="uploadArquivo($event, 'contrato')"
-                            @download="downloadArquivo($event, 'contrato')">
+                            @download="downloadArquivo($event, 'contrato')"
+                            :pdsign="pdsign != null && acao.contrato != null ? matchProcessoPDSign(acao.contrato.pdsignProcessoId) : null">
                         </SingleFileUploader>
 
                         <MultiFileUploader arquivoSolicitado="Arquivo" icone="file-plus" pasta="documentos"
@@ -262,6 +263,7 @@ export default {
     },
     created() {
         this.buscarAcaoIsp(this.$route.params.id);
+        this.buscarProcessoPDSign(this.$route.params.id);
         this.buscarOrganizacoes();
         this.buscarSegmentos();
         this.buscarAreas();
@@ -286,6 +288,7 @@ export default {
             aporteInicial: null,
             aporteValor: null,
             aporteData: null,
+            pdsign: null,
             options: {
                 year: 'numeric',
                 month: 'long',
@@ -304,6 +307,15 @@ export default {
     methods: {
         selecionarTab: function (tab) {
             this.tab = tab;
+        },
+        buscarProcessoPDSign: function (id) {
+            axios.get(process.env.VUE_APP_API_BASE_URL + "/acoes-sociais/acao-isp/" + id + "/pdsign")
+                .then((response) => {
+                    this.pdsign = response.data;
+                })
+                .catch(() => {
+
+                });
         },
         buscarOrganizacoes: function () {
             axios.get(process.env.VUE_APP_API_BASE_URL + "/prospeccao/organizacoes")
@@ -380,6 +392,15 @@ export default {
                     this.erroBuscaAcao = true;
                 });
         },
+        matchProcessoPDSign: function (id) {
+            for (let index = 0; index < this.pdsign.length; index++) {
+                const processo = this.pdsign[index];
+
+                if (processo.id == id) {
+                    return processo;
+                }
+            }
+        },
         incluirAporte: function () {
             if (this.aporteData != null && this.aporteValor != null && this.aporteData != '' && this.aporteValor != '') {
                 var aporte = {
@@ -401,6 +422,9 @@ export default {
                 .then((response) => {
                     if (tipo == 'contrato') {
                         this.acao.contrato = response.data;
+                        this.pdsign = [
+                            { id: this.acao.contrato.pdsignProcessoId, status: 'RUNNING' }
+                        ];
                     } else {
                         this.acao.arquivos.push(response.data);
                     }
@@ -421,6 +445,7 @@ export default {
                 .then(() => {
                     if (tipo == 'contrato') {
                         this.acao.contrato = null;
+                        this.pdsign = null;
                     } else {
                         this.acao.arquivos.splice(event, 1);
                     }

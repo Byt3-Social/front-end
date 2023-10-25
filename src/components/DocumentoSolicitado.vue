@@ -26,12 +26,33 @@
                     <i class="bi bi-arrow-counterclockwise documento__icone documento__icone--reset"></i>
                 </button>
             </div>
+            <div class="documento__info-section w-100" v-if="pdsign != null && pdsign.status == 'DONE'">
+                <i class="bi bi-patch-check-fill assinado"></i>
+                <div class="documento__info">
+                    <p>Assinado digitalmente via PDSign</p>
+                    <p>{{ pdsign.members[0].name }}</p>
+                    <p>CPF: {{ utils.cpfMask(pdsign.members[0].documentCode) }}</p>
+                </div>
+            </div>
+            <div class="documento__info-section" v-if="pdsign != null && pdsign.status != 'DONE'">
+                <i class="bi bi-patch-exclamation-fill nao-assinado"></i>
+                <div class="documento__info">
+                    <p>Não assinado</p>
+                </div>
+            </div>
         </div>
     </div>
 </template>
 <script>
+import utils from '@/helpers/maska';
+
 export default {
     name: 'DocumentoSolicitado',
-    props: ['nome', 'status', 'nomeOriginal', 'assinaturaDigital', 'tamanhoArquivo']
+    props: ['nome', 'status', 'nomeOriginal', 'assinaturaDigital', 'tamanhoArquivo', 'pdsign'],
+    data() {
+        return {
+            utils: utils
+        }
+    }
 }
 </script>

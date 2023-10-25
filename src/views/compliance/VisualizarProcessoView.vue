@@ -300,7 +300,7 @@
                             :assinaturaDigital="documento.assinaturaDigital"
                             @excluir="desvincularDocumentoSolicitado(processo.id, documento.id, index)"
                             @download="baixarDocumentoSolicitado(documento.id)"
-                            @reset="reenviarDocumentoSolicitado(documento.id, index)">
+                            @reset="reenviarDocumentoSolicitado(documento.id, index)" :pdsign="pdsign != null ? matchProcessoPDSign(documento.pdsignProcessoId) : null">
                         </DocumentoSolicitado>
                     </div>
                 </template>
@@ -332,6 +332,7 @@ export default {
     },
     created() {
         this.buscarProcesso(this.$route.params.id);
+        this.buscarProcessoPDSign(this.$route.params.id);
         this.buscarDocumentos();
         this.buscarDados();
     },
@@ -339,6 +340,7 @@ export default {
         return {
             tab: "DADOS-GERAIS",
             processo: null,
+            pdsign: null,
             status: null,
             documentos: [],
             dados: [],
@@ -358,6 +360,15 @@ export default {
     methods: {
         selecionarTab: function (tab) {
             this.tab = tab;
+        },
+        buscarProcessoPDSign: function (id) {
+            axios.get(process.env.VUE_APP_API_BASE_URL + "/compliance/processos/" + id + "/pdsign")
+                .then((response) => {
+                    this.pdsign = response.data;
+                })
+                .catch(() => {
+                    
+                });
         },
         buscarProcesso: function (id) {
             axios.get(process.env.VUE_APP_API_BASE_URL + "/compliance/processos/" + id)
@@ -388,6 +399,15 @@ export default {
                 .catch(() => {
 
                 });
+        },
+        matchProcessoPDSign: function(id) {
+            for (let index = 0; index < this.pdsign.length; index++) {
+                const processo = this.pdsign[index];
+
+                if (processo.id == id) {
+                    return processo;
+                }
+            }
         },
         atualizarStatusOrganizacao: function (id) {
             var json = {

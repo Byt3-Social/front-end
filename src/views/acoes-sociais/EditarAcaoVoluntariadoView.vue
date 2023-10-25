@@ -264,19 +264,85 @@
                                     </div>
                                 </div>
 
-                                <div class="graficos">
-                                    <div>
-                                        <apexchart width="500" type="line" :options="options" :series="series"></apexchart>
-                                        <p class="text-center">
-                                            <strong>Total arrecadado x Dia</strong>
-                                        </p>
-                                    </div>
-                                    <div>
-                                        <apexchart width="500" type="pie" :options="optionsDonut" :series="seriesDonut">
+                                <div class="line-chart">
+                                    <apexchart width="1000" height="250" type="line" :options="options" :series="series">
+                                    </apexchart>
+                                </div>
+                                <div class="radial-charts" v-if="estatisticas.doacoesPorMetodoDoacao.length > 0">
+                                    <div class="radial-charts__item">
+                                        <apexchart width="200" height="200" type="radialBar" :options="optionsRadial"
+                                            :series="seriesRadial">
                                         </apexchart>
-                                        <p class="text-center">
-                                            <strong>Pencentual de doações por método de pagamento</strong>
-                                        </p>
+                                        <div class="radial-charts__detalhes">
+                                            <p class="detalhes__titulo detalhes__total">Arrecadado</p>
+                                            <p>
+                                                {{ new Intl.NumberFormat('pt-BR', {
+                                                    style: 'currency',
+                                                    currency: 'BRL',
+                                                }).format(estatisticas.doacoesPorMetodoDoacao[1].valor) }}
+                                            </p>
+                                            <p class="detalhes__titulo detalhes__total">Quantidade</p>
+                                            <p>
+                                                {{ estatisticas.doacoesPorMetodoDoacao[1].total }} doações
+                                            </p>
+                                            <p class="detalhes__titulo detalhes__total">Ticket Médio</p>
+                                            <p>
+                                                {{ new Intl.NumberFormat('pt-BR', {
+                                                    style: 'currency',
+                                                    currency: 'BRL',
+                                                }).format(estatisticas.doacoesPorMetodoDoacao[1].media) }}
+                                            </p>
+                                        </div>
+                                    </div>
+                                    <div class="radial-charts__item">
+                                        <apexchart width="200" height="200" type="radialBar" :options="optionsRadial2"
+                                            :series="seriesRadial2">
+                                        </apexchart>
+                                        <div class="radial-charts__detalhes">
+                                            <p class="detalhes__titulo detalhes__total">Arrecadado</p>
+                                            <p>
+                                                {{ new Intl.NumberFormat('pt-BR', {
+                                                    style: 'currency',
+                                                    currency: 'BRL',
+                                                }).format(estatisticas.doacoesPorMetodoDoacao[2].valor) }}
+                                            </p>
+                                            <p class="detalhes__titulo detalhes__total">Quantidade</p>
+                                            <p>
+                                                {{ estatisticas.doacoesPorMetodoDoacao[2].total }} doações
+                                            </p>
+                                            <p class="detalhes__titulo detalhes__total">Ticket Médio</p>
+                                            <p>
+                                                {{ new Intl.NumberFormat('pt-BR', {
+                                                    style: 'currency',
+                                                    currency: 'BRL',
+                                                }).format(estatisticas.doacoesPorMetodoDoacao[2].media) }}
+                                            </p>
+                                        </div>
+                                    </div>
+                                    <div class="radial-charts__item">
+                                        <apexchart width="200" height="200" type="radialBar" :options="optionsRadial3"
+                                            :series="seriesRadial3">
+                                        </apexchart>
+                                        <div class="radial-charts__detalhes">
+                                            <p class="detalhes__titulo detalhes__total">Arrecadado</p>
+                                            <p>
+                                                {{ new Intl.NumberFormat('pt-BR', {
+                                                    style: 'currency',
+                                                    currency: 'BRL',
+                                                }).format(estatisticas.doacoesPorMetodoDoacao[0].valor) }}
+                                            </p>
+                                            <p class="detalhes__titulo detalhes__total">Quantidade</p>
+                                            <p>
+                                                {{ estatisticas.doacoesPorMetodoDoacao[0].total }} doações
+                                            </p>
+                                            <p class="detalhes__titulo detalhes__total">Ticket Médio</p>
+                                            <p>
+                                                {{ new Intl.NumberFormat('pt-BR', {
+                                                    style: 'currency',
+                                                    currency: 'BRL',
+                                                }).format(estatisticas.doacoesPorMetodoDoacao[0].media) }}
+                                            </p>
+                                        </div>
                                     </div>
                                 </div>
                             </div>
@@ -438,7 +504,8 @@
                         <SingleFileUploader arquivoSolicitado="Contrato" icone="file-text" pasta="contratos"
                             v-model:arquivo="acao.contrato" @excluirArquivo="excluirArquivo($event, 'contrato')"
                             @uploadArquivo="uploadArquivo($event, 'contrato')"
-                            @download="downloadArquivo($event, 'contrato')">
+                            @download="downloadArquivo($event, 'contrato')"
+                            :pdsign="pdsign != null && acao.contrato != null ? matchProcessoPDSign(acao.contrato.pdsignProcessoId) : null">
                         </SingleFileUploader>
 
                         <MultiFileUploader arquivoSolicitado="Arquivo" icone="file-plus" pasta="documentos"
@@ -476,13 +543,14 @@ export default {
     },
     created() {
         this.buscarAcaoVoluntariado(this.$route.params.id);
+        this.buscarProcessoPDSign(this.$route.params.id);
         this.buscarOrganizacoes();
         this.buscarSegmentos();
         this.buscarEstatisticas(this.$route.params.id);
     },
     data() {
         return {
-            tab: "DADOS-GERAIS",
+            tab: "DOACOES",
             subTab: 'ESTATISTICAS',
             acao: null,
             horario: {
@@ -502,6 +570,16 @@ export default {
             erroAtualizacao: false,
             rotaAnterior: null,
             options: {
+                title: {
+                    text: 'Doações x Dia',
+                    align: 'center',
+                    style: {
+                        fontSize: '20px',
+                        fontWeight: 'bold',
+                        fontFamily: 'Inter, sans-serif',
+                        color: '#000000'
+                    },
+                },
                 markers: {
                     size: 5,
                 },
@@ -565,6 +643,118 @@ export default {
                 }
             },
             seriesDonut: [],
+            seriesRadial: [],
+            seriesRadial2: [],
+            seriesRadial3: [],
+            optionsRadial: {
+                chart: {
+                    fontFamily: 'Inter, sans-serif'
+                },
+                colors: ['#00145f'],
+                plotOptions: {
+                    radialBar: {
+                        hollow: {
+                            margin: 15,
+                            size: "70%"
+                        },
+
+                        dataLabels: {
+                            showOn: "always",
+                            name: {
+                                show: true,
+                                color: "#000",
+                                fontSize: "16px"
+                            },
+                            value: {
+                                color: "#000",
+                                fontSize: "16px",
+                                show: true
+                            }
+                        }
+                    }
+                },
+
+                stroke: {
+                    lineCap: "round",
+                },
+                labels: ["PIX"],
+                noData: {
+                    text: "Sem dados"
+                }
+            },
+            optionsRadial2: {
+                chart: {
+                    fontFamily: 'Inter, sans-serif'
+                },
+                colors: ['#4fc3f6'],
+                plotOptions: {
+                    radialBar: {
+                        hollow: {
+                            margin: 15,
+                            size: "70%"
+                        },
+
+                        dataLabels: {
+                            showOn: "always",
+                            name: {
+                                show: true,
+                                color: "#000",
+                                fontSize: "16px"
+                            },
+                            value: {
+                                color: "#000",
+                                fontSize: "16px",
+                                show: true
+                            }
+                        }
+                    }
+                },
+
+                stroke: {
+                    lineCap: "round",
+                },
+                labels: ["Cartão"],
+                noData: {
+                    text: "Sem dados"
+                }
+            },
+            optionsRadial3: {
+                chart: {
+                    fontFamily: 'Inter, sans-serif'
+                },
+                colors: ['#cccccc'],
+                plotOptions: {
+                    radialBar: {
+                        hollow: {
+                            margin: 15,
+                            size: "70%"
+                        },
+
+                        dataLabels: {
+                            showOn: "always",
+                            name: {
+                                show: true,
+                                color: "#000",
+                                fontSize: "16px"
+                            },
+                            value: {
+                                color: "#000",
+                                fontSize: "16px",
+                                show: true
+                            }
+                        }
+                    }
+                },
+
+                stroke: {
+                    lineCap: "round",
+                },
+                labels: ["Boleto"],
+                noData: {
+                    text: "Sem dados"
+                }
+            },
+            pdsign: null,
         }
     },
     beforeRouteEnter(to, from, next) {
@@ -578,6 +768,15 @@ export default {
         },
         selecionarSubTab: function (tab) {
             this.subTab = tab;
+        },
+        buscarProcessoPDSign: function (id) {
+            axios.get(process.env.VUE_APP_API_BASE_URL + "/acoes-sociais/acao-voluntariado/" + id + "/pdsign")
+                .then((response) => {
+                    this.pdsign = response.data;
+                })
+                .catch(() => {
+
+                });
         },
         buscarOrganizacoes: function () {
             axios.get(process.env.VUE_APP_API_BASE_URL + "/prospeccao/organizacoes")
@@ -598,9 +797,18 @@ export default {
                     this.seriesDonut.push(this.estatisticas.doacoesPorMetodoDoacao[0].total);
                     this.seriesDonut.push(this.estatisticas.doacoesPorMetodoDoacao[2].total);
                     this.seriesDonut.push(this.estatisticas.doacoesPorMetodoDoacao[1].total);
+
+                    var porcentagemPix = Math.round(this.estatisticas.doacoesPorMetodoDoacao[1].total / (this.estatisticas.doacoesPorMetodoDoacao[0].total + this.estatisticas.doacoesPorMetodoDoacao[1].total + this.estatisticas.doacoesPorMetodoDoacao[2].total) * 100);
+                    this.seriesRadial2.push(porcentagemPix);
+
+                    var porcentagemCartao = Math.round(this.estatisticas.doacoesPorMetodoDoacao[2].total / (this.estatisticas.doacoesPorMetodoDoacao[0].total + this.estatisticas.doacoesPorMetodoDoacao[1].total + this.estatisticas.doacoesPorMetodoDoacao[2].total) * 100);
+                    this.seriesRadial.push(porcentagemCartao);
+
+                    var porcentagemBoleto = Math.round(this.estatisticas.doacoesPorMetodoDoacao[0].total / (this.estatisticas.doacoesPorMetodoDoacao[0].total + this.estatisticas.doacoesPorMetodoDoacao[1].total + this.estatisticas.doacoesPorMetodoDoacao[2].total) * 100);
+                    this.seriesRadial3.push(porcentagemBoleto);
                 })
                 .catch(() => {
-                    
+
                 });
         },
         buscarSegmentos: function () {
@@ -630,6 +838,15 @@ export default {
                     this.erroBuscaAcao = true;
                 });
         },
+        matchProcessoPDSign: function (id) {
+            for (let index = 0; index < this.pdsign.length; index++) {
+                const processo = this.pdsign[index];
+
+                if (processo.id == id) {
+                    return processo;
+                }
+            }
+        },
         uploadImagem: function (e) {
             var body = new FormData();
             body.append('imagem', e);
@@ -639,7 +856,7 @@ export default {
                     this.acao.imagem = response.data;
                 })
                 .catch(() => {
-                    
+
                 });
         },
         excluirImagem: function () {
@@ -648,7 +865,7 @@ export default {
                     this.acao.imagem = null;
                 })
                 .catch(() => {
-                    
+
                 });
         },
         uploadArquivo: function (e, tipo) {
@@ -659,12 +876,15 @@ export default {
                 .then((response) => {
                     if (tipo == 'contrato') {
                         this.acao.contrato = response.data;
+                        this.pdsign = [
+                            { id: this.acao.contrato.pdsignProcessoId, status: 'RUNNING' }
+                        ];
                     } else {
                         this.acao.arquivos.push(response.data);
                     }
                 })
                 .catch(() => {
-                    
+
                 });
         },
         excluirArquivo: function (event, tipo) {
@@ -679,12 +899,13 @@ export default {
                 .then(() => {
                     if (tipo == 'contrato') {
                         this.acao.contrato = null;
+                        this.pdsign = null;
                     } else {
                         this.acao.arquivos.splice(event, 1);
                     }
                 })
                 .catch(() => {
-                    
+
                 });
         },
         downloadArquivo: function (event, tipo) {
@@ -693,7 +914,7 @@ export default {
                     window.location.href = response.data;
                 })
                 .catch(() => {
-                    
+
                 });
         },
         incluirOpcaoContribuicao: function () {

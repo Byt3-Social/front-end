@@ -7,7 +7,7 @@
             <input type="file" name="file" id="fileInput" class="dropfile__input" @change="onChange" ref="file">
         </div>
         <div class="documento__enviado" v-if="arquivo != null && arquivo.caminhoS3 != null">
-            <div class="documento__detalhes">
+            <div class="documento__detalhes contrato__detalhes">
                 <div class="documento__info-section">
                     <i class="bi bi-file-pdf-fill"></i>
                     <div class="documento__info">
