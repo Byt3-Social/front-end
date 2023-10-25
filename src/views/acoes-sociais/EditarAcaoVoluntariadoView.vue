@@ -351,11 +351,11 @@
                                 <table class="table table-borderless">
                                     <thead>
                                         <tr>
-                                            <td>Doador</td>
-                                            <td>Valor</td>
-                                            <td>Método</td>
-                                            <td>Status</td>
-                                            <td>Ações</td>
+                                            <th scope="col">Doador</th>
+                                            <th scope="col">Valor</th>
+                                            <th scope="col">Método</th>
+                                            <th scope="col">Status</th>
+                                            <th scope="col">Ações</th>
                                         </tr>
                                     </thead>
                                     <tbody>
@@ -438,8 +438,8 @@
                                 <table class="table table-borderless">
                                     <thead>
                                         <tr>
-                                            <td>Valor</td>
-                                            <td>Remover</td>
+                                            <th scope="col">Valor</th>
+                                            <th scope="col">Remover</th>
                                         </tr>
                                     </thead>
                                     <tbody>
@@ -483,8 +483,8 @@
                         <table class="table table-borderless">
                             <thead>
                                 <tr>
-                                    <td>Colaborador</td>
-                                    <td>Status</td>
+                                    <th scope="col">Colaborador</th>
+                                    <th scope="col">Status</th>
                                 </tr>
                             </thead>
                             <tbody>

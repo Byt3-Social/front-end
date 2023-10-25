@@ -246,9 +246,9 @@
                         <table class="table table-borderless">
                             <thead>
                                 <tr>
-                                    <td>CPF</td>
-                                    <td>Nome</td>
-                                    <td>Qualificação</td>
+                                    <th scope="col">CPF</th>
+                                    <th scope="col">Nome</th>
+                                    <th scope="col">Qualificação</th>
                                 </tr>
                             </thead>
                             <tbody>

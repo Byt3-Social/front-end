@@ -26,10 +26,10 @@
                     <table class="table table-borderless">
                         <thead>
                             <tr>
-                                <td>Ação</td>
-                                <td>Organização</td>
-                                <td>Fase</td>
-                                <td>Ações</td>
+                                <th scope="col">Ação</th>
+                                <th scope="col">Organização</th>
+                                <th scope="col">Fase</th>
+                                <th scope="col">Ações</th>
                             </tr>
                         </thead>
                         <tbody>

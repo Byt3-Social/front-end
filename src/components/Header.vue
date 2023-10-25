@@ -1,10 +1,10 @@
 <template>
-    <section class="header">
+    <section class="header" tabindex="0">
         <div class="header__wrapper">
             <i class="header__icon" :class="icone"></i>
             <label>
-            <h4 class="header__title">{{ titulo }}</h4>
-            <h3 class="header_subtitle"> {{subtitulo}} </h3>
+            <h3 class="header__title">{{ titulo }}</h3>
+            <h4 class="header_subtitle"> {{subtitulo}} </h4>
             </label>
         </div>
     </section>
@@ -48,12 +48,12 @@ export default {
     padding-bottom: 0rem;
 }
 
-h4 {
+h3 {
 margin: 0; 
 padding: 0;
 }
 
-h3 {
+h4 {
 margin: 0;
 opacity: 0.5;
 }

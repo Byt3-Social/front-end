@@ -52,13 +52,13 @@ main#agendar-reuniao-view {
             &--PAID,
             &--CONFIRMADA {
                 background-color: #E8FFF3;
-                color: #50CD89;
+                color: #0c4e2b;
             }
 
             &--CANCELED,
             &--CANCELADA {
                 background-color: #fff5f8;
-                color: #f1416c;
+                color: #a7052e;
             }
         }
 
@@ -77,7 +77,7 @@ main#agendar-reuniao-view {
             }
 
             &--excluir {
-                color: #f1416c;
+                color: #a7052e;
             }
         }
     }
@@ -212,7 +212,7 @@ main#agendar-reuniao-view {
             }
 
             &--reset {
-                color: #f1416c;
+                color: #a7052e;
             }
         }
 

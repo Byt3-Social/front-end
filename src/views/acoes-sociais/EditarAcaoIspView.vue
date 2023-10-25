@@ -172,9 +172,9 @@
                             <table class="table table-borderless">
                                 <thead>
                                     <tr>
-                                        <td>Valor</td>
-                                        <td>Data</td>
-                                        <td>Ações</td>
+                                        <th scope="col">Valor</th>
+                                        <th scope="col">Data</th>
+                                        <th scope="col">Ações</th>
                                     </tr>
                                 </thead>
                                 <tbody>

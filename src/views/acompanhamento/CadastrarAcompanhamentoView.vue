@@ -37,8 +37,8 @@
                             <table class="table table-borderless">
                                 <thead>
                                     <tr>
-                                        <td>Indicador</td>
-                                        <td>Remover</td>
+                                        <th scope="col">Indicador</th>
+                                        <th scope="col">Remover</th>
                                     </tr>
                                 </thead>
                                 <tbody>
