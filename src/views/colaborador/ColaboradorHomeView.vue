@@ -120,16 +120,6 @@
                                     </span>
                                 </td>
                             </tr>
-                            <tr>
-                                <td>Arrecadação de cesta básica</td>
-                                <td>R$ 290,00</td>
-                                <td>13 de outubro de 2023</td>
-                                <td>
-                                    -
-                                </td>
-                                <td><span :class="`status status--PAID`">PAGO</span>
-                                </td>
-                            </tr>
                         </tbody>
                     </table>
                 </div>

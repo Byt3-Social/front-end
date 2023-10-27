@@ -550,7 +550,7 @@ export default {
     },
     data() {
         return {
-            tab: "DOACOES",
+            tab: "DADOS-GERAIS",
             subTab: 'ESTATISTICAS',
             acao: null,
             horario: {
