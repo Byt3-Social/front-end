@@ -193,7 +193,27 @@
                                     <label for="representante.telefone" class="form-input-label">Qualificação</label>
                                     <select name="" id="" class="form-input" v-model="socio.qualificacao">
                                         <option :value="null">Selecione uma qualificação para o sócio...</option>
-                                        <option value="Teste">Teste</option>
+                                        <option value="Administrador">Administrador</option>
+                                        <option value="Conselheiro de Administração">Conselheiro de Administração</option>
+                                        <option value="Diretor">Diretor</option>
+                                        <option value="Presidente">Presidente</option>
+                                        <option value="Procurador">Procurador</option>
+                                        <option value="Secretário">Secretário</option>
+                                        <option value="Sociedade Consorciada">Sociedade Consorciada</option>
+                                        <option value="Sociedade Filiada">Sociedade Filiada</option>
+                                        <option value="Sócio">Sócio</option>
+                                        <option value="Sócio Capitalista">Sócio Capitalista</option>
+                                        <option value="Sócio Comanditado">Sócio Comanditado</option>
+                                        <option value="Sócio Comanditário">Sócio Comanditário</option>
+                                        <option value="Sócio de Indústria">Sócio de Indústria</option>
+                                        <option value="Sócio-Gerente">Sócio-Gerente</option>
+                                        <option value="Sócio Incapaz ou Relat.Incapaz (exceto menor)">Sócio Incapaz ou Relat.Incapaz (exceto menor)</option>
+                                        <option value="Tesoureiro">Tesoureiro</option>
+                                        <option value="Sócio Pessoa Jurídica Domiciliado no Exterior">Sócio Pessoa Jurídica Domiciliado no Exterior</option>
+                                        <option value="Sócio Pessoa Física Residente ou Domiciliado no Exterior">Sócio Pessoa Física Residente ou Domiciliado no Exterior</option>
+                                        <option value="Sócio-Administrador">Sócio-Administrador</option>
+                                        <option value="Fundador">Fundador</option>
+                                        <option value="Fundador Residente ou Domiciliado no Exterior">Fundador Residente ou Domiciliado no Exterior</option>
                                     </select>
                                 </div>
                                 <div class="form-input-wrapper">

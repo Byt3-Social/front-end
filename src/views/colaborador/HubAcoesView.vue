@@ -40,7 +40,7 @@
                     <img :src="`${acao.imagem}`">
                     <p class="card__titulo">{{ acao.nomeAcao }}</p>
                     <p class="card__descricao">
-                        {{ acao.sobreAcao.substring(0, 100) }}{{ acao.sobreAcao.length >= 100 ? '...' : null }}
+                        {{ acao.sobreAcao != null ? acao.sobreAcao.substring(0, 100) : null }}{{ acao.sobreAcao.length >= 100 ? '...' : null }}
                     </p>
                     <button type="button" class="acao cta-btn" data-bs-toggle="modal"
                         :data-bs-target="`#staticBackdrop-${acao.id}`">
