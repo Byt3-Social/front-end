@@ -224,10 +224,10 @@
                             <table class="table table-borderless">
                                 <thead>
                                     <tr>
-                                        <th scope="col">CPF</th>
-                                        <th scope="col">Nome</th>
-                                        <th scope="col">Qualificação</th>
-                                        <th scope="col">Remover</th>
+                                        <td>CPF</td>
+                                        <td>Nome</td>
+                                        <td>Qualificação</td>
+                                        <td>Remover</td>
                                     </tr>
                                 </thead>
                                 <tbody>

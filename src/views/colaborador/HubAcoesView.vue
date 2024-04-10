@@ -8,7 +8,7 @@
                         <div class="carousel__conteudoSlide">
                             <div class="slide__image">
                                 <div class="bg__overlay"></div>
-                                <img :src="acao.imagem" alt="Imagem ilustrativa da ação voluntária">
+                                <img :src="acao.imagem" alt="">
                             </div>
                             <div class="slide__info">
                                 <h3>Vamos ajudar?</h3>
@@ -24,11 +24,9 @@
             <section class="carrossel__botoes">
                 <button @click="prev" class="botao__next">
                     <i class="bi bi-arrow-left"></i>
-                    <span class="sr-only">Slide anterior</span>
                 </button>
                 <button @click="next" class="botao__prev">
                     <i class="bi bi-arrow-right"></i>
-                    <span class="sr-only">Próximo slide</span>
                 </button>
             </section>
         </section>
@@ -39,7 +37,7 @@
 
             <div class="block__cardsvoluntariado">
                 <div class="card__Voluntariado" v-for="acao in acoes.voluntariado">
-                    <img :src="`${acao.imagem}`" alt="Imagem ilustrativa da ação voluntária">
+                    <img :src="`${acao.imagem}`">
                     <p class="card__titulo">{{ acao.nomeAcao }}</p>
                     <p class="card__descricao">
                         {{ acao.sobreAcao != null ? acao.sobreAcao.substring(0, 100) : null }}{{ acao.sobreAcao.length >= 100 ? '...' : null }}

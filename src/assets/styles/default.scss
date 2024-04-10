@@ -93,13 +93,13 @@ textarea.form-input:focus {
 input,
 select {
     &.field-error {
-        border: 1px solid #a7052e;
+        border: 1px solid #f1416c;
     }
 }
 
 .field-error {
     &__message {
-        color: #a7052e;
+        color: #f1416c;
         display: block;
         margin-top: .5rem;
     }
@@ -165,7 +165,7 @@ select {
 
 .secondary-button {
     display: block;
-    background-color: #505050;
+    background-color: #767676;
     width: 100%;
     color: #ffffff;
     padding: .75rem;
@@ -173,8 +173,6 @@ select {
     border: none;
     border-radius: 5rem;
     margin-bottom: -1rem;
-    text-decoration: none; /* Removendo sublinhado padrão */
-    font-weight: bold;
 
     &[disabled] {
         opacity: .5;
@@ -183,7 +181,7 @@ select {
 
 .danger-button {
     display: block;
-    background-color: #a7052e;
+    background-color: #f1416c;
     width: 100%;
     color: #ffffff;
     padding: .75rem;
@@ -239,14 +237,13 @@ select {
     &--APROVADO,
     &--sucesso {
         background-color: #E8FFF3;
-        color: #0c4e2b;
+        color: #50CD89;
     }
 
     &--REPROVADO,
     &--error {
         background-color: #fff5f8;
-        color: #a7052e;
-        font-weight: bold;
+        color: #f1416c;
     }
 
     &--CADASTRADO {

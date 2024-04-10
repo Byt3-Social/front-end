@@ -29,10 +29,10 @@
                         <table class="table table-borderless">
                             <thead>
                                 <tr>
-                                    <th scope="col">Registro</th>
-                                    <th scope="col">Organização</th>
-                                    <th scope="col">Status</th>
-                                    <th scope="col">Ações</th>
+                                    <td>Registro</td>
+                                    <td>Organização</td>
+                                    <td>Status</td>
+                                    <td>Ações</td>
                                 </tr>
                             </thead>
                             <tbody>

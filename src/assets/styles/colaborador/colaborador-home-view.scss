@@ -5,11 +5,6 @@ main#colaborador-home-view {
     height: 100%;
     width: 100%;
 
-    .link {
-        color: #0B36A7;
-        font-weight: bold;
-    }
-
     .primary-button {
         margin: 0 0 1.5rem;
     }
@@ -44,15 +39,13 @@ main#colaborador-home-view {
             &--PAID,
             &--CONFIRMADA {
                 background-color: #E8FFF3;
-                color: #0c4e2b;
-                font-weight: bold;
+                color: #50CD89;
             }
 
             &--CANCELED,
             &--CANCELADA {
                 background-color: #fff5f8;
-                color: #a7052e;
-                font-weight: bold;
+                color: #f1416c;
             }
         }
 
@@ -71,8 +64,7 @@ main#colaborador-home-view {
             }
 
             &--excluir {
-                color: #a7052e;
-                font-weight: bold;
+                color: #ff6c6d;
             }
         }
 

@@ -66,12 +66,12 @@ main#cadastrar-acompanhamento-view {
 
             &--PAID, &--CONFIRMADA {
                 background-color: #E8FFF3;
-                color: #0c4e2b;
+                color: #50CD89;
             }
 
             &--CANCELED, &--CANCELADA {
                 background-color: #fff5f8;
-                color: #a7052e;
+                color: #f1416c;
             }
         }
 
@@ -90,7 +90,7 @@ main#cadastrar-acompanhamento-view {
             }
 
             &--excluir {
-                color: #a7052e;
+                color: #f1416c;
             }
         }
     }

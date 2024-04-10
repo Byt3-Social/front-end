@@ -5,7 +5,7 @@
         <FloatingPanel>
             <template v-slot:FloatingPanelContent>
                 <div class="alerta alerta--info">
-                    <p>Acesse agora nosso novo <router-link :to="{ name: 'HubAcoes' }"><span class="link">Hub de ações sociais</span></router-link>!
+                    <p>Acesse agora nosso novo <router-link :to="{ name: 'HubAcoes' }">Hub de ações sociais</router-link>!
                     </p>
                 </div>
                 <button class="primary-button" @click.prevent="">
@@ -34,12 +34,12 @@
                     </li>
                 </ul>
                 <div class="tabs__content" v-if="tab == 'ENGAJAMENTO'">
-                    <table class="table table-borderless" role="table" aria-label="Lista de Inscrições">
+                    <table class="table table-borderless">
                         <thead>
                             <tr>
-                                <th scope="col">Ação</th>
-                                <th scope="col">Data</th>
-                                <th scope="col">Ações</th>
+                                <td>Ação</td>
+                                <td>Data</td>
+                                <td>Ações</td>
                             </tr>
                         </thead>
                         <tbody>
@@ -51,8 +51,8 @@
                                     }}
                                 </td>
                                 <td>
-                                    <button type="button" class="acao" data-bs-toggle="modal" 
-                                        data-bs-target="#staticBackdrop" aria-label="Ver detalhes da inscrição">
+                                    <button type="button" class="acao" data-bs-toggle="modal"
+                                        data-bs-target="#staticBackdrop">
                                         <i class="acao__icone bi bi-qr-code acao--editar"></i>
                                     </button>
 
@@ -70,7 +70,7 @@
                                                 <div class="modal-body">
                                                     <p class="text-center mb-0">Obrigado pela sua inscrição! Utilize esse Qr
                                                         Code para confirmar sua participação no dia da ação.</p>
-                                                    <img :src="`data:image/png;base64,${inscricao.qrcode}`" alt="QR Code de Confirmação da Inscrição">
+                                                    <img :src="`data:image/png;base64,${inscricao.qrcode}`" alt="">
                                                 </div>
                                             </div>
                                         </div>
@@ -81,16 +81,16 @@
                     </table>
                 </div>
                 <div class="tabs__content" v-if="tab == 'DOACOES'">
-                    <table class="table table-borderless" role="table" aria-label="Lista de ções">
+                    <table class="table table-borderless">
                         <thead>
                             <tr>
-                                <th scope="col">Ação</th>
-                                <th scope="col">Valor</th>
-                                <th scope="col">Data</th>
-                                <th scope="col">Link</th>
-                                <th scope="col">Status</th>
+                                <td>Ação</td>
+                                <td>Valor</td>
+                                <td>Data</td>
+                                <td>Link</td>
+                                <td>Status</td>
                             </tr>
-                        </thead>                        
+                        </thead>
                         <tbody>
                             <tr v-for="doacao in doacoes">
                                 <td>
@@ -124,11 +124,11 @@
                     </table>
                 </div>
                 <div class="tabs__content" v-if="tab == 'INTERESSES'">
-                    <table class="table table-borderless" role="table"  aria-label="Lista de Interessados">
+                    <table class="table table-borderless">
                         <thead>
                             <tr>
-                                <th scope="col">Interessado</th>
-                                <th scope="col">Segmento</th>
+                                <td>Interessado</td>
+                                <td>Segmento</td>
                             </tr>
                         </thead>
                         <tbody>

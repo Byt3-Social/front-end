@@ -140,8 +140,8 @@
                                     <table class="table table-borderless">
                                         <thead>
                                             <tr>
-                                                <th scope="col">Disponibilidade</th>
-                                                <th scope="col">Remover</th>
+                                                <td>Disponibilidade</td>
+                                                <td>Remover</td>
                                             </tr>
                                         </thead>
                                         <tbody>

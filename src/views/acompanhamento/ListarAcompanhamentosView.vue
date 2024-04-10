@@ -33,10 +33,10 @@
                     <table class="table table-borderless">
                         <thead>
                             <tr>
-                                <th scope="col">Ação</th>
-                                <th scope="col">Organização</th>
-                                <th scope="col">Solicitado em</th>
-                                <th scope="col">Ações</th>
+                                <td>Ação</td>
+                                <td>Organização</td>
+                                <td>Solicitado em</td>
+                                <td>Ações</td>
                             </tr>
                         </thead>
                         <tbody>
