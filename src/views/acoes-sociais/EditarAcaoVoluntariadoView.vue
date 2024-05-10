@@ -279,18 +279,18 @@
                                                 {{ new Intl.NumberFormat('pt-BR', {
                                                     style: 'currency',
                                                     currency: 'BRL',
-                                                }).format(estatisticas.doacoesPorMetodoDoacao[1].valor) }}
+                                                }).format(estatisticas.doacoesPorMetodoDoacao[2].valor) }}
                                             </p>
                                             <p class="detalhes__titulo detalhes__total">Quantidade</p>
                                             <p>
-                                                {{ estatisticas.doacoesPorMetodoDoacao[1].total }} doações
+                                                {{ estatisticas.doacoesPorMetodoDoacao[2].total }} doações
                                             </p>
                                             <p class="detalhes__titulo detalhes__total">Ticket Médio</p>
                                             <p>
                                                 {{ new Intl.NumberFormat('pt-BR', {
                                                     style: 'currency',
                                                     currency: 'BRL',
-                                                }).format(estatisticas.doacoesPorMetodoDoacao[1].media) }}
+                                                }).format(estatisticas.doacoesPorMetodoDoacao[2].media) }}
                                             </p>
                                         </div>
                                     </div>
@@ -304,18 +304,18 @@
                                                 {{ new Intl.NumberFormat('pt-BR', {
                                                     style: 'currency',
                                                     currency: 'BRL',
-                                                }).format(estatisticas.doacoesPorMetodoDoacao[2].valor) }}
+                                                }).format(estatisticas.doacoesPorMetodoDoacao[1].valor) }}
                                             </p>
                                             <p class="detalhes__titulo detalhes__total">Quantidade</p>
                                             <p>
-                                                {{ estatisticas.doacoesPorMetodoDoacao[2].total }} doações
+                                                {{ estatisticas.doacoesPorMetodoDoacao[1].total }} doações
                                             </p>
                                             <p class="detalhes__titulo detalhes__total">Ticket Médio</p>
                                             <p>
                                                 {{ new Intl.NumberFormat('pt-BR', {
                                                     style: 'currency',
                                                     currency: 'BRL',
-                                                }).format(estatisticas.doacoesPorMetodoDoacao[2].media) }}
+                                                }).format(estatisticas.doacoesPorMetodoDoacao[1].media) }}
                                             </p>
                                         </div>
                                     </div>
@@ -483,13 +483,13 @@
                         <table class="table table-borderless">
                             <thead>
                                 <tr>
-                                    <td>Colaborador</td>
+                                    <td>Referência</td>
                                     <td>Status</td>
                                 </tr>
                             </thead>
                             <tbody>
                                 <tr v-for="inscricao in acao.inscricoes">
-                                    <td>{{ inscricao.usuario_id }}</td>
+                                    <td>INS-{{ inscricao.id }}</td>
                                     <td><span :class="`status status--${inscricao.status}`">{{ inscricao.status }}</span>
                                     </td>
                                 </tr>
@@ -792,19 +792,22 @@ export default {
                 .then((response) => {
                     this.estatisticas = response.data;
 
+                    console.log(this.estatisticas);
+
                     this.series[0].data = this.estatisticas.doacoesPorDia;
 
-                    this.seriesDonut.push(this.estatisticas.doacoesPorMetodoDoacao[0].total);
                     this.seriesDonut.push(this.estatisticas.doacoesPorMetodoDoacao[2].total);
                     this.seriesDonut.push(this.estatisticas.doacoesPorMetodoDoacao[1].total);
+                    this.seriesDonut.push(this.estatisticas.doacoesPorMetodoDoacao[0].total);
 
-                    var porcentagemPix = Math.round(this.estatisticas.doacoesPorMetodoDoacao[1].total / (this.estatisticas.doacoesPorMetodoDoacao[0].total + this.estatisticas.doacoesPorMetodoDoacao[1].total + this.estatisticas.doacoesPorMetodoDoacao[2].total) * 100);
-                    this.seriesRadial2.push(porcentagemPix);
+                    var porcentagemPix = Math.round(this.estatisticas.doacoesPorMetodoDoacao[2].total / (this.estatisticas.doacoesPorMetodoDoacao[0].total + this.estatisticas.doacoesPorMetodoDoacao[1].total + this.estatisticas.doacoesPorMetodoDoacao[2].total) * 100);
 
-                    var porcentagemCartao = Math.round(this.estatisticas.doacoesPorMetodoDoacao[2].total / (this.estatisticas.doacoesPorMetodoDoacao[0].total + this.estatisticas.doacoesPorMetodoDoacao[1].total + this.estatisticas.doacoesPorMetodoDoacao[2].total) * 100);
-                    this.seriesRadial.push(porcentagemCartao);
+                    var porcentagemCartao = Math.round(this.estatisticas.doacoesPorMetodoDoacao[1].total / (this.estatisticas.doacoesPorMetodoDoacao[0].total + this.estatisticas.doacoesPorMetodoDoacao[1].total + this.estatisticas.doacoesPorMetodoDoacao[2].total) * 100);
 
                     var porcentagemBoleto = Math.round(this.estatisticas.doacoesPorMetodoDoacao[0].total / (this.estatisticas.doacoesPorMetodoDoacao[0].total + this.estatisticas.doacoesPorMetodoDoacao[1].total + this.estatisticas.doacoesPorMetodoDoacao[2].total) * 100);
+                    
+                    this.seriesRadial.push(porcentagemPix);
+                    this.seriesRadial2.push(porcentagemCartao);
                     this.seriesRadial3.push(porcentagemBoleto);
                 })
                 .catch(() => {

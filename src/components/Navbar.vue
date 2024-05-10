@@ -58,7 +58,7 @@
                     <small class="navbar__user-role" v-if="usuario.role != 'B3Social.Organizacao'">Colaborador B3</small>
                     <button type="button" class="navbar__user-sair" v-if="usuario.role == 'B3Social.Organizacao'" @click.prevent="logout()">Sair</button>
                 </div>
-                <img src="../assets/images/profile-picture.png" alt="" class="navbar__user-picture"
+                <img src="../assets/images/foto-perfil-atualizada.png" alt="" class="navbar__user-picture"
                     v-if="this.$route.meta.authScope == 'colaborador' && usuario.role == 'B3Social.Administrador'">
                 <div class="navbar__user-letra" v-if="this.$route.meta.authScope == 'colaborador'
                     && usuario.role != 'B3Social.Administrador'">{{ usuario.nome.charAt(0) }}</div>

@@ -511,6 +511,7 @@ export default {
         finalizarProcesso: function () {
             this.processo.telefone = this.telefone.unmasked;
             this.processo.responsavel.telefone = this.representante.telefone.unmasked;
+            this.processo.responsavel.cpf = this.representante.cpf.unmasked;
 
             axios.put(process.env.VUE_APP_API_BASE_URL + "/compliance/processos/" + this.processo.id + "/finalizar", this.processo)
                 .then(() => {

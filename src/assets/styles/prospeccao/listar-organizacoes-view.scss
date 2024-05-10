@@ -34,6 +34,11 @@ main#listar-organizacoes-view {
                     color: #FFC700;
                 }
 
+                &--PENDENTE {
+                    background-color: #FFF8DD;
+                    color: #FFC700;
+                }
+
                 &--APROVADO {
                     background-color: #E8FFF3;
                     color: #50CD89;

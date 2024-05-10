@@ -14,7 +14,7 @@
                     <p>{{ nomeOriginal }}</p>
                     <p v-if="status == 'PENDENTE_REENVIO'">Enviado - Reenvio solicitado</p>
                     <p v-else-if="assinaturaDigital != null">Enviado (assinado)</p>
-                    <p v-else="assinaturaDigital != null">Enviado (não assinado)</p>
+                    <p v-else="assinaturaDigital != null">Enviado</p>
                     <p>{{ tamanhoArquivo }} bytes</p>
                 </div>
             </div>

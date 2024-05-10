@@ -52,14 +52,13 @@ export default {
             const msalInstance = await PublicClientApplication.createPublicClientApplication(msalConfig);
 
             var loginRequest = {
-                scopes: [process.env.VUE_APP_SCOPE],
-                redirectUri: process.env.VUE_APP_REDIRECT_URL
+                scopes: [process.env.VUE_APP_SCOPE]
             };
 
             try {
                 const loginResponse = await msalInstance.loginPopup(loginRequest);
 
-                var account = msalInstance.getAccountByUsername(loginResponse.account.username)
+                var account = await msalInstance.getAccountByUsername(loginResponse.account.username)
 
                 var request = {
                     scopes: [process.env.VUE_APP_SCOPE],
