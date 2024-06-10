@@ -13,17 +13,16 @@
                             <input type="text" name="indicacao.nomeOrganizacao" id="indicacao.nomeOrganizacao" class="form-input" v-model="indicacao.nomeOrganizacao">
                         </div>
                         <div class="form-input-wrapper">
-                            <label for="indicacao.nomeResponsavel" class="form-input-label">Nome do responsável</label>
-                            <input type="text" name="indicacao.nomeResponsavel" id="indicacao.nomeResponsavel" class="form-input" v-model="indicacao.nomeResponsavel">
+                            <label for="indicacao.responsavel.nome" class="form-input-label">Nome do responsável</label>
+                            <input type="text" name="indicacao.responsavel.nome" id="indicacao.responsavel.nome" class="form-input" v-model="indicacao.responsavel.nome">
                         </div>
                         <div class="form-input-wrapper">
-                            <label for="indicacao.telefoneResponsavel" class="form-input-label">Telefone do responsável</label>
-                            <input type="text" name="indicacao.telefoneResponsavel" id="indicacao.telefoneResponsavel" class="form-input" v-maska="indicacao.telefoneResponsavel"
-                                data-maska="['(##) ####-####', '(##) #####-####']">
+                            <label for="telefoneResponsavel" class="form-input-label">Telefone do responsável</label>
+                            <input type="text" name="telefoneResponsavel" id="telefoneResponsavel" class="form-input" v-maska="telefoneResponsavel" data-maska="['(##) ####-####', '(##) #####-####']">
                         </div>
                         <div class="form-input-wrapper">
-                            <label for="indicacao.emailResponsavel" class="form-input-label">Email do responsável</label>
-                            <input type="email" name="indicacao.emailResponsavel" id="indicacao.emailResponsavel" class="form-input" v-model="indicacao.emailResponsavel">
+                            <label for="indicacao.responsavel.email" class="form-input-label">Email do responsável</label>
+                            <input type="email" name="indicacao.responsavel.email" id="indicacao.responsavel.email" class="form-input" v-model="indicacao.responsavel.email">
                         </div>
                     </fieldset>
 
@@ -31,48 +30,40 @@
                         <legend class="fieldset__legend">Alinhamento</legend>
 
                         <div class="form-input-wrapper">
-                            <label for="acao.id" class="form-input-label">Em qual categoria a organização indicado se encaixa?</label>
-                            <select name="acao.id" id="acao.id" class="form-input" v-model="alinhamento.categoria">
-                                <option :value="null" selected disabled>Selecione uma opção...</option>
-                                <option value="">Esporte</option>
-                                <option value="">STEM</option>
-                                <option value="">Educação</option>
-                                <option value="">Combate ao abandono</option>
-                                <option value="">Combate a evasão escolar</option>
-                                <option value="">Alfabetização</option>
-                                <option value="">Transversal</option>
-                                <option value="">Formação para a vida e para o trabalho</option>
-                                <option value="">Doação emergencial</option>
+                            <label for="indicacao.categoriaId" class="form-input-label">Em qual categoria a organização indicado se encaixa?</label>
+                            <select name="indicacao.categoriaId" id="indicacao.categoriaId" class="form-input" v-model="indicacao.categoriaId">
+                                <option :value="null" selected disabled>Selecione uma categoria...</option>
+                                <option v-for="categoria in categorias" :value="categoria.id">{{categoria.nome }}</option>
                             </select>
                         </div>
 
                         <div class="form-input-wrapper">
-                            <label for="acao.id" class="form-input-label">Em qual tipo de ação social você acredita que a organização indicada melhor se enquadra?</label>
-                            <select name="acao.id" id="acao.id" class="form-input" v-model="alinhamento.tipoAcao">
+                            <label for="indicacao.tipoAcao" class="form-input-label">Em qual tipo de ação social você acredita que a organização indicada melhor se enquadra?</label>
+                            <select name="indicacao.tipoAcao" id="indicacao.tipoAcao" class="form-input" v-model="indicacao.tipoAcao">
                                 <option :value="null" selected disabled>Selecione uma opção...</option>
-                                <option value="">Ação de Voluntariado</option>
-                                <option value="">Ação de Investimento Social Privado</option>
-                                <option value="">Ação de Voluntariado / Ação de Investimento Social Privado</option>
+                                <option value="VOLUNTARIADO">Ação de Voluntariado</option>
+                                <option value="ISP">Ação de Investimento Social Privado</option>
+                                <option value="AMBOS">Ação de Voluntariado / Ação de Investimento Social Privado</option>
                             </select>
                         </div>
                         
                         <div class="form-input-wrapper">
-                            <label for="acao.id" class="form-input-label">Qual a abrangência das ações realizadas pela organização indicada?</label>
-                            <select name="acao.id" id="acao.id" class="form-input" v-model="alinhamento.abrangencia">
+                            <label for="indicacao.abrangencia" class="form-input-label">Qual a abrangência das ações realizadas pela organização indicada?</label>
+                            <select name="indicacao.abrangencia" id="indicacao.abrangencia" class="form-input" v-model="indicacao.abrangencia">
                                 <option :value="null" selected disabled>Selecione uma opção...</option>
-                                <option value="">Nacional</option>
-                                <option value="">Estadual</option>
-                                <option value="">Regional/Local</option>
+                                <option value="INTERNACIONAL">Internacional</option>
+                                <option value="NACIONAL">Nacional</option>
+                                <option value="ESTADUAL">Estadual</option>
+                                <option value="REGIONAL">Regional/Local</option>
                             </select>
                         </div>
 
                         <div class="form-input-wrapper">
-                                <label for="indicacao.informacoesAdicionais" class="form-input-label">
+                                <label for="indicacao.textoIndicacao" class="form-input-label">
                                     Descreva brevemente o porquê você acredita que a organização indicada está alinhada com o nosso propósito
                                 </label>
-                                <textarea name="indicacao.informacoesAdicionais"
-                                    id="indicacao.informacoesAdicionais" class="form-input"
-                                    v-model="alinhamento.informacoesAdicionais"></textarea>
+                                <textarea name="indicacao.textoIndicacao"
+                                    id="indicacao.textoIndicacao" class="form-input" v-model="indicacao.textoIndicacao"></textarea>
                             </div>
                     </fieldset>
 
@@ -107,30 +98,54 @@ export default {
         Header,
         FloatingPanel
     },
+    created() {
+        this.buscarCategorias();
+    },
     data() {
         return {
+            categorias: null,
             indicacao: {
                 nomeOrganizacao: null,
-                nomeResponsavel: null,
-                telefoneResponsavel: {
-                    masked: null,
-                    unmasked: null,
-                    completed: false,
+                responsavel: {
+                    nome: null,
+                    email: null,
+                    telefone: null
                 },
-                emailResponsavel: null,
-            },
-            alinhamento: {
-                categoria: null,
                 tipoAcao: null,
                 abrangencia: null,
-                informacoesAdicionais: null,
+                textoIndicacao: null,
+                categoriaId: null,
+                colaboradorId: 1,
+            },
+            telefoneResponsavel: {
+                masked: null,
+                unmasked: null,
+                completed: false,
             },
             carregandoRequisicao: false,
         }
     },
     methods: {
+        buscarCategorias: function() {
+            axios.get(process.env.VUE_APP_API_BASE_URL + "/prospeccao/indicacoes/categorias")
+                .then((response) => {
+                    this.categorias = response.data;
+                })
+                .catch(() => {
+
+                });
+        },
         indicarOrganizacao: function() {
-            // To do
+            this.indicacao.responsavel.telefone = this.telefoneResponsavel.unmasked;
+
+            axios.post(process.env.VUE_APP_API_BASE_URL + "/prospeccao/indicacoes", this.indicacao)
+                .then((response) => {
+                    console.log("Cadastrado com sucesso");
+                    console.log(response);
+                })
+                .catch((error) => {
+                    console.log(error);
+                });
         }
     }
 }

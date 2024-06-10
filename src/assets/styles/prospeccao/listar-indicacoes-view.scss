@@ -44,7 +44,8 @@ main#listar-indicacoes-view {
                     color: #f1416c;
                 }
 
-                &--CONVIDADA {
+                &--CONVIDADA,
+                &--FORM_PREENCHIDO {
                     background-color: #f8f5ff;
                     color: #7239ea;
                 }

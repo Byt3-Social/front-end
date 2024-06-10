@@ -58,7 +58,7 @@
                         <strong>Uma vez preenchido, este formulário não poderá ser editado.</strong>
                     </p>
 
-                    <button class="primary-button" @click.prevent="concluir()">
+                    <button class="primary-button" @click.prevent="concluir(this.$route.params.id)">
                         <span v-show="carregandoRequisicao" class="spinner-border" aria-hidden="true"></span>
                         <span v-show="!carregandoRequisicao">Concluir</span>
                     </button>
@@ -118,12 +118,13 @@ export default {
         }
     },
     methods: {
-        concluir: function () {
+        concluir: function (id) {
             var data = {
-                nome: this.nome,
+                indicacaoId: id,
                 cnpj: this.cnpj.unmasked,
-                email: this.email,
-                telefone: this.telefone.unmasked,
+                nomeOrganizacao: this.nome,
+                emailOrganizacao: this.email,
+                telefoneOrganizacao: this.telefone.unmasked,
                 responsavel: {
                     nome: this.responsavel.nome,
                     cpf: this.responsavel.cpf.unmasked,
@@ -132,7 +133,15 @@ export default {
                 },
             };
 
-            // To do
+            console.log(data);
+
+            axios.post(process.env.VUE_APP_API_BASE_URL + "/prospeccao/indicacoes/" + id + "/cadastros", data)
+                .then((response) => {
+                    console.log(response);
+                })
+                .catch((error) => {
+                    console.log(error);
+                });
         }
     }
 }

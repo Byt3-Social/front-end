@@ -15,10 +15,10 @@
                         </thead>
                         <tbody>
                             <tr v-for="indicacao in indicacoes">
-                                <td>{{ indicacao.nomeEmpresarial }}</td>
+                                <td>{{ indicacao.nomeOrganizacao }}</td>
                                 <td>
                                     <span :class="`status status--${indicacao.status}`">
-                                        {{ indicacao.status.replace("CONCLUIDA", "CONCLUÍDA") }}
+                                        {{ indicacao.status.replace("CONCLUIDA", "CONCLUÍDA").replace("FORM_PREENCHIDO", "FORM. PREENCHIDO") }}
                                     </span>
                                 </td>
                                 <td>
@@ -68,31 +68,13 @@ export default {
     },
     methods: {
         buscarIndicacoes: function() {
-            // To do
+            axios.get(process.env.VUE_APP_API_BASE_URL + "/prospeccao/indicacoes")
+                .then((response) => {
+                    this.indicacoes = response.data;
+                })
+                .catch(() => {
 
-            // Placeholder data
-            this.indicacoes = [
-                {
-                    id: 1,
-                    nomeEmpresarial: "NeuroTech",
-                    status: "INDICADA"
-                },
-                {
-                    id: 2,
-                    nomeEmpresarial: "PDTec",
-                    status: "CONVIDADA"
-                },
-                {
-                    id: 3,
-                    nomeEmpresarial: "BLK",
-                    status: "CONCLUIDA"
-                },
-                {
-                    id: 4,
-                    nomeEmpresarial: "Neoway",
-                    status: "ARQUIVADA"
-                },
-            ];
+                });
         }
     }
 }

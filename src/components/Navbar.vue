@@ -13,6 +13,8 @@
                     <div class="dropdown__content">
                         <router-link :to="{ name: 'ListarOrganizacoes' }" class="navbar__item group__item">Visão
                             Geral</router-link>
+                        <router-link :to="{ name: 'ListarIndicacoes' }"
+                            class="navbar__item group__item">Indicações</router-link>
                         <router-link :to="{ name: 'CadastrarOrganizacao' }"
                             class="navbar__item group__item">Cadastrar</router-link>
                     </div>
