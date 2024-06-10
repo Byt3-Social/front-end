@@ -8,6 +8,8 @@ import OrganizacaoLoginView from '@/views/autenticacao/OrganizacaoLoginView'
 import CadastrarOrganizacaoView from '@/views/prospeccao/CadastrarOrganizacaoView'
 import ListarOrganizacoesView from '@/views/prospeccao/ListarOrganizacoesView'
 import EditarOrganizacaoView from '@/views/prospeccao/EditarOrganizacaoView'
+import ListarIndicacoesView from '@/views/prospeccao/ListarIndicacoesView'
+import EditarIndicacaoView from '@/views/prospeccao/EditarIndicacaoView'
 
 import ListarProcessosView from '@/views/compliance/ListarProcessosView'
 import VisualizarProcessoView from '@/views/compliance/VisualizarProcessoView'
@@ -28,11 +30,13 @@ import ColaboradorHomeView from '@/views/colaborador/ColaboradorHomeView'
 import DoarView from '@/views/colaborador/DoarView'
 import HubAcoesView from '@/views/colaborador/HubAcoesView'
 import AcaoView from '@/views/colaborador/AcaoView'
+import IndicarOrganizacaoView from '@/views/colaborador/IndicarOrganizacaoView'
 
 import OrganizacaoHomeView from '@/views/organizacao/OrganizacaoHomeView'
 import PreencherAcompanhamentoView from '@/views/organizacao/PreencherAcompanhamentoView'
 import AgendarReuniaoView from '@/views/organizacao/AgendarReuniaoView'
 import PreencherProcessoView from '@/views/organizacao/PreencherProcessoView'
+import ConcluirIndicacaoView from '@/views/organizacao/ConcluirIndicacaoView'
 
 import NotFoundView from '@/views/NotFoundView'
 
@@ -83,6 +87,30 @@ const routes = [
             requiresAuth: true,
             authScope: 'colaborador',
             title: "B3 Social | Editar Organização"
+        }
+    },
+    {
+        path: '/admin/indicacoes',
+        name: 'ListarIndicacoes',
+        component: ListarIndicacoesView,
+        meta: {
+            title: "B3 Social | Indicações"
+        }
+    },
+    {
+        path: '/admin/indicacoes/:id',
+        name: 'EditarIndicacao',
+        component: EditarIndicacaoView,
+        meta: {
+            title: "B3 Social | Editar Indicação"
+        }
+    },
+    {
+        path: '/organizacao/indicacoes/:id/concluir',
+        name: 'ConcluirIndicacao',
+        component: ConcluirIndicacaoView,
+        meta: {
+            title: "B3 Social | Concluir Indicação"
         }
     },
     /* Compliance */
@@ -248,6 +276,14 @@ const routes = [
             requiresAuth: true,
             authScope: 'colaborador',
             title: "B3 Social | Ação"
+        }
+    },
+    {
+        path: '/colaborador/organizacao/indicar',
+        name: 'IndicarOrganizacao',
+        component: IndicarOrganizacaoView,
+        meta: {
+            title: "B3 Social | Indicar Organização"
         }
     },
     /* Organização */
