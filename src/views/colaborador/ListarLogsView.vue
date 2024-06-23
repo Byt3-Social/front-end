@@ -11,7 +11,7 @@
                     <div class="accordion-item" v-for="log in logs">
                         <h2 class="accordion-header">
                         <button class="accordion-button" type="button" data-bs-toggle="collapse" :data-bs-target="'#collapse' + log.id" aria-expanded="false" :aria-controls="'collapse' + log.id">
-                            {{ (new Date(log.requestAt)).toLocaleDateString("pt-BR", options) }} ({{ log.ipAddress }}) - {{ log.actionDescription }}
+                            {{ (new Date(log.requestAt)).toLocaleDateString("pt-BR", options) }} (IP {{ log.ipAddress.replace("/", "") }}) - {{ log.actionDescription }}
                         </button>
                         </h2>
                         <div :id="'collapse' + log.id" class="accordion-collapse collapse" data-bs-parent="#accordionExample">
