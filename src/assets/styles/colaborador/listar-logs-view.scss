@@ -1,0 +1,65 @@
+main#listar-logs-view {
+    display: flex;
+    flex-direction: column;
+    align-items: center;
+    height: 100%;
+    width: 100%;
+
+    .pagination-section {
+        display: block;
+        margin: 2rem auto 0;
+        width: max-content;
+        
+        .pagination-action {
+            background-color: transparent;
+            border: none;
+            
+            i.bi {
+                font-size: 2.5rem;
+                color: #00145F;
+    
+                &:first-of-type {
+                    margin-right: 1rem;
+                }
+            }
+        }
+    }
+
+    .accordion-button {
+        background-color: #ffffff;
+        color: #00145F;
+        outline: none;
+        box-shadow: none;
+    }
+
+    .accordion-body {
+        display: flex;
+        width: 100%;
+
+        .left,
+        .right {
+            width: 45%;
+        }
+    }
+
+    .bloco {
+        display: block;
+        text-align: justify;
+        margin-bottom: 1.5rem;
+
+        &__atributo {
+            display: block;
+            font-weight: 600;
+        }
+
+        &__atributo--preenchido {
+            display: block;
+        }
+    }
+
+    .carregando__message {
+        text-align: center;
+        padding: 1rem 0;
+        margin-bottom: 0;
+    }
+}

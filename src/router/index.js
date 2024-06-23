@@ -31,6 +31,7 @@ import DoarView from '@/views/colaborador/DoarView'
 import HubAcoesView from '@/views/colaborador/HubAcoesView'
 import AcaoView from '@/views/colaborador/AcaoView'
 import IndicarOrganizacaoView from '@/views/colaborador/IndicarOrganizacaoView'
+import ListarLogsView from '@/views/colaborador/ListarLogsView'
 
 import OrganizacaoHomeView from '@/views/organizacao/OrganizacaoHomeView'
 import PreencherAcompanhamentoView from '@/views/organizacao/PreencherAcompanhamentoView'
@@ -94,6 +95,8 @@ const routes = [
         name: 'ListarIndicacoes',
         component: ListarIndicacoesView,
         meta: {
+            requiresAuth: true,
+            authScope: 'colaborador',
             title: "B3 Social | Indicações"
         }
     },
@@ -102,6 +105,8 @@ const routes = [
         name: 'EditarIndicacao',
         component: EditarIndicacaoView,
         meta: {
+            requiresAuth: true,
+            authScope: 'colaborador',
             title: "B3 Social | Editar Indicação"
         }
     },
@@ -110,6 +115,7 @@ const routes = [
         name: 'ConcluirIndicacao',
         component: ConcluirIndicacaoView,
         meta: {
+            authScope: 'open',
             title: "B3 Social | Concluir Indicação"
         }
     },
@@ -283,7 +289,19 @@ const routes = [
         name: 'IndicarOrganizacao',
         component: IndicarOrganizacaoView,
         meta: {
+            requiresAuth: true,
+            authScope: 'colaborador',
             title: "B3 Social | Indicar Organização"
+        }
+    },
+    {
+        path: '/admin/logs',
+        name: 'ListarLogs',
+        component: ListarLogsView,
+        meta: {
+            requiresAuth: true,
+            authScope: 'colaborador',
+            title: "B3 Social | Logs"
         }
     },
     /* Organização */
