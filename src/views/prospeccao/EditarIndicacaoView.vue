@@ -4,13 +4,18 @@
         <Header titulo="Indicação" icone="bi bi-building-fill-gear"></Header>
         <FloatingPanel v-if="indicacao != null">
             <template v-slot:FloatingPanelContent>
+                <div class="alerta alerta--error" v-show="erroAtualizacao">
+                    <i class="alerta__icone bi bi-x-circle-fill"></i>
+                    <p class="alerta__message">Não foi possível atualizar essa indicação</p>
+                </div>
+                <br>
                 <div class="indicacao">
                     <span class="section__title">Indicação</span>
 
                     <div class="bloco">
                         <label class="bloco__atributo">Indicação recebida por</label>
                         <p class="bloco__atributo--preenchido">
-                            {{ indicacao.colaboradorId }}
+                            {{ indicacao.colaborador }}
                         </p>
                     </div>
                     <div class="bloco">
@@ -200,6 +205,7 @@ export default {
             acao: null,
             utils: utils,
             rotaAnterior: null,
+            erroAtualizacao: false,
         }
     },
     beforeRouteEnter(to, from, next) {
@@ -235,10 +241,11 @@ export default {
 
             axios.post(process.env.VUE_APP_API_BASE_URL + "/prospeccao/indicacoes/" + id + "/status", body)
                 .then((response) => {
-                    console.log(response);
+                    this.$router.push({ name: 'ListarIndicacoes', query: { sucessoAtualizacao: true } });
                 })
                 .catch((error) => {
-                    console.log(error);
+                    this.erroAtualizacao = true;
+                    window.scrollTo(0, 0);
                 });
         }
     }

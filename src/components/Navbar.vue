@@ -5,7 +5,7 @@
                 <Logo cor="#00145f"></Logo>
             </h1>
             <ul class="navbar__items"
-                v-if="this.$route.meta.authScope != 'organizacao' && usuario.role != 'B3Social.Colaborador'">
+                v-if="this.$route.meta.authScope != 'open' && this.$route.meta.authScope != 'organizacao' && usuario.role != 'B3Social.Colaborador'">
                 <li class="dropdown">
                     <router-link :to="{ name: 'ColaboradorHome' }" class="navbar__item">Início</router-link>
                 </li>
@@ -51,16 +51,16 @@
                 </li>
             </ul>
 
-            <div class="navbar__user">
+            <div class="navbar__user" v-if="this.$route.meta.authScope != 'open'">
                 <div class="navbar__user-details">
                     <p class="navbar__user-name" v-if="usuario.role != 'B3Social.Organizacao'">
-                        Olá {{ usuario.nome.split(" ")[0].toLowerCase() }}!</p>
-                    <p class="navbar__user-name" v-if="usuario.role == 'B3Social.Organizacao'">Olá {{
+                        Olá, {{ usuario.nome.split(" ")[0].toLowerCase() }}!</p>
+                    <p class="navbar__user-name" v-if="usuario.role == 'B3Social.Organizacao'">Olá, {{
                         usuario.empresa }}!</p>
                     <small class="navbar__user-role" v-if="usuario.role != 'B3Social.Organizacao'">Colaborador B3</small>
                     <button type="button" class="navbar__user-sair" v-if="usuario.role == 'B3Social.Organizacao'" @click.prevent="logout()">Sair</button>
                 </div>
-                <img src="../assets/images/foto-perfil-atualizada.png" alt="" class="navbar__user-picture"
+                <img src="../assets/images/foto-perfil.png" alt="" class="navbar__user-picture"
                     v-if="this.$route.meta.authScope == 'colaborador' && usuario.role == 'B3Social.Administrador'">
                 <div class="navbar__user-letra" v-if="this.$route.meta.authScope == 'colaborador'
                     && usuario.role != 'B3Social.Administrador'">{{ usuario.nome.charAt(0) }}</div>

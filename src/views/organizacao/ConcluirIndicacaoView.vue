@@ -4,13 +4,28 @@
         <Header titulo="Indicação - Informações Básicas" icone="bi bi-building-fill-lock"></Header>
         <FloatingPanel>
             <template v-slot:FloatingPanelContent>
-                <form action="#" method="post">
+                <div class="alerta alerta--error" v-show="erroPreenchimento">
+                    <i class="alerta__icone bi bi-x-circle-fill"></i>
+                    <p class="alerta__message">Não foi possível salvar o formulário</p>
+                </div>
+                <div class="alerta alerta--sucesso mb-0"
+                    v-if="rotaAnterior == null && this.sucessoPreenchimento">
+                    <i class="alerta__icone bi bi-check-circle-fill"></i>
+                    <p class="alerta__message">Formulário salvo com sucesso</p>
+                </div>
+                <div class="alerta alerta--info mb-0"
+                    v-if="!formDisponivel">
+                    <i class="alerta__icone bi bi-info-circle-fill"></i>
+                    <p class="alerta__message">Acesso inválido</p>
+                </div>
+
+                <form action="#" method="post" v-if="formDisponivel != null && formDisponivel && rotaAnterior == null && !sucessoPreenchimento">
                     <fieldset class="fieldset">
                         <legend class="fieldset__legend">Empresa</legend>
 
                         <div class="form-input-wrapper">
                             <label for="nome" class="form-input-label">Razão social</label>
-                            <input type="text" name="razaoSocial" id="nome" class="form-input" v-model="nome">
+                            <input type="text" name="razaoSocial" id="nomeOrganizacao" class="form-input" v-model="nome">
                         </div>
                         <div class="form-input-wrapper">
                             <label for="cnpj" class="form-input-label">CNPJ</label>
@@ -19,11 +34,11 @@
                         </div>
                         <div class="form-input-wrapper">
                             <label for="email" class="form-input-label">Email</label>
-                            <input type="email" name="email" id="email" class="form-input" v-model="email">
+                            <input type="email" name="email" id="emailOrganizacao" class="form-input" v-model="email">
                         </div>
                         <div class="form-input-wrapper">
                             <label for="telefone" class="form-input-label">Telefone</label>
-                            <input type="text" name="telefone" id="telefone" class="form-input" v-maska="telefone"
+                            <input type="text" name="telefone" id="telefoneOrganizacao" class="form-input" v-maska="telefone"
                                 data-maska="['(##) ####-####', '(##) #####-####']">
                         </div>
                     </fieldset>
@@ -114,10 +129,24 @@ export default {
             },
 
             carregandoRequisicao: false,
-            erroCadastro: false,
+            erroPreenchimento: false,
+            sucessoPreenchimento: false,
+            formDisponivel: null
         }
     },
+    async created() {
+        await this.verificar(this.$route.params.id);
+    },
     methods: {
+        verificar: async function(id) {
+            await axios.post(process.env.VUE_APP_API_BASE_URL + "/prospeccao/indicacoes/" + id + "/cadastros/verificacoes")
+                .then((response) => {
+                    this.formDisponivel = response.data;
+                })
+                .catch((error) => {
+                    this.formDisponivel = false;
+                });
+        },
         concluir: function (id) {
             var data = {
                 indicacaoId: id,
@@ -133,14 +162,47 @@ export default {
                 },
             };
 
-            console.log(data);
-
             axios.post(process.env.VUE_APP_API_BASE_URL + "/prospeccao/indicacoes/" + id + "/cadastros", data)
                 .then((response) => {
-                    console.log(response);
+                    document.querySelectorAll(".field-error__message").forEach(field => {
+                        field.remove();
+                    });
+
+                    document.querySelectorAll(".field-error").forEach(field => {
+                        field.classList.remove("field-error");
+                    });
+
+                    this.sucessoPreenchimento = true;
+                    this.erroPreenchimento = false;
+                    window.scrollTo(0, 0);
                 })
                 .catch((error) => {
-                    console.log(error);
+                    document.querySelectorAll(".field-error__message").forEach(field => {
+                        field.remove();
+                    });
+
+                    document.querySelectorAll(".field-error").forEach(field => {
+                        field.classList.remove("field-error");
+                    });
+
+                    if (error.response && error.response.status != null && error.response.status == 400 && error.response.data != null) {
+                        error.response.data.forEach(fieldError => {
+                            var campo = document.getElementById(fieldError.field);
+
+                            if (campo != null) {
+                                var span = document.createElement("span");
+                                span.classList.add("field-error__message");
+                                span.innerText = fieldError.message;
+
+                                campo.after(span);
+                                campo.classList.add("field-error");
+                            }
+                        });
+                    }
+
+                    this.carregandoRequisicao = false;
+                    this.erroPreenchimento = true;
+                    window.scrollTo(0, 0);
                 });
         }
     }

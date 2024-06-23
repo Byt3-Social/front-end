@@ -4,6 +4,11 @@
         <Header titulo="Indicações" icone="bi bi-building-fill-down"></Header>
         <FloatingPanel>
             <template v-slot:FloatingPanelContent>
+                <div class="alerta alerta--sucesso"
+                    v-if="rotaAnterior != null && rotaAnterior.name == 'EditarIndicacao' && this.$route.query.sucessoAtualizacao">
+                    <i class="alerta__icone bi bi-check-circle-fill"></i>
+                    <p class="alerta__message">Indicação atualizada com sucesso</p>
+                </div>
                 <div>
                     <table class="table table-borderless">
                         <thead>

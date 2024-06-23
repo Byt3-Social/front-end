@@ -8,7 +8,11 @@
                     <p>Acesse agora nosso novo <router-link :to="{ name: 'HubAcoes' }">Hub de ações sociais</router-link>!
                     </p>
                 </div>
-                <button class="primary-button" @click.prevent="">
+                <div class="alerta alerta--sucesso" v-if="rotaAnterior != null && rotaAnterior.name == 'IndicarOrganizacao' && this.$route.query.sucessoIndicacao">
+                    <i class="alerta__icone bi bi-check-circle-fill"></i>
+                    <p class="alerta__message">Indicação realizada com sucesso</p>
+                </div>
+                <button class="primary-button" @click.prevent="this.$router.push({ name: 'IndicarOrganizacao' });">
                     Indique uma organização
                 </button>
                 <div class="alerta alerta--sucesso" v-if="this.$route.query.sucessoAtualizacao && rotaAnterior == null">
